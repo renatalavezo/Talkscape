@@ -5,13 +5,13 @@ import { getDatabase, ref, get, set } from 'firebase/database'
 // Create a free project at https://console.firebase.google.com
 // Enable Realtime Database, then paste your project config below.
 const firebaseConfig = {
-  apiKey:            'COLE_AQUI',
-  authDomain:        'COLE_AQUI.firebaseapp.com',
-  databaseURL:       'https://COLE_AQUI-default-rtdb.firebaseio.com',
-  projectId:         'COLE_AQUI',
-  storageBucket:     'COLE_AQUI.appspot.com',
-  messagingSenderId: 'COLE_AQUI',
-  appId:             'COLE_AQUI',
+  apiKey:            'TALKSCAPE',
+  authDomain:        'TALKSCAPE.firebaseapp.com',
+  databaseURL:       'https://TALKSCAPE-default-rtdb.firebaseio.com',
+  projectId:         'TALKSCAPE',
+  storageBucket:     'TALKSCAPE.appspot.com',
+  messagingSenderId: 'TALKSCAPE',
+  appId:             'TALKSCAPE',
 }
 
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
