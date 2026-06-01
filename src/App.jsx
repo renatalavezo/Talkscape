@@ -73,19 +73,22 @@ export default function App() {
     const s = students.find(s =>
       (s.username || '').trim().toLowerCase() === u && (s.password || '').trim() === p
     )
-    if (!s) { setLoginErr(t.wrongLogin); return }
-    setId(s.id); setView('student'); setLoginErr('')
+    if (s) { setId(s.id); setView('student'); setLoginErr(''); return }
+    const cs = courseStudents.find(s =>
+      (s.email || '').trim().toLowerCase() === u && (s.password || '').trim() === p
+    )
+    if (!cs) { setLoginErr(t.wrongLogin); return }
+    if (!cs.active) { setLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
+    setId(cs.id); setView('course'); setLoginErr('')
   }
 
   const doCourseLogin = () => {
     const u = courseLoginU.trim().toLowerCase()
     const p = courseLoginP.trim()
-    console.log('LOGIN ATTEMPT', { u, p, courseStudents })
     if (!u) { setCourseLoginErr('Preencha seu email.'); return }
-    const s = courseStudents.find(s => {
-      console.log('CHECKING', { email: s.email, match_email: (s.email || '').trim().toLowerCase() === u, password: s.password, match_pass: (s.password || '').trim() === p, active: s.active })
-      return (s.email || '').trim().toLowerCase() === u && (s.password || '').trim() === p
-    })
+    const s = courseStudents.find(s =>
+      (s.email || '').trim().toLowerCase() === u && (s.password || '').trim() === p
+    )
     if (!s) { setCourseLoginErr('Email ou senha incorretos.'); return }
     if (!s.active) { setCourseLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
     setId(s.id); setView('course'); setCourseLoginErr('')
