@@ -33,7 +33,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
 
   const getWT = wn => {
     const ck = `pt_${sid}_${lvl}_w${wn}`
-    if (db[ck]) return [...db[ck], ...(db[`ex_${sid}_${lvl}_w${wn}`] || [])]
+    if (db[ck]?.length) return [...db[ck], ...(db[`ex_${sid}_${lvl}_w${wn}`] || [])]
     return [...(allWeekDefs.find(w => w.week === wn)?.tasks || []), ...(db[`ex_${sid}_${lvl}_w${wn}`] || [])]
   }
 

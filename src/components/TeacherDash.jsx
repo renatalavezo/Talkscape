@@ -51,7 +51,7 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
 
   const getWTasks = (sid, wn) => {
     const lv = lvOf(sid), ck = `pt_${sid}_${lv}_w${wn}`
-    if (db[ck]) return [...db[ck], ...(db[`ex_${sid}_${lv}_w${wn}`] || [])]
+    if (db[ck]?.length) return [...db[ck], ...(db[`ex_${sid}_${lv}_w${wn}`] || [])]
     const exW = [...(PLAN[lv] || []), ...(db[`pew_${sid}_${lv}`] || [])]
     return [...(exW.find(w => w.week === wn)?.tasks || []), ...(db[`ex_${sid}_${lv}_w${wn}`] || [])]
   }
@@ -91,7 +91,7 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
   const curPlanTasks = () => {
     if (!selS) return []
     const lv = lvOf(selS.id), ck = `pt_${selS.id}_${lv}_w${planWeek}`
-    if (db[ck]) return db[ck]
+    if (db[ck]?.length) return db[ck]
     return planAllWeeks().find(w => w.week === planWeek)?.tasks || []
   }
 
