@@ -106,11 +106,14 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
       {/* Header */}
       <header style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(247,244,239,0.95)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${B.border}`, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Logo h={36} />
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button onClick={onStudent} style={{ padding: '8px 16px', background: B.bege, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 600, color: B.dark, cursor: 'pointer', fontFamily: 'inherit' }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          <button onClick={onStudent} style={{ padding: '8px 14px', background: B.bege, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 600, color: B.dark, cursor: 'pointer', fontFamily: 'inherit' }}>
             Já sou aluna
           </button>
-          <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ padding: '8px 16px', background: B.laranja, borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', textDecoration: 'none' }}>
+          <button onClick={onCourse} style={{ padding: '8px 14px', background: B.bege, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 600, color: B.dark, cursor: 'pointer', fontFamily: 'inherit' }}>
+            Acesso ao curso
+          </button>
+          <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ padding: '8px 14px', background: B.laranja, borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', textDecoration: 'none' }}>
             Quero começar
           </a>
         </div>
@@ -126,17 +129,9 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <p style={{ ...ir(400, 16), color: 'rgba(255,255,255,0.85)', marginBottom: 40, lineHeight: 1.7 }}>
             Aulas particulares com acompanhamento real, jornadas personalizadas e uma professora que acredita no seu potencial.
           </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ padding: '15px 30px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 15, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)' }}>
-              Quero começar minha jornada
-            </a>
-            <button onClick={onStudent} style={{ padding: '15px 30px', background: 'rgba(255,255,255,0.25)', color: '#fff', border: '2px solid rgba(255,255,255,0.7)', borderRadius: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>
-              Já sou aluna
-            </button>
-            <button onClick={onCourse} style={{ padding: '15px 30px', background: 'rgba(255,255,255,0.2)', color: '#fff', border: '2px solid rgba(255,255,255,0.6)', borderRadius: 14, fontSize: 15, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>
-              Já tenho acesso ao curso
-            </button>
-          </div>
+          <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ display: 'inline-block', padding: '15px 32px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 15, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)' }}>
+            Quero começar minha jornada
+          </a>
         </div>
       </section>
 
