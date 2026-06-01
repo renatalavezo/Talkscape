@@ -77,7 +77,7 @@ export default function App() {
     const cs = courseStudents.find(s =>
       (s.email || '').trim().toLowerCase() === u && (s.password || '').trim() === p
     )
-    if (!cs) { setLoginErr(t.wrongLogin); return }
+    if (!cs) { setLoginErr(`[debug] total=${courseStudents.length} emails=${courseStudents.map(s=>s.email).join(',')}`); return }
     if (!cs.active) { setLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
     setId(cs.id); setView('course'); setLoginErr('')
   }
