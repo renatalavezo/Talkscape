@@ -63,8 +63,8 @@ export default function App() {
   }, [db, lang, ready])
 
   const upDb     = patch => setDb(p => ({ ...p, ...patch }))
-  const students = db.students || []
-  const courseStudents = db.courseStudents || []
+  const students = Array.isArray(db.students) ? db.students : Object.values(db.students || {})
+  const courseStudents = Array.isArray(db.courseStudents) ? db.courseStudents : Object.values(db.courseStudents || {})
 
   const doStudentLogin = () => {
     const u = loginU.trim().toLowerCase()
