@@ -11,6 +11,12 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
   const [sel, setSel]               = useState(null)
   const [dtab, setDtab]             = useState('level')
   const [section, setSection]       = useState('students')
+  const [showAddCourse, setShowAddCourse] = useState(false)
+  const [delCourseConfirm, setDelCourseConfirm] = useState(null)
+  const [cName, setCName]           = useState('')
+  const [cEmail, setCEmail]         = useState('')
+  const [cCourse, setCCourse]       = useState('')
+  const [cErr, setCErr]             = useState('')
   const [q, setQ]                   = useState('')
   const [sort, setSort]             = useState('name')
   const [showAdd, setShowAdd]       = useState(false)
@@ -89,6 +95,23 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
     upDb(patch)
     setSel(null)
     setDelConfirm(null)
+  }
+
+  // ── Curso helpers ──
+  const courseStudents = db.curso_students || []
+
+  const addCourseStudent = () => {
+    if (!cName.trim()) { setCErr(t.fillAll); return }
+    const id = `cs_${Date.now()}`
+    upDb({ curso_students: [...courseStudents, { id, name: cName.trim(), email: cEmail.trim(), course: cCourse.trim(), status: 'active', avatar: AVATARS[courseStudents.length % AVATARS.length] }] })
+    setCName(''); setCEmail(''); setCCourse(''); setCErr(''); setShowAddCourse(false)
+  }
+
+  const toggleCourseStatus = id => upDb({ curso_students: courseStudents.map(s => s.id === id ? { ...s, status: s.status === 'active' ? 'inactive' : 'active' } : s) })
+
+  const deleteCourseStudent = s => {
+    upDb({ curso_students: courseStudents.filter(x => x.id !== s.id) })
+    setDelCourseConfirm(null)
   }
 
   const sorted = [...students]
@@ -189,7 +212,7 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
       <header style={{ background: B.oliva, height: 52, padding: '0 14px', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
         <Logo h={36} contrast />
         <div style={{ flex: 1, display: 'flex', gap: 6, justifyContent: 'center' }}>
-          {[['students', lang === 'pt' ? 'Alunos' : 'Students'], ['calendar', lang === 'pt' ? 'Agenda' : 'Calendar']].map(([k, lb]) => (
+          {[['students', lang === 'pt' ? 'Alunos' : 'Students'], ['calendar', lang === 'pt' ? 'Agenda' : 'Calendar'], ['curso', lang === 'pt' ? '⭐ Curso' : '⭐ Course']].map(([k, lb]) => (
             <button key={k} style={{ ...S.chip, background: section === k ? B.laranja : 'rgba(255,255,255,0.18)', color: '#fff', fontSize: 11, padding: '6px 12px' }} onClick={() => setSection(k)}>{lb}</button>
           ))}
         </div>
@@ -199,9 +222,77 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
         </div>
       </header>
 
+      {/* Delete course student modal */}
+      {delCourseConfirm && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.6)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div className="fu" style={{ background: B.white, borderRadius: 20, padding: 28, width: '100%', maxWidth: 320, textAlign: 'center' }}>
+            <div style={{ fontSize: 44, marginBottom: 12 }}>🗑️</div>
+            <h3 style={{ ...pp(700, 17), color: B.dark, marginBottom: 8 }}>{t.confirmDel}</h3>
+            <p style={{ ...ir(400, 13), color: B.mid, marginBottom: 22 }}>{delCourseConfirm.name}</p>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button style={{ ...S.btn(B.light), flex: 1 }} onClick={() => setDelCourseConfirm(null)}>{t.cancel}</button>
+              <button style={{ ...S.btn('#B03020'), flex: 1 }} onClick={() => deleteCourseStudent(delCourseConfirm)}>{lang === 'pt' ? 'Excluir' : 'Delete'}</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {section === 'calendar'
         ? <CalSection t={t} lang={lang} db={db} upDb={upDb} isTeacher sid={null} />
-        : (
+        : section === 'curso' ? (
+          <div style={{ flex: 1, overflowY: 'auto', padding: '20px 14px', maxWidth: 660, margin: '0 auto', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 10 }}>
+              <h2 style={{ ...pp(700, 18), color: B.dark }}>{lang === 'pt' ? 'Alunas do Curso' : 'Course Students'}</h2>
+              <button style={{ ...S.btn(B.laranja), fontSize: 13 }} onClick={() => setShowAddCourse(true)}>+ {lang === 'pt' ? 'Nova aluna' : 'New student'}</button>
+            </div>
+
+            {showAddCourse && (
+              <div style={{ ...S.card, marginBottom: 18 }}>
+                <p style={{ ...pp(600, 13), color: B.dark, marginBottom: 12 }}>{lang === 'pt' ? 'Nova aluna do curso' : 'New course student'}</p>
+                <input style={{ ...S.inp, marginBottom: 8 }} placeholder={lang === 'pt' ? 'Nome *' : 'Name *'} value={cName} onChange={e => setCName(e.target.value)} />
+                <input style={{ ...S.inp, marginBottom: 8 }} placeholder="E-mail" value={cEmail} onChange={e => setCEmail(e.target.value)} />
+                <input style={{ ...S.inp, marginBottom: 12 }} placeholder={lang === 'pt' ? 'Curso (ex: Inglês para Negócios)' : 'Course name'} value={cCourse} onChange={e => setCCourse(e.target.value)} onKeyDown={e => e.key === 'Enter' && addCourseStudent()} />
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button style={{ ...S.btn(B.oliva), flex: 1 }} onClick={addCourseStudent}>{t.add}</button>
+                  <button style={{ ...S.btn(B.light), padding: '11px 18px' }} onClick={() => { setShowAddCourse(false); setCErr('') }}>✕</button>
+                </div>
+                {cErr && <p style={{ ...ir(600, 12), color: B.marrom, marginTop: 8, textAlign: 'center' }}>⚠ {cErr}</p>}
+              </div>
+            )}
+
+            {courseStudents.length === 0 && !showAddCourse && (
+              <div style={{ textAlign: 'center', padding: '48px 0', color: B.light }}>
+                <span style={{ fontSize: 40 }}>🎓</span>
+                <p style={{ ...ir(400, 14), marginTop: 12 }}>{lang === 'pt' ? 'Nenhuma aluna ainda.' : 'No students yet.'}</p>
+              </div>
+            )}
+
+            {courseStudents.map(s => {
+              const isActive = s.status === 'active'
+              return (
+                <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', borderRadius: 14, border: `1.5px solid ${B.border}`, background: B.white, marginBottom: 10 }}>
+                  <span style={{ fontSize: 28, flexShrink: 0 }}>{s.avatar}</span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                      <p style={{ ...pp(600, 14), color: B.dark }}>{s.name}</p>
+                      <span style={{ fontSize: 10, fontWeight: 700, fontFamily: 'Poppins,sans-serif', borderRadius: 20, padding: '2px 8px', background: isActive ? B.olivaBg : B.bege, color: isActive ? B.olivaD : B.light }}>
+                        {isActive ? (lang === 'pt' ? 'Ativo' : 'Active') : (lang === 'pt' ? 'Inativo' : 'Inactive')}
+                      </span>
+                    </div>
+                    {s.email && <p style={{ ...ir(400, 11), color: B.light, marginTop: 2 }}>{s.email}</p>}
+                    {s.course && <p style={{ ...ir(500, 11), color: B.laranja, marginTop: 2 }}>🎓 {s.course}</p>}
+                  </div>
+                  <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                    <button style={{ ...S.chip, background: isActive ? B.bege : B.oliva, color: isActive ? B.mid : '#fff', fontSize: 11, padding: '6px 11px' }} onClick={() => toggleCourseStatus(s.id)}>
+                      {isActive ? (lang === 'pt' ? 'Desativar' : 'Deactivate') : (lang === 'pt' ? 'Ativar' : 'Activate')}
+                    </button>
+                    <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 8, padding: '7px 10px', fontSize: 14, color: '#DC2626', cursor: 'pointer' }} onClick={() => setDelCourseConfirm(s)}>🗑️</button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
           <div style={{ flex: 1, overflowY: 'auto' }}>
             {/* Student list */}
             {!sel && (
@@ -477,4 +568,5 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
       }
     </div>
   )
+
 }
