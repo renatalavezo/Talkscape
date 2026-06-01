@@ -183,7 +183,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
   ]
 
   return (
-    <div style={S.app}>
+    <div style={{ ...S.app, overflowX: 'hidden' }}>
 
       {/* Settings modal */}
       {showSettings && (
@@ -288,22 +288,22 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
       )}
 
       {/* Header */}
-      <header style={{ background: B.oliva, height: 64, padding: '0 14px', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-        <Logo h={48} contrast />
-        <div style={{ flex: 1, display: 'flex', gap: 6, justifyContent: 'center' }}>
+      <header style={{ background: B.oliva, padding: '0 10px', display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, flexWrap: 'wrap', minHeight: 56 }}>
+        <Logo h={40} contrast />
+        <div style={{ flex: 1, display: 'flex', gap: 4, overflowX: 'auto', WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}>
           {[
-            ['students', <><Icon name="students" size={13} color="#fff" />&nbsp;{lang === 'pt' ? 'Alunos' : 'Students'}</>],
-            ['calendar', <><Icon name="calendar" size={13} color="#fff" />&nbsp;{lang === 'pt' ? 'Agenda' : 'Calendar'}</>],
-            ['bank',     <><Icon name="star" size={13} color="#fff" />&nbsp;{lang === 'pt' ? 'Banco' : 'Bank'}</>],
-            ['course',   <><Icon name="star" size={13} color="#fff" />&nbsp;{lang === 'pt' ? 'Curso' : 'Course'}</>],
+            ['students', <><Icon name="students" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Alunos' : 'Students'}</>],
+            ['calendar', <><Icon name="calendar" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Agenda' : 'Calendar'}</>],
+            ['bank',     <><Icon name="star" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Banco' : 'Bank'}</>],
+            ['course',   <><Icon name="star" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Curso' : 'Course'}</>],
           ].map(([k, lb]) => (
-            <button key={k} style={{ ...S.chip, background: section === k ? B.laranja : 'rgba(255,255,255,0.18)', color: '#fff', fontSize: 12, padding: '7px 14px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => setSection(k)}>{lb}</button>
+            <button key={k} style={{ ...S.chip, background: section === k ? B.laranja : 'rgba(255,255,255,0.18)', color: '#fff', fontSize: 11, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }} onClick={() => setSection(k)}>{lb}</button>
           ))}
         </div>
-        <div style={{ display: 'flex', gap: 5 }}>
-          <button style={{ ...S.chip, background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 11, padding: '6px 10px' }} onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}>{t.switchLang}</button>
-          <button style={{ ...S.chip, background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 11, padding: '6px 10px', display: 'flex', alignItems: 'center' }} onClick={() => setShowSettings(true)}><Icon name="settings" size={15} color="#fff" /></button>
-          <button style={{ ...S.chip, background: 'rgba(138,63,44,0.5)', color: '#fff', fontSize: 11, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={onLogout}><Icon name="logout" size={13} color="#fff" />{t.logout}</button>
+        <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+          <button style={{ ...S.chip, background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 11, padding: '6px 8px' }} onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}>{t.switchLang}</button>
+          <button style={{ ...S.chip, background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 11, padding: '6px 8px', display: 'flex', alignItems: 'center' }} onClick={() => setShowSettings(true)}><Icon name="settings" size={14} color="#fff" /></button>
+          <button style={{ ...S.chip, background: 'rgba(138,63,44,0.5)', color: '#fff', fontSize: 11, padding: '6px 8px', display: 'flex', alignItems: 'center', gap: 4 }} onClick={onLogout}><Icon name="logout" size={13} color="#fff" />{t.logout}</button>
         </div>
       </header>
 
