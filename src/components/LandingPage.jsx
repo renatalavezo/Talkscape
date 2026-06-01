@@ -129,7 +129,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <p style={{ ...ir(400, 16), color: 'rgba(255,255,255,0.85)', marginBottom: 40, lineHeight: 1.7 }}>
             Aulas particulares com acompanhamento real, jornadas personalizadas e uma professora que acredita no seu potencial.
           </p>
-          <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ display: 'inline-block', padding: '15px 32px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 15, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)' }}>
+          <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ display: 'inline-block', padding: '13px 28px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)', maxWidth: 300, textAlign: 'center', lineHeight: 1.4 }}>
             Quero começar minha jornada
           </a>
         </div>
