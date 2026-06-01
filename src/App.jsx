@@ -80,10 +80,12 @@ export default function App() {
   const doCourseLogin = () => {
     const u = courseLoginU.trim().toLowerCase()
     const p = courseLoginP.trim()
+    console.log('LOGIN ATTEMPT', { u, p, courseStudents })
     if (!u) { setCourseLoginErr('Preencha seu email.'); return }
-    const s = courseStudents.find(s =>
-      (s.email || '').trim().toLowerCase() === u && (s.password || '').trim() === p
-    )
+    const s = courseStudents.find(s => {
+      console.log('CHECKING', { email: s.email, match_email: (s.email || '').trim().toLowerCase() === u, password: s.password, match_pass: (s.password || '').trim() === p, active: s.active })
+      return (s.email || '').trim().toLowerCase() === u && (s.password || '').trim() === p
+    })
     if (!s) { setCourseLoginErr('Email ou senha incorretos.'); return }
     if (!s.active) { setCourseLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
     setId(s.id); setView('course'); setCourseLoginErr('')
