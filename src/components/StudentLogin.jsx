@@ -4,26 +4,67 @@ import Logo from './Logo'
 
 export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, onLogin, onBack }) {
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})` }}>
-      <div className="fu" style={{ background: B.white, borderRadius: 24, padding: '44px 36px', maxWidth: 380, width: '92%', boxShadow: '0 40px 80px rgba(44,24,16,0.3)' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}><Logo h={52} /></div>
-        <h2 style={{ ...pp(700, 18), color: B.dark, marginBottom: 4, textAlign: 'center' }}>{t.loginTitle}</h2>
-        <p style={{ ...ir(400, 13), color: B.light, textAlign: 'center', marginBottom: 24 }}>{t.loginSub}</p>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})`, padding: 20 }}>
+      <div style={{ background: B.white, borderRadius: 24, padding: '44px 36px', maxWidth: 380, width: '100%', boxShadow: '0 40px 80px rgba(44,24,16,0.3)' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
+          <Logo h={52} />
+        </div>
+        <h2 style={{ ...pp(700, 18), color: B.dark, marginBottom: 4, textAlign: 'center' }}>
+          {lang === 'pt' ? 'Entrar' : 'Sign in'}
+        </h2>
+        <p style={{ ...ir(400, 13), color: B.light, textAlign: 'center', marginBottom: 28 }}>
+          {lang === 'pt' ? 'Aluna particular ou das Jornadas — mesma tela!' : 'Private or Journey student — same screen!'}
+        </p>
+
+        <div style={{ background: B.cream, borderRadius: 12, padding: '10px 14px', marginBottom: 20, display: 'flex', gap: 8 }}>
+          <span style={{ fontSize: 16 }}>💡</span>
+          <p style={{ ...ir(400, 12), color: B.mid, lineHeight: 1.6 }}>
+            {lang === 'pt'
+              ? 'Aluna particular: use seu usuário. Aluna das Jornadas: use seu email.'
+              : 'Private student: use your username. Journey student: use your email.'}
+          </p>
+        </div>
+
         <div style={{ marginBottom: 12 }}>
-          <label style={S.lbl}>{t.userLabel}</label>
-          <input style={S.inp} placeholder={t.userLabel} value={u} onChange={e => setU(e.target.value)} onKeyDown={e => e.key === 'Enter' && onLogin()} />
+          <label style={S.lbl}>{lang === 'pt' ? 'Usuário ou email' : 'Username or email'}</label>
+          <input style={S.inp} placeholder={lang === 'pt' ? 'seu_usuario ou email@email.com' : 'your_username or email@email.com'}
+            value={u} onChange={e => setU(e.target.value)} onKeyDown={e => e.key === 'Enter' && onLogin()} />
         </div>
-        <div style={{ marginBottom: 16 }}>
-          <label style={S.lbl}>{t.passLabel2}</label>
-          <input type="password" style={S.inp} placeholder="••••••••" value={p} onChange={e => setP(e.target.value)} onKeyDown={e => e.key === 'Enter' && onLogin()} />
+        <div style={{ marginBottom: 20 }}>
+          <label style={S.lbl}>{lang === 'pt' ? 'Senha' : 'Password'}</label>
+          <input type="password" style={S.inp} placeholder="••••••••"
+            value={p} onChange={e => setP(e.target.value)} onKeyDown={e => e.key === 'Enter' && onLogin()} />
         </div>
-        {err && <p style={{ ...ir(600, 12), color: B.marrom, marginBottom: 12, textAlign: 'center' }}>⚠️ {err}</p>}
-        <button style={{ ...S.btn(B.marrom), width: '100%', marginBottom: 12, fontSize: 14 }} onClick={onLogin}>{t.loginBtn}</button>
+
+        {err && (
+          <div style={{ background: '#FEE2E2', borderRadius: 10, padding: '10px 14px', marginBottom: 16, display: 'flex', gap: 8 }}>
+            <span>⚠️</span>
+            <p style={{ ...ir(600, 12), color: '#DC2626' }}>{err}</p>
+          </div>
+        )}
+
+        <button style={{ ...S.btn(B.laranja), width: '100%', marginBottom: 12, fontSize: 15 }} onClick={onLogin}>
+          {lang === 'pt' ? 'Entrar' : 'Sign in'}
+        </button>
+
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
           <button style={{ background: 'none', border: `1.5px solid ${B.border}`, borderRadius: 20, padding: '6px 16px', fontSize: 12, color: B.mid, cursor: 'pointer' }} onClick={onBack}>←</button>
           <button style={{ background: 'none', border: `1.5px solid ${B.border}`, borderRadius: 20, padding: '6px 16px', fontSize: 12, color: B.mid, cursor: 'pointer' }} onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}>{t.switchLang}</button>
         </div>
-        <p style={{ ...ir(400, 11), color: B.light, textAlign: 'center', marginTop: 16 }}>{t.noAccountHint}</p>
+
+        <p style={{ ...ir(400, 11), color: B.light, textAlign: 'center', marginTop: 16 }}>
+          {lang === 'pt' ? 'Não tem acesso ainda?' : "Don't have access yet?"}
+        </p>
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 8 }}>
+          <a href="https://wa.me/5511986704076?text=Olá%20Renata!%20Quero%20começar%20no%20TalkScape." target="_blank" rel="noreferrer"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: '#25D366', color: '#fff', borderRadius: 10, fontSize: 12, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif' }}>
+            WhatsApp
+          </a>
+          <a href="https://www.instagram.com/talkscape.byrenata" target="_blank" rel="noreferrer"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: '#E1306C', color: '#fff', borderRadius: 10, fontSize: 12, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif' }}>
+            Instagram
+          </a>
+        </div>
       </div>
     </div>
   )
