@@ -110,10 +110,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <button onClick={onStudent} style={{ padding: '8px 14px', background: B.bege, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 600, color: B.dark, cursor: 'pointer', fontFamily: 'inherit' }}>
             Já sou aluna
           </button>
-          <button onClick={onCourse} style={{ padding: '8px 14px', background: B.bege, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 600, color: B.dark, cursor: 'pointer', fontFamily: 'inherit' }}>
-            Acesso ao curso
-          </button>
-          <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ padding: '8px 14px', background: B.laranja, borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', textDecoration: 'none' }}>
+<a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ padding: '8px 14px', background: B.laranja, borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', textDecoration: 'none' }}>
             Quero começar
           </a>
         </div>
