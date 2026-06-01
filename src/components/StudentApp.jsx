@@ -119,7 +119,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
           <div style={{ padding: '20px 14px', maxWidth: 860, margin: '0 auto' }}>
             {/* Hero */}
             <div style={{ background: `linear-gradient(135deg,${B.marrom},${B.laranja} 60%,${B.rosa})`, borderRadius: 20, padding: '22px 20px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-              <Logo h={52} contrast />
+              <span style={{ fontSize: 52, flexShrink: 0 }}>{student.avatar}</span>
               <div style={{ flex: 1, minWidth: 140 }}>
                 <p style={{ ...pp(800, 18), color: '#fff', marginBottom: 4 }}>{lang === 'pt' ? `Olá, ${student.name}!` : `Hi, ${student.name}!`}</p>
                 <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.75)', marginBottom: 12 }}>{lang === 'pt' ? 'Continue sua jornada com Teacher Renata' : 'Continue your journey with Teacher Renata'}</p>
