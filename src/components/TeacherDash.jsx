@@ -75,7 +75,21 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
     setNewName(''); setNewUser(''); setNewPass(''); setAddErr(''); setShowAdd(false)
   }
 
-  const deleteStudent = s => { upDb({ students: students.filter(x => x.id !== s.id) }); setSel(null); setDelConfirm(null) }
+  const deleteStudent = s => {
+    const sid = s.id
+    const patch = { students: students.filter(x => x.id !== sid) }
+    for (const k of [`lv_${sid}`, `sd_${sid}`, `fb_${sid}`, `hw_${sid}`, `mat_${sid}`, `hab_${sid}`, `ig_${sid}`, `in_${sid}`, `cal_${sid}`]) {
+      patch[k] = null
+    }
+    for (const k of Object.keys(db)) {
+      if (k.startsWith(`pew_${sid}_`) || k.startsWith(`pt_${sid}_`) || k.startsWith(`ex_${sid}_`)) {
+        patch[k] = null
+      }
+    }
+    upDb(patch)
+    setSel(null)
+    setDelConfirm(null)
+  }
 
   const sorted = [...students]
     .filter(s => s.name.toLowerCase().includes(q.toLowerCase()))
@@ -205,9 +219,9 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
                 {sorted.map(s => {
                   const pct = pctOf(s.id), lm = lvMeta(s.id)
                   return (
-                    <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px', borderRadius: 14, border: `1.5px solid ${B.border}`, background: B.white, cursor: 'pointer', marginBottom: 8 }} onClick={() => { setSel(s.id); setDtab('level') }}>
-                      <span style={{ fontSize: 28 }}>{s.avatar}</span>
-                      <div style={{ flex: 1, minWidth: 0 }}>
+                    <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px', borderRadius: 14, border: `1.5px solid ${B.border}`, background: B.white, marginBottom: 8 }}>
+                      <span style={{ fontSize: 28, cursor: 'pointer' }} onClick={() => { setSel(s.id); setDtab('level') }}>{s.avatar}</span>
+                      <div style={{ flex: 1, minWidth: 0, cursor: 'pointer' }} onClick={() => { setSel(s.id); setDtab('level') }}>
                         <p style={{ ...pp(600, 14), color: B.dark }}>{s.name}</p>
                         <p style={{ ...ir(400, 11), color: B.light }}>@{s.username}</p>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
@@ -216,7 +230,7 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
                           <span style={{ ...pp(700, 12), color: B.marrom }}>{pct}%</span>
                         </div>
                       </div>
-                      <span style={{ color: B.light, fontSize: 18 }}>›</span>
+                      <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 8, padding: '7px 10px', fontSize: 14, color: '#DC2626', cursor: 'pointer', flexShrink: 0 }} onClick={e => { e.stopPropagation(); setDelConfirm(s) }}>🗑️</button>
                     </div>
                   )
                 })}
