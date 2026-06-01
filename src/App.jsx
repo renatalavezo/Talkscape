@@ -25,8 +25,9 @@ export default function App() {
   const [loading, setLoading]   = useState(true)
   const [ready, setReady]       = useState(false)
 
-  const saveTimer  = useRef(null)
-  const isRemote   = useRef(false)
+  const saveTimer    = useRef(null)
+  const isRemote     = useRef(false)
+  const initialized  = useRef(false)
   const t = TR[lang]
 
   // Real-time Firebase listener
@@ -35,7 +36,8 @@ export default function App() {
       const fresh = snap.exists() ? snap.val() : {}
       isRemote.current = true
       setDb(fresh)
-      if (!ready) {
+      if (!initialized.current) {
+        initialized.current = true
         setLang(fresh.lang || 'pt')
         setLoading(false)
         setReady(true)

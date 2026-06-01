@@ -115,7 +115,7 @@ export default function TeacherDash({ t, lang, setLang, students, db, upDb, onPr
 
   const resetPlanWeek = () => {
     const lv = lvOf(selS.id), ck = `pt_${selS.id}_${lv}_w${planWeek}`
-    const next = { ...db }; delete next[ck]; upDb(next)
+    upDb({ [ck]: null })
   }
 
   const addExtraWeek = () => {

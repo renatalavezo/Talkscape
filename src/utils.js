@@ -1,4 +1,4 @@
-export const TEACHER_PASS = 'teacher123'
+export const TEACHER_PASS = import.meta.env.VITE_TEACHER_PASS || 'teacher123'
 
 export const todayStr = () => new Date().toISOString().slice(0, 10)
 

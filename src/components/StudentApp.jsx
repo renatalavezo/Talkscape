@@ -235,7 +235,8 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                 {wTasks.map(task => {
                   const cm = CAT[task.cat] || CAT.grammar
                   const isDone = !!checked[task.id], hasErr = !!errors[task.id]
-                  const isEx = !!(PLAN[lvl] || []).every(w => !w.tasks.find(tk => tk.id === task.id))
+                  const basePlanTasks = (PLAN[lvl] || []).flatMap(w => w.tasks)
+                  const isEx = !basePlanTasks.find(tk => tk.id === task.id)
                   return (
                     <div key={task.id} style={{ borderRadius: 11, border: `1.5px solid ${isDone ? B.rosaD : isEx ? B.laranja : B.border}`, background: isDone ? B.marrBg : isEx ? B.larBg : B.white, padding: '11px 13px', transition: 'all 0.15s' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }} onClick={() => toggleTask(task.id)}>
