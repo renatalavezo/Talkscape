@@ -20,6 +20,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
   const [addErr, setAddErr]         = useState('')
   const [delConfirm, setDelConfirm] = useState(null)
   const [delCourseConfirm, setDelCourseConfirm] = useState(null)
+  const [copiedId, setCopiedId]     = useState(null)
   const [newName, setNewName]       = useState('')
   const [newUser, setNewUser]       = useState('')
   const [newPass, setNewPass]       = useState('')
@@ -216,7 +217,10 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
             </div>
             <input style={{ ...S.inp, marginBottom: 10 }} placeholder={t.stPh} value={newName} onChange={e => setNewName(e.target.value)} />
             <input style={{ ...S.inp, marginBottom: 10 }} placeholder={t.userPh} value={newUser} onChange={e => setNewUser(e.target.value)} />
-            <input style={{ ...S.inp, marginBottom: 16 }} placeholder={t.passSt} value={newPass} onChange={e => setNewPass(e.target.value)} onKeyDown={e => e.key === 'Enter' && addStudent()} />
+            <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
+              <input style={{ ...S.inp, flex: 1, marginBottom: 0 }} placeholder={t.passSt} value={newPass} onChange={e => setNewPass(e.target.value)} onKeyDown={e => e.key === 'Enter' && addStudent()} />
+              <button style={{ ...S.btn(B.bege), color: B.dark, padding: '0 14px', fontSize: 12, flexShrink: 0 }} onClick={() => { if (newPass) { navigator.clipboard.writeText(newPass); setCopiedId('new') } }}>{copiedId === 'new' ? '✓' : lang === 'pt' ? 'Copiar' : 'Copy'}</button>
+            </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button style={{ ...S.btn(B.oliva), flex: 1, fontSize: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={addStudent}><Icon name="add" size={15} color="#fff" />{t.add}</button>
               <button style={{ ...S.btn(B.light), fontSize: 14, padding: '11px 14px', display: 'flex', alignItems: 'center' }} onClick={() => { setShowAdd(false); setAddErr('') }}><Icon name="close" size={15} color="#fff" /></button>
@@ -294,7 +298,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
             ['students', <><Icon name="students" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Alunos' : 'Students'}</>],
             ['calendar', <><Icon name="calendar" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Agenda' : 'Calendar'}</>],
             ['bank',     <><Icon name="star" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Banco' : 'Bank'}</>],
-            ['course',   <><Icon name="star" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Curso' : 'Course'}</>],
+            ['course',   (() => { const n = (courseStudents||[]).reduce((acc,s) => acc + ((db[`cq_${s.id}`]||[]).filter(q=>!q.answer).length), 0); return <><Icon name="star" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Curso' : 'Course'}{n > 0 && <span style={{ background: '#ef4444', borderRadius: '50%', width: 16, height: 16, fontSize: 9, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginLeft: 4 }}>{n}</span>}</> })()],
             ['journeys', <><Icon name="map" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Jornadas' : 'Journeys'}</>],
           ].map(([k, lb]) => (
             <button key={k} style={{ ...S.chip, background: section === k ? B.laranja : 'rgba(255,255,255,0.18)', color: '#fff', fontSize: 11, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }} onClick={() => setSection(k)}>{lb}</button>

@@ -66,6 +66,11 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', maxWidth: 720, margin: '0 auto', width: '100%' }}>
 
+        {/* Welcome */}
+        <p style={{ ...pp(700, 16), color: B.dark, marginBottom: 12 }}>
+          {lang === 'pt' ? `Olá, ${student.name.split(' ')[0]}! 👋` : `Hi, ${student.name.split(' ')[0]}! 👋`}
+        </p>
+
         {/* Progress bar */}
         <div style={{ ...S.card, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 14 }}>
           <div style={{ flex: 1 }}>
