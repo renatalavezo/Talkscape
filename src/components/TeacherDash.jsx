@@ -179,7 +179,6 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
     ['hw',      <><Icon name="homework" size={13} />&nbsp;{t.tabHW}</>],
     ['info',    <><Icon name="info" size={13} />&nbsp;{t.tabInfo}</>],
     ['cal',     <><Icon name="calendar" size={13} />&nbsp;{t.tabCal}</>],
-    ['journeys',<><Icon name="map" size={13} color="#fff" />&nbsp;{lang === 'pt' ? 'Jornadas' : 'Journeys'}</>],
   ]
 
   return (
@@ -296,6 +295,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
             ['calendar', <><Icon name="calendar" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Agenda' : 'Calendar'}</>],
             ['bank',     <><Icon name="star" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Banco' : 'Bank'}</>],
             ['course',   <><Icon name="star" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Curso' : 'Course'}</>],
+            ['journeys', <><Icon name="map" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Jornadas' : 'Journeys'}</>],
           ].map(([k, lb]) => (
             <button key={k} style={{ ...S.chip, background: section === k ? B.laranja : 'rgba(255,255,255,0.18)', color: '#fff', fontSize: 11, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }} onClick={() => setSection(k)}>{lb}</button>
           ))}
