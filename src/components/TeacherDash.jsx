@@ -10,7 +10,7 @@ import Icon from './Icon'
 import Logo from './Logo'
 import CalSection from './CalSection'
 
-export default function TeacherDash({ t, lang, setLang, students, courseStudents, db, upDb, onPreview, onLogout }) {
+export default function TeacherDash({ t, lang, setLang, students, courseStudents, db, upDb, onPreview, onPreviewCourse, onLogout }) {
   const [sel, setSel]               = useState(null)
   const [dtab, setDtab]             = useState('level')
   const [section, setSection]       = useState('students')
@@ -520,6 +520,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                     </div>
                     <div style={{ display: 'flex', gap: 6 }}>
                       <button style={{ ...S.btn(s.active ? B.light : B.oliva), fontSize: 12, padding: '8px 12px' }} onClick={() => upDb({ courseStudents: (courseStudents || []).map(x => x.id === s.id ? { ...x, active: !x.active } : x) })}>{s.active ? 'Desativar' : 'Ativar'}</button>
+                      <button style={{ ...S.btn(B.marrom), fontSize: 12, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => onPreviewCourse(s.id)}><Icon name="globe" size={13} color="#fff" />{lang === 'pt' ? 'Ver' : 'View'}</button>
                       <button style={{ ...S.btn(B.marrom), fontSize: 12, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => setSelCourse(selCourse === s.id ? null : s.id)}><Icon name="feedback" size={13} color="#fff" />Dúvidas</button>
                       <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 8, padding: '8px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => setDelCourseConfirm(s)}><Icon name="delete" size={14} color="#DC2626" /></button>
                     </div>
