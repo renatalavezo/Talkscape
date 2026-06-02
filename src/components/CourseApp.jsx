@@ -49,45 +49,50 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
     ['doubts',  <><Icon name="feedback" size={13} />&nbsp;{lang === 'pt' ? 'Dúvidas' : 'Doubts'}</>],
   ]
 
+  const firstName = student.name.split(' ')[0]
+
   return (
-    <div style={S.app}>
+    <div style={{ ...S.app, background: '#fdf6f0' }}>
       {/* Header */}
-      <header style={{ background: B.laranja, height: 64, padding: '0 14px', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-        <Logo h={48} contrast />
+      <header style={{ background: `linear-gradient(135deg, ${B.marrom} 0%, ${B.laranja} 100%)`, padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0, boxShadow: '0 4px 20px rgba(44,24,16,0.2)' }}>
+        <Logo h={40} contrast />
         <div style={{ flex: 1 }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Avatar seed={student.avatar || 'Lily'} size={32} />
-          <p style={{ ...pp(600, 13), color: '#fff' }}>{student.name}</p>
+          <Avatar seed={student.avatar || 'Lily'} size={34} />
+          <p style={{ ...pp(600, 13), color: '#fff' }}>{firstName}</p>
         </div>
-        <button style={{ ...S.chip, background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: 11, padding: '6px 10px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={onLogout}>
+        <button style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 20, padding: '6px 12px', color: '#fff', fontSize: 11, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', display: 'flex', alignItems: 'center', gap: 5 }} onClick={onLogout}>
           <Icon name="logout" size={13} color="#fff" />{lang === 'pt' ? 'Sair' : 'Logout'}
         </button>
       </header>
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', maxWidth: 720, margin: '0 auto', width: '100%' }}>
-
-        {/* Welcome */}
-        <p style={{ ...pp(700, 16), color: B.dark, marginBottom: 12 }}>
-          {lang === 'pt' ? `Olá, ${student.name.split(' ')[0]}! 👋` : `Hi, ${student.name.split(' ')[0]}! 👋`}
+      {/* Hero welcome strip */}
+      <div style={{ background: `linear-gradient(135deg, ${B.marrom}ee 0%, ${B.laranja}cc 100%)`, padding: '20px 20px 28px', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: -20, right: -20, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
+        <div style={{ position: 'absolute', bottom: -30, left: 40, width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.04)' }} />
+        <p style={{ ...ir(400, 13), color: 'rgba(255,255,255,0.75)', marginBottom: 2 }}>{new Date().toLocaleDateString(lang === 'pt' ? 'pt-BR' : 'en-US', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+        <p style={{ ...pp(800, 22), color: '#fff', marginBottom: 12 }}>
+          {lang === 'pt' ? `Olá, ${firstName}! 👋` : `Hi, ${firstName}! 👋`}
         </p>
-
-        {/* Progress bar */}
-        <div style={{ ...S.card, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 14 }}>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-              <p style={{ ...pp(600, 13), color: B.dark }}>{journey ? (lang === 'pt' ? journey.pt : journey.en) : (lang === 'pt' ? 'Nenhuma jornada' : 'No journey')}</p>
-              <p style={{ ...pp(700, 13), color: B.laranja }}>{pct}%</p>
-            </div>
-            <div style={{ height: 8, background: B.bege, borderRadius: 99, overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${pct}%`, background: B.laranja, borderRadius: 99, transition: 'width 0.4s ease' }} />
-            </div>
+        {/* Progress inside hero */}
+        <div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 12, padding: '12px 14px', backdropFilter: 'blur(4px)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+            <p style={{ ...pp(600, 12), color: 'rgba(255,255,255,0.9)' }}>{journey ? (lang === 'pt' ? journey.pt : journey.en) : (lang === 'pt' ? 'Nenhuma jornada' : 'No journey')}</p>
+            <p style={{ ...pp(700, 12), color: '#fff' }}>{pct}%</p>
+          </div>
+          <div style={{ height: 6, background: 'rgba(255,255,255,0.2)', borderRadius: 99, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${pct}%`, background: '#fff', borderRadius: 99, transition: 'width 0.4s ease' }} />
           </div>
         </div>
+      </div>
+
+      <div style={{ flex: 1, overflowY: 'auto', padding: '0 14px 16px', maxWidth: 720, margin: '0 auto', width: '100%' }}>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: 6, marginBottom: 18 }}>
+        <div style={{ display: 'flex', gap: 6, margin: '16px 0' }}>
           {TABS.map(([k, lb]) => (
-            <button key={k} style={{ ...S.chip, flex: 1, background: tab === k ? B.laranja : B.bege, color: tab === k ? '#fff' : B.mid, fontSize: 12, padding: '8px 10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }} onClick={() => setTab(k)}>{lb}</button>
+            <button key={k} onClick={() => setTab(k)}
+              style={{ flex: 1, padding: '10px 8px', borderRadius: 12, border: tab === k ? 'none' : `1.5px solid ${B.border}`, background: tab === k ? B.laranja : '#fff', color: tab === k ? '#fff' : B.mid, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, boxShadow: tab === k ? '0 4px 12px rgba(212,100,39,0.3)' : 'none', transition: 'all 0.15s' }}>{lb}</button>
           ))}
         </div>
 
@@ -102,27 +107,20 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
               </div>
             ) : (
               <div>
-                <div style={{ background: journey.color, borderRadius: 14, padding: '14px 18px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <span style={{ fontSize: 28 }}>{journey.icon}</span>
-                  <div>
-                    <p style={{ ...pp(700, 15), color: '#fff' }}>{lang === 'pt' ? journey.pt : journey.en}</p>
-                    <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.85)' }}>{lang === 'pt' ? journey.desc.pt : journey.desc.en}</p>
-                  </div>
-                </div>
-
                 {/* Week selector */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
                   {allWeeks.map(w => {
                     const tasks = getJTasks(jid, w.week)
                     const wPct = tasks.length ? Math.round(tasks.filter(tk => checked[tk.id]).length / tasks.length * 100) : 0
                     const isSelected = selWeek === w.week
+                    const isDone = wPct === 100
                     return (
                       <button key={w.week} onClick={() => setSelWeek(isSelected ? null : w.week)}
-                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '10px 14px', borderRadius: 12, border: `2px solid ${isSelected ? journey.color : B.border}`, background: isSelected ? journey.color + '18' : B.white, cursor: 'pointer', minWidth: 72 }}>
-                        <p style={{ ...pp(700, 13), color: isSelected ? journey.color : B.dark }}>{lang === 'pt' ? `S${w.week}` : `W${w.week}`}</p>
-                        <p style={{ ...ir(400, 10), color: B.light, textAlign: 'center', maxWidth: 80 }}>{w.theme[lang] || w.theme.en}</p>
-                        <div style={{ height: 4, width: '100%', background: B.bege, borderRadius: 99, overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: `${wPct}%`, background: journey.color, borderRadius: 99 }} />
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '12px 14px', borderRadius: 14, border: `2px solid ${isSelected ? journey.color : isDone ? journey.color + '55' : '#e8ddd4'}`, background: isSelected ? journey.color : isDone ? journey.color + '12' : '#fff', cursor: 'pointer', minWidth: 76, boxShadow: isSelected ? `0 4px 14px ${journey.color}44` : '0 2px 6px rgba(44,24,16,0.06)', transition: 'all 0.15s' }}>
+                        <p style={{ ...pp(800, 14), color: isSelected ? '#fff' : journey.color }}>{isDone ? '✓' : (lang === 'pt' ? `S${w.week}` : `W${w.week}`)}</p>
+                        <p style={{ ...ir(400, 10), color: isSelected ? 'rgba(255,255,255,0.85)' : B.light, textAlign: 'center', maxWidth: 80, lineHeight: 1.3 }}>{w.theme[lang] || w.theme.en}</p>
+                        <div style={{ height: 3, width: '100%', background: isSelected ? 'rgba(255,255,255,0.3)' : '#e8ddd4', borderRadius: 99, overflow: 'hidden', marginTop: 2 }}>
+                          <div style={{ height: '100%', width: `${wPct}%`, background: isSelected ? '#fff' : journey.color, borderRadius: 99 }} />
                         </div>
                       </button>
                     )
@@ -130,27 +128,34 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                 </div>
 
                 {/* Tasks for selected week */}
-                {selWeek && (() => {
+                {selWeek ? (() => {
                   const w = allWeeks.find(w => w.week === selWeek)
                   const tasks = getJTasks(jid, selWeek)
+                  const wDone = tasks.filter(tk => checked[tk.id]).length
                   return (
-                    <div style={{ ...S.card }}>
-                      <p style={{ ...pp(700, 14), color: B.dark, marginBottom: 12 }}>
-                        {lang === 'pt' ? `Semana ${selWeek}` : `Week ${selWeek}`}: {w?.theme[lang] || w?.theme.en}
-                      </p>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+                    <div style={{ background: '#fff', borderRadius: 16, padding: 16, boxShadow: '0 4px 16px rgba(44,24,16,0.08)', border: `1px solid #f0e8e0` }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, paddingBottom: 12, borderBottom: `1.5px solid #f5ede6` }}>
+                        <div style={{ width: 36, height: 36, borderRadius: 10, background: journey.color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: 18 }}>{journey.icon}</span>
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <p style={{ ...pp(700, 13), color: B.dark }}>{lang === 'pt' ? `Semana ${selWeek}` : `Week ${selWeek}`}: {w?.theme[lang] || w?.theme.en}</p>
+                          <p style={{ ...ir(400, 11), color: B.light }}>{wDone}/{tasks.length} {lang === 'pt' ? 'concluídas' : 'completed'}</p>
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                         {tasks.map(task => {
                           const done = !!checked[task.id]
                           const cm = CAT[task.cat] || CAT.grammar
                           return (
                             <div key={task.id} onClick={() => upDb({ [`cjsd_${sid}`]: { ...checked, [task.id]: !done } })}
-                              style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', background: done ? B.olivaBg : B.cream, borderRadius: 10, border: `1.5px solid ${done ? B.oliva + '44' : B.border}`, cursor: 'pointer', transition: 'all 0.2s' }}>
-                              <div style={{ width: 20, height: 20, borderRadius: 6, border: `2px solid ${done ? B.oliva : B.border}`, background: done ? B.oliva : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 13px', background: done ? '#f5faf5' : '#fdf8f5', borderRadius: 12, border: `1.5px solid ${done ? '#b6d4b6' : '#edddd4'}`, cursor: 'pointer', transition: 'all 0.15s' }}>
+                              <div style={{ width: 22, height: 22, borderRadius: 7, border: `2px solid ${done ? B.oliva : '#d4c4b8'}`, background: done ? B.oliva : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s' }}>
                                 {done && <Icon name="check" size={12} color="#fff" />}
                               </div>
                               <div style={{ flex: 1 }}>
-                                <p style={{ ...ir(600, 12), color: done ? B.mid : B.dark, textDecoration: done ? 'line-through' : 'none' }}>{lang === 'pt' ? task.pt : task.en}</p>
-                                {task.link && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
+                                <p style={{ ...ir(600, 13), color: done ? '#8faf8f' : B.dark, textDecoration: done ? 'line-through' : 'none' }}>{lang === 'pt' ? task.pt : task.en}</p>
+                                {task.link && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
                               </div>
                               <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
                             </div>
@@ -159,12 +164,13 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                       </div>
                     </div>
                   )
-                })()}
-
-                {!selWeek && (
-                  <p style={{ ...ir(400, 13), color: B.light, textAlign: 'center', padding: '16px 0' }}>
-                    {lang === 'pt' ? 'Selecione uma semana para ver as atividades' : 'Select a week to see the activities'}
-                  </p>
+                })() : (
+                  <div style={{ textAlign: 'center', padding: '32px 0' }}>
+                    <span style={{ fontSize: 36 }}>{journey.icon}</span>
+                    <p style={{ ...ir(400, 13), color: B.light, marginTop: 10 }}>
+                      {lang === 'pt' ? 'Toque em uma semana para ver as atividades ✨' : 'Tap a week to see the activities ✨'}
+                    </p>
+                  </div>
                 )}
               </div>
             )}
