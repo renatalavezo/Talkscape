@@ -8,6 +8,7 @@ import Logo from './Logo'
 
 export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogout }) {
   const [tab, setTab] = useState('journey')
+  const [selWeek, setSelWeek] = useState(null)
   const [question, setQuestion] = useState('')
   const [sent, setSent] = useState(false)
 
@@ -103,15 +104,35 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                     <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.85)' }}>{lang === 'pt' ? journey.desc.pt : journey.desc.en}</p>
                   </div>
                 </div>
-                {allWeeks.map(w => {
-                  const tasks = getJTasks(jid, w.week)
-                  const wPct = tasks.length ? Math.round(tasks.filter(tk => checked[tk.id]).length / tasks.length * 100) : 0
+
+                {/* Week selector */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 16 }}>
+                  {allWeeks.map(w => {
+                    const tasks = getJTasks(jid, w.week)
+                    const wPct = tasks.length ? Math.round(tasks.filter(tk => checked[tk.id]).length / tasks.length * 100) : 0
+                    const isSelected = selWeek === w.week
+                    return (
+                      <button key={w.week} onClick={() => setSelWeek(isSelected ? null : w.week)}
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '10px 14px', borderRadius: 12, border: `2px solid ${isSelected ? journey.color : B.border}`, background: isSelected ? journey.color + '18' : B.white, cursor: 'pointer', minWidth: 72 }}>
+                        <p style={{ ...pp(700, 13), color: isSelected ? journey.color : B.dark }}>{lang === 'pt' ? `S${w.week}` : `W${w.week}`}</p>
+                        <p style={{ ...ir(400, 10), color: B.light, textAlign: 'center', maxWidth: 80 }}>{w.theme[lang] || w.theme.en}</p>
+                        <div style={{ height: 4, width: '100%', background: B.bege, borderRadius: 99, overflow: 'hidden' }}>
+                          <div style={{ height: '100%', width: `${wPct}%`, background: journey.color, borderRadius: 99 }} />
+                        </div>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* Tasks for selected week */}
+                {selWeek && (() => {
+                  const w = allWeeks.find(w => w.week === selWeek)
+                  const tasks = getJTasks(jid, selWeek)
                   return (
-                    <div key={w.week} style={{ ...S.card, marginBottom: 10 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                        <p style={{ ...pp(700, 13), color: B.dark }}>{lang === 'pt' ? `Semana ${w.week}` : `Week ${w.week}`}: {w.theme[lang] || w.theme.en}</p>
-                        <span style={{ ...pp(700, 12), color: journey.color }}>{wPct}%</span>
-                      </div>
+                    <div style={{ ...S.card }}>
+                      <p style={{ ...pp(700, 14), color: B.dark, marginBottom: 12 }}>
+                        {lang === 'pt' ? `Semana ${selWeek}` : `Week ${selWeek}`}: {w?.theme[lang] || w?.theme.en}
+                      </p>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
                         {tasks.map(task => {
                           const done = !!checked[task.id]
@@ -133,7 +154,13 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                       </div>
                     </div>
                   )
-                })}
+                })()}
+
+                {!selWeek && (
+                  <p style={{ ...ir(400, 13), color: B.light, textAlign: 'center', padding: '16px 0' }}>
+                    {lang === 'pt' ? 'Selecione uma semana para ver as atividades' : 'Select a week to see the activities'}
+                  </p>
+                )}
               </div>
             )}
           </div>
