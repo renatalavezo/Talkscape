@@ -1,11 +1,14 @@
+import { useState } from 'react'
 import { B } from '../constants/colors'
 import { ir, pp } from '../constants/styles'
 import Logo from './Logo'
 import Icon from './Icon'
 import { JOURNEYS } from '../constants/journeys'
+import { dbLoad, dbSave } from '../firebase'
 
 const INSTAGRAM = 'https://www.instagram.com/talkscape.byrenata'
 const WHATSAPP = 'https://wa.me/5511986704076?text=Olá%20Renata!%20Vim%20pelo%20TalkScape%20e%20quero%20saber%20mais%20sobre%20as%20aulas.'
+const LINK_PAGAMENTO_ASAAS = 'COLOCAR_LINK_AQUI'
 const WAButton = ({ style }) => (
   <a href={WHATSAPP} target="_blank" rel="noreferrer"
     style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', background: '#25D366', color: '#fff', borderRadius: 12, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', ...style }}>
@@ -100,8 +103,72 @@ const PlanCard = ({ plan, isDuo = false, onStudent, onCourse }) => (
 )
 
 export default function LandingPage({ onBack, onStudent, onCourse }) {
+  const [showModal, setShowModal] = useState(false)
+  const [nome, setNome] = useState('')
+  const [email, setEmail] = useState('')
+  const [usuario, setUsuario] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [err, setErr] = useState('')
+
+  const handleSubmit = async () => {
+    if (!nome.trim() || !email.trim() || !usuario.trim()) { setErr('Preencha todos os campos.'); return }
+    if (!/^[a-zA-Z0-9_]+$/.test(usuario.trim())) { setErr('Usuário não pode ter espaços ou acentos. Use letras, números e _ apenas.'); return }
+    setLoading(true); setErr('')
+    try {
+      const fresh = await dbLoad()
+      const pendentes = Array.isArray(fresh.cadastros_pendentes) ? fresh.cadastros_pendentes : Object.values(fresh.cadastros_pendentes || {})
+      await dbSave({
+        ...fresh,
+        cadastros_pendentes: [...pendentes, {
+          id: `cp_${Date.now()}`,
+          nome: nome.trim(),
+          email: email.trim().toLowerCase(),
+          usuario: usuario.trim().toLowerCase(),
+          status: 'aguardando_pagamento',
+          criadoEm: new Date().toISOString(),
+        }]
+      })
+      window.location.href = LINK_PAGAMENTO_ASAAS
+    } catch(e) {
+      setErr('Erro ao salvar. Tente novamente.'); setLoading(false)
+    }
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: B.cream, fontFamily: 'Inter, sans-serif' }}>
+
+      {showModal && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }} onClick={() => setShowModal(false)}>
+          <div style={{ background: '#fff', borderRadius: 24, padding: 32, width: '100%', maxWidth: 400, boxShadow: '0 24px 60px rgba(44,24,16,0.35)' }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+              <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 800, fontSize: 18, color: '#2c1810' }}>Começar minha jornada</p>
+              <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#b0a090' }} onClick={() => setShowModal(false)}>×</button>
+            </div>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#8a7060', marginBottom: 24, lineHeight: 1.6 }}>Preencha abaixo para reservar sua vaga. Você será redirecionada para o pagamento. 😊</p>
+
+            <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Nome completo</p>
+            <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
+              placeholder="Seu nome completo" value={nome} onChange={e => { setNome(e.target.value); setErr('') }} />
+
+            <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Email</p>
+            <input type="email" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
+              placeholder="seuemail@email.com" value={email} onChange={e => { setEmail(e.target.value); setErr('') }} />
+
+            <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Usuário desejado</p>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Sem espaços ou acentos. Ex: maria_silva</p>
+            <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 20, boxSizing: 'border-box', outline: 'none' }}
+              placeholder="seu_usuario" value={usuario} onChange={e => { setUsuario(e.target.value.replace(/[^a-zA-Z0-9_]/g, '')); setErr('') }}
+              onKeyDown={e => e.key === 'Enter' && handleSubmit()} />
+
+            {err && <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#DC2626', marginBottom: 14, background: '#FEE2E2', padding: '8px 12px', borderRadius: 8 }}>{err}</p>}
+
+            <button disabled={loading} onClick={handleSubmit}
+              style={{ width: '100%', padding: '14px', background: loading ? '#e0c4a8' : '#d46427', border: 'none', borderRadius: 12, color: '#fff', fontSize: 15, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: loading ? 'not-allowed' : 'pointer' }}>
+              {loading ? 'Salvando...' : 'Continuar →'}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Header */}
       <header style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(247,244,239,0.95)', backdropFilter: 'blur(12px)', borderBottom: `1px solid ${B.border}`, padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -110,9 +177,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <button onClick={onStudent} style={{ padding: '8px 14px', background: B.bege, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 600, color: B.dark, cursor: 'pointer', fontFamily: 'inherit' }}>
             Já sou aluna
           </button>
-<a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ padding: '8px 14px', background: B.laranja, borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', textDecoration: 'none' }}>
-            Quero começar
-          </a>
+<button onClick={() => setShowModal(true)} style={{ padding: '8px 14px', background: B.laranja, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>Quero começar</button>
         </div>
       </header>
 
@@ -126,9 +191,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <p style={{ ...ir(400, 16), color: 'rgba(255,255,255,0.85)', marginBottom: 40, lineHeight: 1.7 }}>
             Aulas particulares com acompanhamento real, jornadas personalizadas e uma professora que acredita no seu potencial.
           </p>
-          <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={{ display: 'inline-block', padding: '13px 28px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)', maxWidth: 300, textAlign: 'center', lineHeight: 1.4 }}>
-            Quero começar minha jornada
-          </a>
+          <button onClick={() => setShowModal(true)} style={{ display: 'inline-block', padding: '13px 28px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 14, fontWeight: 700, border: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)', maxWidth: 300, textAlign: 'center', lineHeight: 1.4, cursor: 'pointer' }}>Quero começar minha jornada</button>
         </div>
       </section>
 

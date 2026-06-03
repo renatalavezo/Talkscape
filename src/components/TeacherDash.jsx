@@ -10,7 +10,7 @@ import Icon from './Icon'
 import Logo from './Logo'
 import CalSection from './CalSection'
 
-export default function TeacherDash({ t, lang, setLang, students, courseStudents, db, upDb, onPreview, onPreviewCourse, onLogout }) {
+export default function TeacherDash({ t, lang, setLang, students, courseStudents, cadastrosPendentes, db, upDb, onPreview, onPreviewCourse, onLogout }) {
   const [sel, setSel]               = useState(null)
   const [dtab, setDtab]             = useState('level')
   const [section, setSection]       = useState('students')
@@ -52,6 +52,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
   const [bankCat, setBankCat]       = useState('grammar')
   const [bankLink, setBankLink]     = useState('')
   const [welcomeMsg, setWelcomeMsg] = useState('')
+  const [fromCadastroId, setFromCadastroId] = useState(null)
   const [showAddCourse, setShowAddCourse] = useState(false)
   const [courseNewName, setCourseNewName] = useState('')
   const [courseNewEmail, setCourseNewEmail] = useState('')
@@ -155,6 +156,10 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
     if (students.find(s => (s.username || '').toLowerCase() === newUser.trim().toLowerCase())) { setAddErr(t.usernameExists); return }
     const id = Date.now().toString(), av = AVATARS[students.length % AVATARS.length]
     upDb({ students: [...students, { id, name: newName.trim(), avatar: av, username: newUser.trim(), password: newPass.trim() }] })
+    if (fromCadastroId) {
+      upDb({ cadastros_pendentes: (cadastrosPendentes || []).filter(c => c.id !== fromCadastroId) })
+      setFromCadastroId(null)
+    }
     setNewName(''); setNewUser(''); setNewPass(''); setAddErr(''); setShowAdd(false)
   }
 
@@ -561,6 +566,39 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
           <div style={{ flex: 1, overflowY: 'auto' }}>
             {!sel && (
               <div style={{ padding: '16px 14px', maxWidth: 820, margin: '0 auto' }}>
+                {(cadastrosPendentes || []).filter(c => c.status === 'aguardando_pagamento').length > 0 && (
+                  <div style={{ ...S.card, marginBottom: 16, border: `1.5px solid ${B.laranja}44`, background: B.laranja + '06' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: B.laranja }} />
+                      <p style={{ ...pp(700, 13), color: B.dark }}>{lang === 'pt' ? 'Cadastros Pendentes' : 'Pending Registrations'}</p>
+                      <span style={{ background: B.laranja, color: '#fff', borderRadius: 20, padding: '2px 8px', fontSize: 11, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{(cadastrosPendentes || []).filter(c => c.status === 'aguardando_pagamento').length}</span>
+                    </div>
+                    {(cadastrosPendentes || []).filter(c => c.status === 'aguardando_pagamento').map(c => (
+                      <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', background: B.white, borderRadius: 12, marginBottom: 8, border: `1px solid ${B.border}`, flexWrap: 'wrap' }}>
+                        <div style={{ flex: 1, minWidth: 160 }}>
+                          <p style={{ ...pp(600, 13), color: B.dark }}>{c.nome}</p>
+                          <p style={{ ...ir(400, 11), color: B.light }}>{c.email} · @{c.usuario}</p>
+                        </div>
+                        <div style={{ display: 'flex', gap: 6 }}>
+                          <button style={{ ...S.btn(B.oliva), fontSize: 12, padding: '7px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
+                            onClick={() => {
+                              setNewName(c.nome)
+                              setNewUser(c.usuario)
+                              setNewPass(Math.random().toString(36).slice(2, 8))
+                              setFromCadastroId(c.id)
+                              setShowAdd(true)
+                            }}>
+                            <Icon name="add" size={13} color="#fff" />{lang === 'pt' ? 'Criar conta' : 'Create account'}
+                          </button>
+                          <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 8, padding: '7px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                            onClick={() => upDb({ cadastros_pendentes: (cadastrosPendentes || []).filter(x => x.id !== c.id) })}>
+                            <Icon name="delete" size={14} color="#DC2626" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
                   <div style={{ flex: 1, position: 'relative' }}>
                     <Icon name="search" size={15} color={B.light} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
