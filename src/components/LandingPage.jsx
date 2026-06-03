@@ -104,6 +104,7 @@ const PlanCard = ({ plan, isDuo = false, onStudent, onCourse }) => (
 
 export default function LandingPage({ onBack, onStudent, onCourse }) {
   const [showModal, setShowModal] = useState(false)
+  const [tipo, setTipo] = useState('particular')
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
   const [usuario, setUsuario] = useState('')
@@ -111,26 +112,47 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState('')
 
+  const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setUsuario(''); setSenha(''); setErr(''); setShowModal(true) }
+
   const handleSubmit = async () => {
-    if (!nome.trim() || !email.trim() || !usuario.trim() || !senha.trim()) { setErr('Preencha todos os campos.'); return }
-    if (!/^[a-zA-Z0-9_]+$/.test(usuario.trim())) { setErr('Usuário não pode ter espaços ou acentos. Use letras, números e _ apenas.'); return }
+    if (!nome.trim() || !senha.trim()) { setErr('Preencha todos os campos.'); return }
+    if (tipo === 'particular' && !usuario.trim()) { setErr('Preencha todos os campos.'); return }
+    if (tipo === 'curso' && !email.trim()) { setErr('Preencha todos os campos.'); return }
+    if (tipo === 'particular' && !/^[a-zA-Z0-9_]+$/.test(usuario.trim())) { setErr('Usuário não pode ter espaços ou acentos. Use letras, números e _ apenas.'); return }
     if (senha.trim().length < 6) { setErr('A senha deve ter pelo menos 6 caracteres.'); return }
     setLoading(true); setErr('')
     try {
       const fresh = await dbLoad()
-      const pendentes = Array.isArray(fresh.cadastros_pendentes) ? fresh.cadastros_pendentes : Object.values(fresh.cadastros_pendentes || {})
-      await dbSave({
-        ...fresh,
-        cadastros_pendentes: [...pendentes, {
-          id: `cp_${Date.now()}`,
-          nome: nome.trim(),
-          email: email.trim().toLowerCase(),
-          usuario: usuario.trim().toLowerCase(),
-          senha: senha.trim(),
-          status: 'aguardando_pagamento',
-          criadoEm: new Date().toISOString(),
-        }]
-      })
+      if (tipo === 'particular') {
+        const pendentes = Array.isArray(fresh.cadastros_pendentes) ? fresh.cadastros_pendentes : Object.values(fresh.cadastros_pendentes || {})
+        await dbSave({
+          ...fresh,
+          cadastros_pendentes: [...pendentes, {
+            id: `cp_${Date.now()}`,
+            nome: nome.trim(),
+            email: email.trim().toLowerCase(),
+            usuario: usuario.trim().toLowerCase(),
+            senha: senha.trim(),
+            status: 'aguardando_pagamento',
+            criadoEm: new Date().toISOString(),
+          }]
+        })
+      } else {
+        const cursos = Array.isArray(fresh.courseStudents) ? fresh.courseStudents : Object.values(fresh.courseStudents || {})
+        await dbSave({
+          ...fresh,
+          courseStudents: [...cursos, {
+            id: `cs_${Date.now()}`,
+            name: nome.trim(),
+            email: email.trim().toLowerCase(),
+            password: senha.trim(),
+            active: true,
+            avatar: 'Lily',
+            jid: null,
+            createdAt: new Date().toISOString().slice(0, 10),
+          }]
+        })
+      }
       window.location.href = LINK_PAGAMENTO_ASAAS
     } catch(e) {
       setErr('Erro ao salvar. Tente novamente.'); setLoading(false)
@@ -143,27 +165,44 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
       {showModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }} onClick={() => setShowModal(false)}>
           <div style={{ background: '#fff', borderRadius: 24, padding: 32, width: '100%', maxWidth: 400, boxShadow: '0 24px 60px rgba(44,24,16,0.35)' }} onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 800, fontSize: 18, color: '#2c1810' }}>Começar minha jornada</p>
               <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: '#b0a090' }} onClick={() => setShowModal(false)}>×</button>
             </div>
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#8a7060', marginBottom: 24, lineHeight: 1.6 }}>Preencha abaixo para reservar sua vaga. Você será redirecionada para o pagamento. 😊</p>
+
+            {/* Tipo selector */}
+            <div style={{ display: 'flex', background: '#f5ede6', borderRadius: 12, padding: 4, marginBottom: 20, gap: 4 }}>
+              {[['particular', 'Aula particular'], ['curso', 'Jornada Digital']].map(([k, lb]) => (
+                <button key={k} onClick={() => { setTipo(k); setErr('') }}
+                  style={{ flex: 1, padding: '8px', borderRadius: 9, border: 'none', background: tipo === k ? '#fff' : 'transparent', color: tipo === k ? '#2c1810' : '#8a7060', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: 'pointer', boxShadow: tipo === k ? '0 2px 6px rgba(44,24,16,0.1)' : 'none', transition: 'all 0.15s' }}>
+                  {lb}
+                </button>
+              ))}
+            </div>
+
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#8a7060', marginBottom: 20, lineHeight: 1.6, background: '#fdf8f5', borderRadius: 10, padding: '10px 12px' }}>
+              {tipo === 'particular'
+                ? '📚 Após o cadastro você será redirecionada para o pagamento. Assim que confirmado, a Renata libera seu acesso.'
+                : '✨ Após o cadastro você já pode acessar a plataforma. Você será redirecionada para o pagamento.'}
+            </p>
 
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Nome completo</p>
             <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
               placeholder="Seu nome completo" value={nome} onChange={e => { setNome(e.target.value); setErr('') }} />
 
-            <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Email</p>
-            <input type="email" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
-              placeholder="seuemail@email.com" value={email} onChange={e => { setEmail(e.target.value); setErr('') }} />
-
-            <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Usuário desejado</p>
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Sem espaços ou acentos. Ex: maria_silva</p>
-            <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
-              placeholder="seu_usuario" value={usuario} onChange={e => { setUsuario(e.target.value.replace(/[^a-zA-Z0-9_]/g, '')); setErr('') }} />
+            {tipo === 'particular' ? (<>
+              <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Usuário desejado</p>
+              <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Sem espaços ou acentos. Ex: maria_silva</p>
+              <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
+                placeholder="seu_usuario" value={usuario} onChange={e => { setUsuario(e.target.value.replace(/[^a-zA-Z0-9_]/g, '')); setErr('') }} />
+            </>) : (<>
+              <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Email</p>
+              <input type="email" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
+                placeholder="seuemail@email.com" value={email} onChange={e => { setEmail(e.target.value); setErr('') }} />
+            </>)}
 
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Senha de acesso</p>
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Mínimo 6 caracteres. Você vai usar essa senha para entrar na plataforma.</p>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Mínimo 6 caracteres.</p>
             <input type="password" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 20, boxSizing: 'border-box', outline: 'none' }}
               placeholder="••••••••" value={senha} onChange={e => { setSenha(e.target.value); setErr('') }}
               onKeyDown={e => e.key === 'Enter' && handleSubmit()} />
@@ -172,7 +211,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
 
             <button disabled={loading} onClick={handleSubmit}
               style={{ width: '100%', padding: '14px', background: loading ? '#e0c4a8' : '#d46427', border: 'none', borderRadius: 12, color: '#fff', fontSize: 15, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: loading ? 'not-allowed' : 'pointer' }}>
-              {loading ? 'Salvando...' : 'Continuar →'}
+              {loading ? 'Salvando...' : tipo === 'curso' ? 'Criar conta e ir para o pagamento →' : 'Continuar →'}
             </button>
           </div>
         </div>
@@ -185,7 +224,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <button onClick={onStudent} style={{ padding: '8px 14px', background: B.bege, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 600, color: B.dark, cursor: 'pointer', fontFamily: 'inherit' }}>
             Já sou aluna
           </button>
-<button onClick={() => setShowModal(true)} style={{ padding: '8px 14px', background: B.laranja, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>Quero começar</button>
+<button onClick={() => openModal('particular')} style={{ padding: '8px 14px', background: B.laranja, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>Quero começar</button>
         </div>
       </header>
 
@@ -199,7 +238,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <p style={{ ...ir(400, 16), color: 'rgba(255,255,255,0.85)', marginBottom: 40, lineHeight: 1.7 }}>
             Aulas particulares com acompanhamento real, jornadas personalizadas e uma professora que acredita no seu potencial.
           </p>
-          <button onClick={() => setShowModal(true)} style={{ display: 'inline-block', padding: '13px 28px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 14, fontWeight: 700, border: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)', maxWidth: 300, textAlign: 'center', lineHeight: 1.4, cursor: 'pointer' }}>Quero começar minha jornada</button>
+          <button onClick={() => openModal('particular')} style={{ display: 'inline-block', padding: '13px 28px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 14, fontWeight: 700, border: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)', maxWidth: 300, textAlign: 'center', lineHeight: 1.4, cursor: 'pointer' }}>Quero começar minha jornada</button>
         </div>
       </section>
 
@@ -370,7 +409,9 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
                 <div style={{ background: B.oliva + '22', borderRadius: 8, padding: '6px 12px', marginBottom: 20 }}>
                   <p style={{ ...pp(600, 12), color: B.oliva }}>ou R$ 497 à vista</p>
                 </div>
-                <WAButton style={{ width: '100%', justifyContent: 'center' }} />
+                <button onClick={() => openModal('curso')} style={{ width: '100%', padding: '14px', background: '#d46427', border: 'none', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: 'pointer' }}>
+                  Quero me inscrever na Jornada Digital →
+                </button>
               </div>
             </div>
           </div>
