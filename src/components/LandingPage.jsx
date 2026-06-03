@@ -107,12 +107,14 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
   const [usuario, setUsuario] = useState('')
+  const [senha, setSenha] = useState('')
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState('')
 
   const handleSubmit = async () => {
-    if (!nome.trim() || !email.trim() || !usuario.trim()) { setErr('Preencha todos os campos.'); return }
+    if (!nome.trim() || !email.trim() || !usuario.trim() || !senha.trim()) { setErr('Preencha todos os campos.'); return }
     if (!/^[a-zA-Z0-9_]+$/.test(usuario.trim())) { setErr('Usuário não pode ter espaços ou acentos. Use letras, números e _ apenas.'); return }
+    if (senha.trim().length < 6) { setErr('A senha deve ter pelo menos 6 caracteres.'); return }
     setLoading(true); setErr('')
     try {
       const fresh = await dbLoad()
@@ -124,6 +126,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           nome: nome.trim(),
           email: email.trim().toLowerCase(),
           usuario: usuario.trim().toLowerCase(),
+          senha: senha.trim(),
           status: 'aguardando_pagamento',
           criadoEm: new Date().toISOString(),
         }]
@@ -156,8 +159,13 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
 
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Usuário desejado</p>
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Sem espaços ou acentos. Ex: maria_silva</p>
-            <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 20, boxSizing: 'border-box', outline: 'none' }}
-              placeholder="seu_usuario" value={usuario} onChange={e => { setUsuario(e.target.value.replace(/[^a-zA-Z0-9_]/g, '')); setErr('') }}
+            <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
+              placeholder="seu_usuario" value={usuario} onChange={e => { setUsuario(e.target.value.replace(/[^a-zA-Z0-9_]/g, '')); setErr('') }} />
+
+            <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Senha de acesso</p>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Mínimo 6 caracteres. Você vai usar essa senha para entrar na plataforma.</p>
+            <input type="password" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 20, boxSizing: 'border-box', outline: 'none' }}
+              placeholder="••••••••" value={senha} onChange={e => { setSenha(e.target.value); setErr('') }}
               onKeyDown={e => e.key === 'Enter' && handleSubmit()} />
 
             {err && <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#DC2626', marginBottom: 14, background: '#FEE2E2', padding: '8px 12px', borderRadius: 8 }}>{err}</p>}

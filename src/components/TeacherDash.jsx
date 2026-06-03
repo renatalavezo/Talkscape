@@ -578,13 +578,14 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         <div style={{ flex: 1, minWidth: 160 }}>
                           <p style={{ ...pp(600, 13), color: B.dark }}>{c.nome}</p>
                           <p style={{ ...ir(400, 11), color: B.light }}>{c.email} · @{c.usuario}</p>
+                          {c.senha && <p style={{ ...ir(600, 11), color: B.oliva, marginTop: 2 }}>🔑 {c.senha}</p>}
                         </div>
                         <div style={{ display: 'flex', gap: 6 }}>
                           <button style={{ ...S.btn(B.oliva), fontSize: 12, padding: '7px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
                             onClick={() => {
                               setNewName(c.nome)
                               setNewUser(c.usuario)
-                              setNewPass(Math.random().toString(36).slice(2, 8))
+                              setNewPass(c.senha || Math.random().toString(36).slice(2, 8))
                               setFromCadastroId(c.id)
                               setShowAdd(true)
                             }}>
