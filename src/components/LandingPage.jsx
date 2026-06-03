@@ -107,12 +107,14 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
   const [tipo, setTipo] = useState('particular')
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
-  const [usuario, setUsuario] = useState('')
   const [senha, setSenha] = useState('')
+  const [selJids, setSelJids] = useState([])
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState('')
 
-  const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setUsuario(''); setSenha(''); setErr(''); setShowModal(true) }
+  const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setSenha(''); setSelJids([]); setErr(''); setShowModal(true) }
+
+  const toggleJid = jid => setSelJids(prev => prev.includes(jid) ? prev.filter(x => x !== jid) : [...prev, jid])
 
   const handleSubmit = async () => {
     if (!nome.trim() || !email.trim() || !senha.trim()) { setErr('Preencha todos os campos.'); return }
@@ -132,7 +134,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
         const cursos = Array.isArray(fresh.courseStudents) ? fresh.courseStudents : Object.values(fresh.courseStudents || {})
         await dbSave({
           ...fresh,
-          courseStudents: [...cursos, { id, name: nome.trim(), email: em, password: senha.trim(), active: false, avatar: 'Lily', jid: null, createdAt: new Date().toISOString().slice(0, 10) }]
+          courseStudents: [...cursos, { id, name: nome.trim(), email: em, password: senha.trim(), active: false, avatar: 'Lily', jids: selJids, jid: selJids[0] || null, createdAt: new Date().toISOString().slice(0, 10) }]
         })
       }
       window.location.href = LINK_PAGAMENTO_ASAAS
@@ -178,9 +180,27 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
 
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Senha de acesso</p>
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Mínimo 6 caracteres.</p>
-            <input type="password" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 20, boxSizing: 'border-box', outline: 'none' }}
+            <input type="password" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: tipo === 'curso' ? 20 : 20, boxSizing: 'border-box', outline: 'none' }}
               placeholder="••••••••" value={senha} onChange={e => { setSenha(e.target.value); setErr('') }}
               onKeyDown={e => e.key === 'Enter' && handleSubmit()} />
+
+            {tipo === 'curso' && (
+              <div style={{ marginBottom: 20 }}>
+                <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Qual(is) jornada(s) você quer?</p>
+                <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 10 }}>Selecione uma ou mais. A Renata confirma após o pagamento.</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {JOURNEYS.map(j => {
+                    const sel = selJids.includes(j.id)
+                    return (
+                      <button key={j.id} onClick={() => toggleJid(j.id)}
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 20, border: `1.5px solid ${sel ? '#d46427' : '#e0d4c8'}`, background: sel ? '#fdf0e6' : '#fff', color: sel ? '#d46427' : '#8a7060', fontSize: 12, fontWeight: sel ? 700 : 400, fontFamily: 'Inter,sans-serif', cursor: 'pointer', transition: 'all 0.15s' }}>
+                        <span>{j.icon}</span>{j.pt}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
             {err && <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#DC2626', marginBottom: 14, background: '#FEE2E2', padding: '8px 12px', borderRadius: 8 }}>{err}</p>}
 
