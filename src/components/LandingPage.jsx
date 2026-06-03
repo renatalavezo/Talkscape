@@ -115,42 +115,24 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
   const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setUsuario(''); setSenha(''); setErr(''); setShowModal(true) }
 
   const handleSubmit = async () => {
-    if (!nome.trim() || !senha.trim()) { setErr('Preencha todos os campos.'); return }
-    if (tipo === 'particular' && !usuario.trim()) { setErr('Preencha todos os campos.'); return }
-    if (tipo === 'curso' && !email.trim()) { setErr('Preencha todos os campos.'); return }
-    if (tipo === 'particular' && !/^[a-zA-Z0-9_]+$/.test(usuario.trim())) { setErr('Usuário não pode ter espaços ou acentos. Use letras, números e _ apenas.'); return }
+    if (!nome.trim() || !email.trim() || !senha.trim()) { setErr('Preencha todos os campos.'); return }
     if (senha.trim().length < 6) { setErr('A senha deve ter pelo menos 6 caracteres.'); return }
     setLoading(true); setErr('')
     try {
       const fresh = await dbLoad()
+      const em = email.trim().toLowerCase()
+      const id = `${tipo === 'particular' ? 's' : 'cs'}_${Date.now()}`
       if (tipo === 'particular') {
-        const pendentes = Array.isArray(fresh.cadastros_pendentes) ? fresh.cadastros_pendentes : Object.values(fresh.cadastros_pendentes || {})
+        const students = Array.isArray(fresh.students) ? fresh.students : Object.values(fresh.students || {})
         await dbSave({
           ...fresh,
-          cadastros_pendentes: [...pendentes, {
-            id: `cp_${Date.now()}`,
-            nome: nome.trim(),
-            email: email.trim().toLowerCase(),
-            usuario: usuario.trim().toLowerCase(),
-            senha: senha.trim(),
-            status: 'aguardando_pagamento',
-            criadoEm: new Date().toISOString(),
-          }]
+          students: [...students, { id, name: nome.trim(), username: em, email: em, password: senha.trim(), avatar: 'Lily', createdAt: new Date().toISOString().slice(0, 10) }]
         })
       } else {
         const cursos = Array.isArray(fresh.courseStudents) ? fresh.courseStudents : Object.values(fresh.courseStudents || {})
         await dbSave({
           ...fresh,
-          courseStudents: [...cursos, {
-            id: `cs_${Date.now()}`,
-            name: nome.trim(),
-            email: email.trim().toLowerCase(),
-            password: senha.trim(),
-            active: true,
-            avatar: 'Lily',
-            jid: null,
-            createdAt: new Date().toISOString().slice(0, 10),
-          }]
+          courseStudents: [...cursos, { id, name: nome.trim(), email: em, password: senha.trim(), active: false, avatar: 'Lily', jid: null, createdAt: new Date().toISOString().slice(0, 10) }]
         })
       }
       window.location.href = LINK_PAGAMENTO_ASAAS
@@ -182,24 +164,17 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
 
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#8a7060', marginBottom: 20, lineHeight: 1.6, background: '#fdf8f5', borderRadius: 10, padding: '10px 12px' }}>
               {tipo === 'particular'
-                ? '📚 Após o cadastro você será redirecionada para o pagamento. Assim que confirmado, a Renata libera seu acesso.'
-                : '✨ Após o cadastro você já pode acessar a plataforma. Você será redirecionada para o pagamento.'}
+                ? '📚 Você já pode acessar a plataforma após o cadastro. Será redirecionada para o pagamento.'
+                : '✨ Após o cadastro você aguarda a confirmação do pagamento para acessar a plataforma.'}
             </p>
 
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Nome completo</p>
             <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
               placeholder="Seu nome completo" value={nome} onChange={e => { setNome(e.target.value); setErr('') }} />
 
-            {tipo === 'particular' ? (<>
-              <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Usuário desejado</p>
-              <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Sem espaços ou acentos. Ex: maria_silva</p>
-              <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
-                placeholder="seu_usuario" value={usuario} onChange={e => { setUsuario(e.target.value.replace(/[^a-zA-Z0-9_]/g, '')); setErr('') }} />
-            </>) : (<>
-              <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Email</p>
-              <input type="email" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
-                placeholder="seuemail@email.com" value={email} onChange={e => { setEmail(e.target.value); setErr('') }} />
-            </>)}
+            <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Email</p>
+            <input type="email" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
+              placeholder="seuemail@email.com" value={email} onChange={e => { setEmail(e.target.value); setErr('') }} />
 
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Senha de acesso</p>
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Mínimo 6 caracteres.</p>
