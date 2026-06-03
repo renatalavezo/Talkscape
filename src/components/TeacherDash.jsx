@@ -60,6 +60,8 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
   const [courseNewJid, setCourseNewJid] = useState('')
   const [courseAddErr, setCourseAddErr] = useState('')
   const [selCourse, setSelCourse]   = useState(null)
+  const [selCourseJrn, setSelCourseJrn] = useState(null)
+  const [addJrnId, setAddJrnId]     = useState('')
   const [courseAnswers, setCourseAnswers] = useState({})
   const [selJBase, setSelJBase]           = useState(null)
   const [selJBaseWeek, setSelJBaseWeek]   = useState(1)
@@ -525,15 +527,53 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         {unanswered > 0 && <span style={{ fontSize: 10, background: B.laranja + '22', color: B.laranja, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{unanswered} dúvida{unanswered > 1 ? 's' : ''}</span>}
                       </div>
                       <p style={{ ...ir(400, 11), color: B.light }}>{s.email}</p>
-                      {s.jid && JOURNEY_MAP[s.jid] && <p style={{ ...ir(400, 11), color: B.mid }}>{JOURNEY_MAP[s.jid].icon} {JOURNEY_MAP[s.jid].pt}</p>}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
+                        {(s.jids || (s.jid ? [s.jid] : [])).map(jid => JOURNEY_MAP[jid] && (
+                          <span key={jid} style={{ fontSize: 10, background: JOURNEY_MAP[jid].color + '22', color: JOURNEY_MAP[jid].color, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{JOURNEY_MAP[jid].icon} {JOURNEY_MAP[jid].pt}</span>
+                        ))}
+                      </div>
                     </div>
-                    <div style={{ display: 'flex', gap: 6 }}>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                       <button style={{ ...S.btn(s.active ? B.light : B.oliva), fontSize: 12, padding: '8px 12px' }} onClick={() => upDb({ courseStudents: (courseStudents || []).map(x => x.id === s.id ? { ...x, active: !x.active } : x) })}>{s.active ? 'Desativar' : 'Ativar'}</button>
+                      <button style={{ ...S.btn(B.oliva), fontSize: 12, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => { setSelCourseJrn(selCourseJrn === s.id ? null : s.id); setSelCourse(null) }}><Icon name="map" size={13} color="#fff" />Jornadas</button>
                       <button style={{ ...S.btn(B.marrom), fontSize: 12, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => onPreviewCourse(s.id)}><Icon name="globe" size={13} color="#fff" />{lang === 'pt' ? 'Ver' : 'View'}</button>
-                      <button style={{ ...S.btn(B.marrom), fontSize: 12, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => setSelCourse(selCourse === s.id ? null : s.id)}><Icon name="feedback" size={13} color="#fff" />Dúvidas</button>
+                      <button style={{ ...S.btn(B.marrom), fontSize: 12, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => { setSelCourse(selCourse === s.id ? null : s.id); setSelCourseJrn(null) }}><Icon name="feedback" size={13} color="#fff" />Dúvidas</button>
                       <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 8, padding: '8px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => setDelCourseConfirm(s)}><Icon name="delete" size={14} color="#DC2626" /></button>
                     </div>
                   </div>
+
+                  {selCourseJrn === s.id && (() => {
+                    const jids = s.jids || (s.jid ? [s.jid] : [])
+                    const available = JOURNEYS.filter(j => !jids.includes(j.id))
+                    const upJids = newJids => upDb({ courseStudents: (courseStudents || []).map(x => x.id === s.id ? { ...x, jids: newJids, jid: newJids[0] || null } : x) })
+                    return (
+                      <div style={{ marginTop: 14, borderTop: `1px solid ${B.border}`, paddingTop: 14 }}>
+                        <p style={{ ...pp(600, 12), color: B.dark, marginBottom: 10 }}>Jornadas da aluna</p>
+                        {jids.length === 0 && <p style={{ ...ir(400, 12), color: B.light, marginBottom: 10 }}>Nenhuma jornada atribuída.</p>}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
+                          {jids.map(jid => JOURNEY_MAP[jid] && (
+                            <div key={jid} style={{ display: 'flex', alignItems: 'center', gap: 6, background: JOURNEY_MAP[jid].color + '18', border: `1.5px solid ${JOURNEY_MAP[jid].color}44`, borderRadius: 10, padding: '6px 10px' }}>
+                              <span style={{ fontSize: 14 }}>{JOURNEY_MAP[jid].icon}</span>
+                              <p style={{ ...pp(600, 12), color: B.dark }}>{JOURNEY_MAP[jid].pt}</p>
+                              <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: B.light, fontSize: 14, padding: '0 2px', lineHeight: 1 }} onClick={() => upJids(jids.filter(x => x !== jid))}>×</button>
+                            </div>
+                          ))}
+                        </div>
+                        {available.length > 0 && (
+                          <div style={{ display: 'flex', gap: 8 }}>
+                            <select style={{ ...S.inp, flex: 1, marginBottom: 0 }} value={addJrnId} onChange={e => setAddJrnId(e.target.value)}>
+                              <option value="">Adicionar jornada...</option>
+                              {available.map(j => <option key={j.id} value={j.id}>{j.icon} {j.pt}</option>)}
+                            </select>
+                            <button style={{ ...S.btn(B.oliva), padding: '0 16px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => { if (addJrnId) { upJids([...jids, addJrnId]); setAddJrnId('') } }}>
+                              <Icon name="add" size={14} color="#fff" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })()}
+
                   {selCourse === s.id && (
                     <div style={{ marginTop: 14, borderTop: `1px solid ${B.border}`, paddingTop: 14 }}>
                       {questions.length === 0 && <p style={{ ...ir(400, 13), color: B.light }}>Nenhuma dúvida ainda.</p>}

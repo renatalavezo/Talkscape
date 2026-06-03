@@ -15,7 +15,9 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
   const student = courseStudents.find(s => s.id === sid)
   if (!student) return null
 
-  const jid = db[`cjrn_${sid}`]
+  const jids = student.jids || (student.jid ? [student.jid] : [])
+  const [selJid, setSelJid] = useState(jids[0] || null)
+  const jid = selJid || jids[0] || null
   const journey = jid ? JOURNEY_MAP[jid] : null
   const checked = db[`cjsd_${sid}`] || {}
   const habits = db[`chab_${sid}`] || {}
@@ -99,6 +101,16 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
         {/* Journey tab */}
         {tab === 'journey' && (
           <div>
+            {jids.length > 1 && (
+              <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+                {jids.map(id => JOURNEY_MAP[id] && (
+                  <button key={id} onClick={() => { setSelJid(id); setSelWeek(null) }}
+                    style={{ flex: 1, padding: '8px 10px', borderRadius: 12, border: `2px solid ${selJid === id ? JOURNEY_MAP[id].color : B.border}`, background: selJid === id ? JOURNEY_MAP[id].color + '15' : '#fff', color: selJid === id ? JOURNEY_MAP[id].color : B.mid, fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, transition: 'all 0.15s' }}>
+                    {JOURNEY_MAP[id].icon} {JOURNEY_MAP[id].pt}
+                  </button>
+                ))}
+              </div>
+            )}
             {!journey ? (
               <div style={{ textAlign: 'center', padding: '48px 0' }}>
                 <span style={{ fontSize: 48 }}>⏳</span>

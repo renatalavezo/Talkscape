@@ -360,17 +360,17 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
             <p style={{ ...ir(400, 15), color: B.mid, maxWidth: 480, margin: '0 auto' }}>12 semanas de inglês estruturado com suporte real da Renata — sem precisar de aula ao vivo.</p>
           </div>
 
-          <div style={{ background: B.white, borderRadius: 20, border: `2px solid ${B.laranja}44`, overflow: 'hidden', boxShadow: `0 12px 40px ${B.laranja}18` }}>
+            <div style={{ background: B.white, borderRadius: 20, border: `2px solid ${B.laranja}44`, overflow: 'hidden', boxShadow: `0 12px 40px ${B.laranja}18` }}>
             <div style={{ background: B.laranja, padding: '20px 28px' }}>
               <p style={{ ...pp(700, 20), color: '#fff' }}>Jornada TalkScape Digital</p>
-              <p style={{ ...ir(400, 13), color: 'rgba(255,255,255,0.85)' }}>Escolha sua jornada · 12 semanas · 3 meses de acesso</p>
+              <p style={{ ...ir(400, 13), color: 'rgba(255,255,255,0.85)' }}>Acesso à plataforma + jornada à sua escolha</p>
             </div>
             <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
               <div>
                 <p style={{ ...pp(600, 13), color: B.mid, marginBottom: 12 }}>O que inclui:</p>
-                {['Jornada completa de 12 semanas', 'Habit tracker diário', 'Espaço de dúvidas com a Renata', 'Suporte por 3 meses', 'Acesso à plataforma TalkScape'].map((item, i) => (
+                {['Acesso completo à plataforma TalkScape', '1 jornada de 12 semanas incluída', 'Habit tracker diário', 'Espaço de dúvidas com a Renata', 'Adicione jornadas extras por R$ 35/mês cada'].map((item, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: B.laranja, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: i === 4 ? B.oliva : B.laranja, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <Icon name="check" size={11} color="#fff" />
                     </div>
                     <p style={{ ...ir(400, 13), color: B.dark }}>{item}</p>
@@ -378,11 +378,11 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
                 ))}
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-                <p style={{ ...ir(400, 13), color: B.mid, marginBottom: 4 }}>3x de</p>
-                <p style={{ ...pp(800, 40), color: B.laranja, lineHeight: 1 }}>R$ 197</p>
-                <p style={{ ...ir(400, 12), color: B.mid, marginBottom: 8 }}>por mês</p>
+                <p style={{ ...ir(400, 13), color: B.mid, marginBottom: 4 }}>a partir de</p>
+                <p style={{ ...pp(800, 44), color: B.laranja, lineHeight: 1 }}>R$ 59,90</p>
+                <p style={{ ...ir(400, 12), color: B.mid, marginBottom: 8 }}>/mês · 1 jornada</p>
                 <div style={{ background: B.oliva + '22', borderRadius: 8, padding: '6px 12px', marginBottom: 20 }}>
-                  <p style={{ ...pp(600, 12), color: B.oliva }}>ou R$ 497 à vista</p>
+                  <p style={{ ...pp(600, 12), color: B.oliva }}>+ R$ 35/mês por jornada adicional</p>
                 </div>
                 <button onClick={() => openModal('curso')} style={{ width: '100%', padding: '14px', background: '#d46427', border: 'none', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: 'pointer' }}>
                   Quero me inscrever na Jornada Digital →
