@@ -8,7 +8,7 @@ import { dbLoad, dbSave } from '../firebase'
 
 const INSTAGRAM = 'https://www.instagram.com/talkscape.byrenata'
 const WHATSAPP = 'https://wa.me/5511986704076?text=Olá%20Renata!%20Vim%20pelo%20TalkScape%20e%20quero%20saber%20mais%20sobre%20as%20aulas.'
-const LINK_PAGAMENTO_ASAAS = 'COLOCAR_LINK_AQUI'
+const LINK_PAGAMENTO_ASAAS = 'https://www.asaas.com/c/ri6cdcimyr50t33r'
 const WAButton = ({ style }) => (
   <a href={WHATSAPP} target="_blank" rel="noreferrer"
     style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', background: '#25D366', color: '#fff', borderRadius: 12, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', ...style }}>
