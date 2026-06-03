@@ -9,6 +9,7 @@ import Logo from './Logo'
 export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogout }) {
   const [tab, setTab] = useState('journey')
   const [selWeek, setSelWeek] = useState(null)
+  const [selJid, setSelJid] = useState(null)
   const [question, setQuestion] = useState('')
   const [sent, setSent] = useState(false)
 
@@ -16,8 +17,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
   if (!student) return null
 
   const jids = student.jids || (student.jid ? [student.jid] : [])
-  const [selJid, setSelJid] = useState(jids[0] || null)
-  const jid = selJid || jids[0] || null
+  const jid = selJid && jids.includes(selJid) ? selJid : jids[0] || null
   const journey = jid ? JOURNEY_MAP[jid] : null
   const checked = db[`cjsd_${sid}`] || {}
   const habits = db[`chab_${sid}`] || {}
