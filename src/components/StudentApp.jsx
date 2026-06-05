@@ -11,6 +11,8 @@ import CalSection from './CalSection'
 export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, isPreview, onBack }) {
   const [tab, setTab]       = useState('dashboard')
   const [activeWeek, setAW] = useState(1)
+  const [newPwd, setNewPwd] = useState('')
+  const [pwdMsg, setPwdMsg] = useState('')
 
   const student   = students.find(s => s.id === sid) || { name: '?', avatar: '🎒' }
   const lvl       = db[`lv_${sid}`] || 'A1'
@@ -386,6 +388,19 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                 <p style={{ ...ir(400, 14), marginTop: 12 }}>{t.noInfoYet}</p>
               </div>
             )}
+            <div style={{ ...S.card, marginBottom: 14, borderLeft: `4px solid ${B.laranja}` }}>
+              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 12 }}>🔑 {lang === 'pt' ? 'Alterar senha' : 'Change password'}</p>
+              <input type="password" style={S.inp} placeholder={lang === 'pt' ? 'Nova senha (mín. 6 caracteres)' : 'New password (min. 6 chars)'}
+                value={newPwd} onChange={e => { setNewPwd(e.target.value); setPwdMsg('') }} />
+              {pwdMsg && <p style={{ ...ir(600, 12), color: pwdMsg === 'ok' ? B.oliva : '#DC2626', margin: '6px 0' }}>
+                {pwdMsg === 'ok' ? (lang === 'pt' ? '✓ Senha alterada com sucesso!' : '✓ Password changed!') : pwdMsg}
+              </p>}
+              <button style={{ ...S.btn(B.laranja), marginTop: 8 }} onClick={() => {
+                if (newPwd.trim().length < 6) { setPwdMsg(lang === 'pt' ? 'Mínimo 6 caracteres.' : 'Minimum 6 characters.'); return }
+                upDb({ students: students.map(s => s.id === sid ? { ...s, password: newPwd.trim() } : s) })
+                setNewPwd(''); setPwdMsg('ok')
+              }}>{lang === 'pt' ? 'Salvar nova senha' : 'Save new password'}</button>
+            </div>
             {infoGen && (
               <div style={{ ...S.card, marginBottom: 14 }}>
                 <p style={S.lbl}>ℹ️ {t.infoGenLabel}</p>

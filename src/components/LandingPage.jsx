@@ -73,9 +73,9 @@ const DUO_PLANS = [
 ]
 
 const TESTIMONIALS = [
-  { text: 'Eu gosto da maneira dinâmica como a didática é aplicada. Recomendaria sim, pois as aulas são particulares e adaptadas para cada aluno.', name: 'Aluna do plano Essencial' },
-  { text: 'As aulas são divertidas, leves e bem estruturadas. A cada semana trabalhamos em um assunto novo e isso me motiva a continuar estudando inglês. A utilização de vídeos junto a exercícios de escrita e conversação são muito eficazes para o aprendizado.', name: 'Aluna do plano Jornada' },
-  { text: 'Gosto do jeito que lida com o aprendizado de inglês e a liberdade que oferece para nos adaptarmos. Percebi que reforcei muitos aprendizados e descobri coisas sobre a língua que nunca tinha visto. As dúvidas são tiradas de forma clara e o espaço é extremamente receptivo.', name: 'Aluna do plano Horizonte' },
+  { text: 'Eu gosto muito da maneira dinâmica como a didática é aplicada e de como cada aula é pensada especialmente pra mim sem seguir um roteiro fixo e sem aquela pressão que a gente sente em cursos tradicionais onde todo mundo precisa andar no mesmo ritmo', name: 'Aluna do plano Essencial' },
+  { text: 'As aulas são divertidas leves e muito bem estruturadas e a cada semana trabalhamos um assunto diferente o que me deixa animada pra continuar estudando porque a combinação de vídeos exercícios de escrita e conversação faz tudo fazer muito mais sentido na prática', name: 'Aluna do plano Jornada' },
+  { text: 'Gosto muito do jeito que a Renata lida com o aprendizado porque ela oferece liberdade pra cada aluna se adaptar ao próprio ritmo e com isso eu reforcei coisas que achei que já sabia e aprendi coisas que nunca tinha visto antes tudo de um jeito claro e muito acolhedor', name: 'Aluna do plano Horizonte' },
 ]
 
 const DIFFERENTIALS = [
@@ -91,6 +91,11 @@ const PlanCard = ({ plan, isDuo = false, onStudent, onCourse }) => (
         ⭐ Mais popular
       </div>
     )}
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+      <span style={{ fontSize: 24 }}>{plan.icon}</span>
+      <p style={{ ...pp(700, 17), color: plan.color }}>{plan.name}</p>
+      <span style={{ ...ir(400, 12), color: B.mid, marginLeft: 'auto' }}>{plan.hours}</span>
+    </div>
     <div style={{ background: B.cream, borderRadius: 12, padding: '12px 14px', marginBottom: 16 }}>
       {plan.prices.map((p, j) => (
         <div key={j} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: j < plan.prices.length - 1 ? `1px solid ${B.border}` : 'none' }}>

@@ -12,6 +12,8 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
   const [selJid, setSelJid] = useState(null)
   const [question, setQuestion] = useState('')
   const [sent, setSent] = useState(false)
+  const [newPwd, setNewPwd] = useState('')
+  const [pwdMsg, setPwdMsg] = useState('')
 
   const student = courseStudents.find(s => s.id === sid)
   if (!student) return null
@@ -49,6 +51,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
     ['journey', <><Icon name="map" size={13} />&nbsp;{lang === 'pt' ? 'Jornada' : 'Journey'}</>],
     ['habits',  <><Icon name="habits" size={13} />&nbsp;{lang === 'pt' ? 'Hábitos' : 'Habits'}</>],
     ['doubts',  <><Icon name="feedback" size={13} />&nbsp;{lang === 'pt' ? 'Dúvidas' : 'Doubts'}</>],
+    ['perfil',  <><Icon name="info" size={13} />&nbsp;{lang === 'pt' ? 'Perfil' : 'Profile'}</>],
   ]
 
   const firstName = student.name.split(' ')[0]
@@ -333,6 +336,25 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Perfil tab */}
+        {tab === 'perfil' && (
+          <div style={{ padding: 16, maxWidth: 480, margin: '0 auto' }}>
+            <div style={{ ...S.card, marginBottom: 14, borderLeft: `4px solid ${B.laranja}` }}>
+              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 12 }}>🔑 {lang === 'pt' ? 'Alterar senha' : 'Change password'}</p>
+              <input type="password" style={S.inp} placeholder={lang === 'pt' ? 'Nova senha (mín. 6 caracteres)' : 'New password (min. 6 chars)'}
+                value={newPwd} onChange={e => { setNewPwd(e.target.value); setPwdMsg('') }} />
+              {pwdMsg && <p style={{ ...ir(600, 12), color: pwdMsg === 'ok' ? B.oliva : '#DC2626', margin: '6px 0' }}>
+                {pwdMsg === 'ok' ? (lang === 'pt' ? '✓ Senha alterada com sucesso!' : '✓ Password changed!') : pwdMsg}
+              </p>}
+              <button style={{ ...S.btn(B.laranja), marginTop: 8 }} onClick={() => {
+                if (newPwd.trim().length < 6) { setPwdMsg(lang === 'pt' ? 'Mínimo 6 caracteres.' : 'Minimum 6 characters.'); return }
+                upDb({ courseStudents: courseStudents.map(s => s.id === sid ? { ...s, password: newPwd.trim() } : s) })
+                setNewPwd(''); setPwdMsg('ok')
+              }}>{lang === 'pt' ? 'Salvar nova senha' : 'Save new password'}</button>
+            </div>
           </div>
         )}
       </div>
