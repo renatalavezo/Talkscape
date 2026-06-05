@@ -79,9 +79,9 @@ const TESTIMONIALS = [
 ]
 
 const DIFFERENTIALS = [
-  { icon: 'target', title: 'Personalizado de verdade', text: 'Nenhuma aluna recebe o mesmo caminho porque cada pessoa tem um ritmo um objetivo e uma história diferente e aqui isso é levado a sério desde a primeira aula' },
-  { icon: 'feedback', title: 'Inglês como prática social', text: 'O inglês que você aprende aqui serve pra vida real porque o foco é sempre em como você se expressa e pensa numa segunda língua e não em decorar regras soltas sem contexto' },
-  { icon: 'progress', title: 'Progresso visível', text: 'Com o TalkScape você consegue acompanhar sua evolução semana a semana e ver na prática o quanto você já avançou sem aquela sensação de estar estudando e não chegando a lugar nenhum' },
+  { icon: 'target', title: 'Verdadeiramente personalizado', text: 'Cada aluna percorre um caminho único, construído a partir do seu ritmo, dos seus objetivos e da sua história. Não existe receita pronta aqui — o que funciona para uma pessoa pode não funcionar para outra, e isso é respeitado desde o primeiro encontro.' },
+  { icon: 'feedback', title: 'Inglês como prática social', text: 'Aprender uma língua vai muito além de memorizar gramática. O foco é desenvolver a sua capacidade de se expressar e pensar em inglês de forma genuína, com contexto e propósito — não apenas para passar em testes.' },
+  { icon: 'progress', title: 'Evolução acompanhada de perto', text: 'Com o TalkScape, você visualiza seu progresso semana a semana, de forma concreta e transparente. Chega aquela sensação de estar estudando sem sair do lugar — aqui cada etapa é registrada e celebrada.' },
 ]
 
 const PlanCard = ({ plan, isDuo = false, onStudent, onCourse }) => (
@@ -250,7 +250,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
             Inglês que transforma.<br />Aulas que respeitam quem você é.
           </h1>
           <p style={{ ...ir(400, 16), color: 'rgba(255,255,255,0.85)', marginBottom: 40, lineHeight: 1.7 }}>
-            Aulas particulares com acompanhamento real e jornadas pensadas pra quem quer aprender inglês de um jeito que respeita quem você é e onde você quer chegar
+            Aulas particulares com acompanhamento real e jornadas de aprendizado estruturadas para quem quer evoluir no inglês de forma consistente, respeitando seu ritmo e seus objetivos.
           </p>
           <button onClick={() => openModal('particular')} style={{ display: 'inline-block', padding: '13px 28px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 14, fontWeight: 700, border: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)', maxWidth: 300, textAlign: 'center', lineHeight: 1.4, cursor: 'pointer' }}>Quero começar minha jornada</button>
         </div>
@@ -283,10 +283,10 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
             <p style={{ ...ir(600, 13), color: B.laranja, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Sobre a professora</p>
             <h2 style={{ ...pp(800, 28), color: B.dark, marginBottom: 16 }}>Oi, eu sou a Renata!</h2>
             <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 16 }}>
-              Sou professora há 6 anos e ao longo desse tempo passei por muitos contextos de ensino até perceber que o que mais importa é que a aluna se sinta vista e respeitada no seu próprio processo e foi por isso que criei o TalkScape como um espaço que foge do modelo tradicional e coloca cada pessoa no centro do aprendizado
+              Professora há 6 anos, construí minha trajetória em diferentes contextos de ensino até perceber que o modelo tradicional raramente coloca a aluna no centro do processo. Foi a partir dessa inquietação que nasceu o TalkScape: um espaço de aprendizado personalizado, sem fórmulas prontas e sem pressão desnecessária.
             </p>
             <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 24 }}>
-              Acredito que o inglês é antes de tudo uma prática social e que aprender bem uma língua significa usá-la de verdade para se expressar pensar e se conectar com o mundo e é isso que busco construir em cada aula junto com cada aluna que passa pelo TalkScape além das aulas sou pesquisadora curso Letras na USP e sou mãe do Toffee e do Gato
+              Acredito que aprender inglês é, acima de tudo, uma prática social. Desenvolver uma língua significa aprender a se expressar, a pensar e a se conectar com o mundo através dela. Além das aulas, sou pesquisadora, estudo Letras na USP e sou mãe do Toffee e do Gato.
             </p>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               {['6 anos de experiência', 'Letras USP', 'Pesquisadora', 'Ensino personalizado'].map((tag, i) => (
