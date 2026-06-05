@@ -9,6 +9,17 @@ import { dbLoad, dbSave } from '../firebase'
 const INSTAGRAM = 'https://www.instagram.com/talkscape.byrenata'
 const WHATSAPP = 'https://wa.me/5511986704076?text=Olá%20Renata!%20Vim%20pelo%20TalkScape%20e%20quero%20saber%20mais%20sobre%20as%20aulas.'
 const LINK_PAGAMENTO_ASAAS = 'https://www.asaas.com/c/ri6cdcimyr50t33r'
+const ASAAS_LINKS = [
+  'https://www.asaas.com/c/ri6cdcimyr50t33r',   // 1 jornada
+  'https://www.asaas.com/c/dcep19uf853426c8',    // 2
+  'https://www.asaas.com/c/mgyhm610m8108n8r',    // 3
+  'https://www.asaas.com/c/5beqc3ok654i2r64',    // 4
+  'https://www.asaas.com/c/g6vszeumpn1p0yls',    // 5
+  'https://www.asaas.com/c/21z5o7osm2k2cwjz',    // 6
+  'https://www.asaas.com/c/gifgzldckasn46kf',    // 7
+  'https://www.asaas.com/c/hb2l1nwqghtkbi8x',    // 8
+]
+const ASAAS_LINK_ALL = 'https://www.asaas.com/c/8tmx9qi6djugpxwv' // todas (promo)
 const WAButton = ({ style }) => (
   <a href={WHATSAPP} target="_blank" rel="noreferrer"
     style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', background: '#25D366', color: '#fff', borderRadius: 12, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', ...style }}>
@@ -137,7 +148,10 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           courseStudents: [...cursos, { id, name: nome.trim(), email: em, password: senha.trim(), active: false, avatar: 'Lily', jids: selJids, jid: selJids[0] || null, createdAt: new Date().toISOString().slice(0, 10) }]
         })
       }
-      window.location.href = LINK_PAGAMENTO_ASAAS
+      const payLink = tipo === 'curso'
+        ? (selJids.length >= 8 ? ASAAS_LINK_ALL : ASAAS_LINKS[Math.max(selJids.length, 1) - 1])
+        : LINK_PAGAMENTO_ASAAS
+      window.location.href = payLink
     } catch(e) {
       setErr('Erro ao salvar. Tente novamente.'); setLoading(false)
     }
