@@ -73,15 +73,15 @@ const DUO_PLANS = [
 ]
 
 const TESTIMONIALS = [
-  { text: 'Eu gosto muito da maneira dinâmica como a didática é aplicada e de como cada aula é pensada especialmente pra mim sem seguir um roteiro fixo e sem aquela pressão que a gente sente em cursos tradicionais onde todo mundo precisa andar no mesmo ritmo', name: 'Aluna do plano Essencial' },
-  { text: 'As aulas são divertidas leves e muito bem estruturadas e a cada semana trabalhamos um assunto diferente o que me deixa animada pra continuar estudando porque a combinação de vídeos exercícios de escrita e conversação faz tudo fazer muito mais sentido na prática', name: 'Aluna do plano Jornada' },
-  { text: 'Gosto muito do jeito que a Renata lida com o aprendizado porque ela oferece liberdade pra cada aluna se adaptar ao próprio ritmo e com isso eu reforcei coisas que achei que já sabia e aprendi coisas que nunca tinha visto antes tudo de um jeito claro e muito acolhedor', name: 'Aluna do plano Horizonte' },
+  { text: 'Eu gosto da maneira dinâmica como a didática é aplicada. Recomendaria sim, pois as aulas são particulares e adaptadas para cada aluno.', name: 'Aluna do plano Essencial' },
+  { text: 'As aulas são divertidas, leves e bem estruturadas. A cada semana trabalhamos em um assunto novo e isso me motiva a continuar estudando inglês. A utilização de vídeos junto a exercícios de escrita e conversação são muito eficazes para o aprendizado.', name: 'Aluna do plano Jornada' },
+  { text: 'Gosto do jeito que lida com o aprendizado de inglês e a liberdade que oferece para nos adaptarmos. Percebi que reforcei muitos aprendizados e descobri coisas sobre a língua que nunca tinha visto. As dúvidas são tiradas de forma clara e o espaço é extremamente receptivo.', name: 'Aluna do plano Horizonte' },
 ]
 
 const DIFFERENTIALS = [
-  { icon: 'target', title: 'Personalizado de verdade', text: 'Sem receita mágica. Cada aluna tem seu próprio caminho, ritmo e objetivos. O que funciona pra uma pode não funcionar pra outra — e tudo bem.' },
-  { icon: 'feedback', title: 'Inglês como prática social', text: 'Estimulo o pensamento crítico mesmo numa segunda língua. Aqui você aprende a se expressar de verdade, não só a decorar regras.' },
-  { icon: 'progress', title: 'Progresso visível', text: 'Com o TalkScape você acompanha sua evolução em tempo real, semana a semana. Nada de sensação de estar parada no lugar.' },
+  { icon: 'target', title: 'Personalizado de verdade', text: 'Nenhuma aluna recebe o mesmo caminho porque cada pessoa tem um ritmo um objetivo e uma história diferente e aqui isso é levado a sério desde a primeira aula' },
+  { icon: 'feedback', title: 'Inglês como prática social', text: 'O inglês que você aprende aqui serve pra vida real porque o foco é sempre em como você se expressa e pensa numa segunda língua e não em decorar regras soltas sem contexto' },
+  { icon: 'progress', title: 'Progresso visível', text: 'Com o TalkScape você consegue acompanhar sua evolução semana a semana e ver na prática o quanto você já avançou sem aquela sensação de estar estudando e não chegando a lugar nenhum' },
 ]
 
 const PlanCard = ({ plan, isDuo = false, onStudent, onCourse }) => (
@@ -250,7 +250,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
             Inglês que transforma.<br />Aulas que respeitam quem você é.
           </h1>
           <p style={{ ...ir(400, 16), color: 'rgba(255,255,255,0.85)', marginBottom: 40, lineHeight: 1.7 }}>
-            Aulas particulares com acompanhamento real, jornadas personalizadas e uma professora que acredita no seu potencial.
+            Aulas particulares com acompanhamento real e jornadas pensadas pra quem quer aprender inglês de um jeito que respeita quem você é e onde você quer chegar
           </p>
           <button onClick={() => openModal('particular')} style={{ display: 'inline-block', padding: '13px 28px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 14, fontWeight: 700, border: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)', maxWidth: 300, textAlign: 'center', lineHeight: 1.4, cursor: 'pointer' }}>Quero começar minha jornada</button>
         </div>
@@ -283,10 +283,10 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
             <p style={{ ...ir(600, 13), color: B.laranja, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Sobre a professora</p>
             <h2 style={{ ...pp(800, 28), color: B.dark, marginBottom: 16 }}>Oi, eu sou a Renata!</h2>
             <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 16 }}>
-              Professora há 6 anos com experiências em diversos contextos de ensino, sempre senti que algo faltava nos modelos tradicionais. Por isso criei o TalkScape — um espaço que preza por ensino personalizado, sem receita mágica e sem pressão.
+              Sou professora há 6 anos e ao longo desse tempo passei por muitos contextos de ensino até perceber que o que mais importa é que a aluna se sinta vista e respeitada no seu próprio processo e foi por isso que criei o TalkScape como um espaço que foge do modelo tradicional e coloca cada pessoa no centro do aprendizado
             </p>
             <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 24 }}>
-              Acredito que aprender inglês é uma prática social, não uma lista de regras pra decorar. Aqui você desenvolve a língua enquanto desenvolve o pensamento crítico. Fora das aulas, sou pesquisadora, faço Letras na USP e sou mãe da Toffee e do Gato.
+              Acredito que o inglês é antes de tudo uma prática social e que aprender bem uma língua significa usá-la de verdade para se expressar pensar e se conectar com o mundo e é isso que busco construir em cada aula junto com cada aluna que passa pelo TalkScape além das aulas sou pesquisadora curso Letras na USP e sou mãe do Toffee e do Gato
             </p>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               {['6 anos de experiência', 'Letras USP', 'Pesquisadora', 'Ensino personalizado'].map((tag, i) => (
