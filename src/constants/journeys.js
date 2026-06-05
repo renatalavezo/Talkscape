@@ -53,25 +53,65 @@ export const JOURNEYS = [
     desc: { en: 'Professional communication for the workplace', pt: 'Comunicação profissional para o trabalho' },
     weeks: [
       { week:1, theme:{en:'Professional Introductions',pt:'Apresentações Profissionais'}, tasks:[
-        {id:'bj1',en:'Introduce yourself: name, role, company',pt:'Apresentar-se profissionalmente',cat:'speaking'},
-        {id:'bj2',en:'Small talk topics: weather, weekend, commute',pt:'Conversa casual no trabalho',cat:'speaking'},
-        {id:'bj3',en:'Business vocabulary: colleague, deadline, meeting',pt:'Vocabulário básico de negócios',cat:'vocab'},
+        {id:'bj1',en:'Introduce yourself: name, role, company',pt:'Apresentar-se profissionalmente',cat:'speaking',
+          variations:{
+            beginner:{pt:'Apresente-se em inglês usando frases simples: diga seu nome, profissão e uma coisa que você faz no trabalho',en:'Introduce yourself with simple phrases: say your name, job title and one thing you do at work'},
+            advanced:{pt:'Faça uma apresentação profissional completa: trajetória, especialização, conquistas e objetivos (2–3 minutos)',en:'Give a full professional introduction: career path, specialization, achievements and goals (2–3 minutes)'},
+          }},
+        {id:'bj2',en:'Small talk topics: weather, weekend, commute',pt:'Conversa casual no trabalho',cat:'speaking',
+          variations:{
+            beginner:{pt:'Aprenda 5 perguntas de conversa casual simples para usar no trabalho',en:'Learn 5 simple small talk questions to use at work'},
+            advanced:{pt:'Pratique small talk que vai além do superficial: opiniões, tendências e curiosidades do setor',en:'Practice small talk that goes beyond the surface: opinions, trends and industry curiosities'},
+          }},
+        {id:'bj3',en:'Business vocabulary: colleague, deadline, meeting',pt:'Vocabulário básico de negócios',cat:'vocab',
+          variations:{
+            beginner:{pt:'Estude as 20 palavras mais essenciais do ambiente de trabalho em inglês',en:'Study the 20 most essential workplace words in English'},
+            advanced:{pt:'Expanda seu vocabulário corporativo com termos de gestão, estratégia e liderança',en:'Expand your corporate vocabulary with management, strategy and leadership terms'},
+          }},
         {id:'bj4',en:'Greetings & farewells in professional settings',pt:'Cumprimentos e despedidas profissionais',cat:'speaking'},
-        {id:'bj5',en:'Write a professional LinkedIn summary (50 words)',pt:'Resumo profissional em inglês',cat:'writing'},
+        {id:'bj5',en:'Write a professional LinkedIn summary (50 words)',pt:'Resumo profissional em inglês',cat:'writing',
+          variations:{
+            beginner:{pt:'Escreva 3 frases simples descrevendo sua profissão e o que você gosta de fazer no trabalho',en:'Write 3 simple sentences describing your job and what you enjoy doing at work'},
+            advanced:{pt:'Escreva um perfil completo do LinkedIn em inglês: headline, resumo e conquistas (150 palavras)',en:'Write a full LinkedIn profile in English: headline, summary and achievements (150 words)'},
+          }},
       ]},
       { week:2, theme:{en:'Email Writing',pt:'Escrita de E-mails'}, tasks:[
-        {id:'bj6',en:'Email structure: subject, greeting, body, closing',pt:'Estrutura de e-mail profissional',cat:'writing'},
-        {id:'bj7',en:'Formal phrases: I am writing to… / Please find attached…',pt:'Frases formais para e-mail',cat:'writing'},
+        {id:'bj6',en:'Email structure: subject, greeting, body, closing',pt:'Estrutura de e-mail profissional',cat:'writing',
+          variations:{
+            beginner:{pt:'Conheça a estrutura básica de um e-mail em inglês e copie 3 modelos prontos',en:'Learn the basic structure of an email in English and copy 3 ready-made templates'},
+            advanced:{pt:'Analise a estrutura de e-mails executivos e identifique técnicas de persuasão e tom',en:'Analyze executive email structure and identify persuasion techniques and tone'},
+          }},
+        {id:'bj7',en:'Formal phrases: I am writing to… / Please find attached…',pt:'Frases formais para e-mail',cat:'writing',
+          variations:{
+            beginner:{pt:'Memorize 8 frases essenciais para abrir e fechar um e-mail formal em inglês',en:'Memorize 8 essential phrases to open and close a formal email in English'},
+            advanced:{pt:'Pratique variações sofisticadas de abertura, desenvolvimento e encerramento para diferentes contextos formais',en:'Practice sophisticated opening, body and closing variations for different formal contexts'},
+          }},
         {id:'bj8',en:'Polite requests: Could you please… / Would it be possible…',pt:'Pedidos educados por e-mail',cat:'writing'},
         {id:'bj9',en:'Semi-formal emails: Hi vs Dear / Best vs Regards',pt:'E-mails semi-formais',cat:'writing'},
-        {id:'bj10',en:'Write 3 emails: request, follow-up, apology',pt:'Escreva 3 e-mails: pedido, follow-up, desculpas',cat:'writing'},
+        {id:'bj10',en:'Write 3 emails: request, follow-up, apology',pt:'Escreva 3 e-mails: pedido, follow-up, desculpas',cat:'writing',
+          variations:{
+            beginner:{pt:'Escreva 1 e-mail simples de pedido usando um modelo como base (mínimo 5 frases)',en:'Write 1 simple request email using a template as a base (minimum 5 sentences)'},
+            advanced:{pt:'Escreva os 3 e-mails sem usar modelos prontos, adaptando tom e registro para cada situação',en:'Write all 3 emails without templates, adapting tone and register for each situation'},
+          }},
       ]},
       { week:3, theme:{en:'Meetings & Calls',pt:'Reuniões & Videochamadas'}, tasks:[
-        {id:'bj11',en:'Meeting vocabulary: agenda, minutes, action item',pt:'Vocabulário de reunião',cat:'vocab'},
-        {id:'bj12',en:'Chairing a meeting: opening, turn-taking, closing',pt:'Conduzir uma reunião em inglês',cat:'speaking'},
+        {id:'bj11',en:'Meeting vocabulary: agenda, minutes, action item',pt:'Vocabulário de reunião',cat:'vocab',
+          variations:{
+            beginner:{pt:'Aprenda 10 palavras essenciais de reunião com exemplos de uso em frases reais',en:'Learn 10 essential meeting words with examples of use in real sentences'},
+            advanced:{pt:'Estude vocabulário avançado de reunião: action items, minutes, quorum, tabling an issue',en:'Study advanced meeting vocabulary: action items, minutes, quorum, tabling an issue'},
+          }},
+        {id:'bj12',en:'Chairing a meeting: opening, turn-taking, closing',pt:'Conduzir uma reunião em inglês',cat:'speaking',
+          variations:{
+            beginner:{pt:'Aprenda as frases básicas para participar de uma reunião: como concordar, discordar e fazer perguntas',en:'Learn basic phrases to participate in a meeting: how to agree, disagree and ask questions'},
+            advanced:{pt:'Pratique a condução de reunião do início ao fim: abrir, distribuir a fala, resumir e encerrar',en:'Practice chairing a meeting from start to finish: opening, distributing the floor, summarizing and closing'},
+          }},
         {id:'bj13',en:'Interrupting politely: Sorry to interrupt… / If I may add…',pt:'Interromper educadamente',cat:'speaking'},
         {id:'bj14',en:'Video call phrases: Can you hear me? / You are on mute',pt:'Frases para videoconferência',cat:'speaking'},
-        {id:'bj15',en:'Roleplay: participate in a 5-minute mock meeting',pt:'Roleplay: reunião simulada de 5 minutos',cat:'speaking'},
+        {id:'bj15',en:'Roleplay: participate in a 5-minute mock meeting',pt:'Roleplay: reunião simulada de 5 minutos',cat:'speaking',
+          variations:{
+            beginner:{pt:'Roleplay simples: você participa de uma reunião respondendo perguntas diretas com frases preparadas',en:'Simple roleplay: you join a meeting answering direct questions with prepared phrases'},
+            advanced:{pt:'Roleplay completo: você conduz a reunião, distribui a fala, lida com interrupções e chega a uma decisão',en:'Full roleplay: you chair the meeting, manage turns, handle interruptions and reach a decision'},
+          }},
       ]},
       { week:4, theme:{en:'Presentations',pt:'Apresentações'}, tasks:[
         {id:'bj16',en:"Opening: Today I'm going to talk about…",pt:'Abrir uma apresentação',cat:'speaking'},

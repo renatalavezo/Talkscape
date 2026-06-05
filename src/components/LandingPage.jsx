@@ -125,10 +125,11 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [selJids, setSelJids] = useState([])
+  const [selLevel, setSelLevel] = useState('')
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState('')
 
-  const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setSenha(''); setSelJids([]); setErr(''); setShowModal(true) }
+  const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setSenha(''); setSelJids([]); setSelLevel(''); setErr(''); setShowModal(true) }
 
   const toggleJid = jid => setSelJids(prev => prev.includes(jid) ? prev.filter(x => x !== jid) : [...prev, jid])
 
@@ -150,7 +151,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
         const cursos = Array.isArray(fresh.courseStudents) ? fresh.courseStudents : Object.values(fresh.courseStudents || {})
         await dbSave({
           ...fresh,
-          courseStudents: [...cursos, { id, name: nome.trim(), email: em, password: senha.trim(), active: false, avatar: 'Lily', jids: selJids, jid: selJids[0] || null, createdAt: new Date().toISOString().slice(0, 10) }]
+          courseStudents: [...cursos, { id, name: nome.trim(), email: em, password: senha.trim(), active: false, avatar: 'Lily', jids: selJids, jid: selJids[0] || null, level: selLevel || null, createdAt: new Date().toISOString().slice(0, 10) }]
         })
       }
       const payLink = tipo === 'curso'
@@ -217,6 +218,21 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
                       </button>
                     )
                   })}
+                </div>
+              </div>
+            )}
+
+            {tipo === 'curso' && (
+              <div style={{ marginBottom: 20 }}>
+                <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Qual é o seu nível de inglês?</p>
+                <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 10 }}>Isso ajuda a Renata a personalizar o conteúdo para você.</p>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  {[['beginner','🌱 Iniciante'],['intermediate','🌿 Intermediário'],['advanced','🌳 Avançado']].map(([k, lb]) => (
+                    <button key={k} onClick={() => setSelLevel(k)}
+                      style={{ flex: 1, padding: '8px 6px', borderRadius: 10, border: `1.5px solid ${selLevel === k ? '#d46427' : '#e0d4c8'}`, background: selLevel === k ? '#fdf0e6' : '#fff', color: selLevel === k ? '#d46427' : '#8a7060', fontSize: 11, fontWeight: selLevel === k ? 700 : 400, fontFamily: 'Inter,sans-serif', cursor: 'pointer', transition: 'all 0.15s', textAlign: 'center' }}>
+                      {lb}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}

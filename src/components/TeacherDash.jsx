@@ -525,6 +525,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         <p style={{ ...pp(600, 14), color: B.dark }}>{s.name}</p>
                         <span style={{ fontSize: 10, background: s.active ? B.oliva + '22' : '#FEE2E2', color: s.active ? B.oliva : '#DC2626', borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{s.active ? 'Ativo' : 'Aguardando'}</span>
                         {unanswered > 0 && <span style={{ fontSize: 10, background: B.laranja + '22', color: B.laranja, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{unanswered} dúvida{unanswered > 1 ? 's' : ''}</span>}
+                        {s.level && <span style={{ fontSize: 10, background: '#e8f4fd', color: '#2563eb', borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{{ beginner:'🌱 Iniciante', intermediate:'🌿 Intermediário', advanced:'🌳 Avançado' }[s.level]}</span>}
                       </div>
                       <p style={{ ...ir(400, 11), color: B.light }}>{s.email}</p>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
@@ -548,7 +549,18 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                     const upJids = newJids => upDb({ courseStudents: (courseStudents || []).map(x => x.id === s.id ? { ...x, jids: newJids, jid: newJids[0] || null } : x) })
                     return (
                       <div style={{ marginTop: 14, borderTop: `1px solid ${B.border}`, paddingTop: 14 }}>
-                        <p style={{ ...pp(600, 12), color: B.dark, marginBottom: 10 }}>Jornadas da aluna</p>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                          <p style={{ ...pp(600, 12), color: B.dark }}>Jornadas da aluna</p>
+                          <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                            <p style={{ ...ir(400, 11), color: B.light, marginRight: 4 }}>Nível:</p>
+                            {[['beginner','🌱'],['intermediate','🌿'],['advanced','🌳']].map(([k, ic]) => (
+                              <button key={k} onClick={() => upDb({ courseStudents: (courseStudents||[]).map(x => x.id === s.id ? {...x, level: x.level === k ? null : k} : x) })}
+                                style={{ padding: '4px 8px', borderRadius: 8, border: `1.5px solid ${s.level === k ? '#2563eb' : B.border}`, background: s.level === k ? '#e8f4fd' : B.white, color: s.level === k ? '#2563eb' : B.light, fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>
+                                {ic}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                         {jids.length === 0 && <p style={{ ...ir(400, 12), color: B.light, marginBottom: 10 }}>Nenhuma jornada atribuída.</p>}
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
                           {jids.map(jid => JOURNEY_MAP[jid] && (

@@ -65,6 +65,11 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Avatar seed={student.avatar || 'Lily'} size={34} />
           <p style={{ ...pp(600, 13), color: '#fff' }}>{firstName}</p>
+          {student.level && (
+            <span style={{ background: 'rgba(255,255,255,0.2)', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#fff', fontFamily: 'Poppins,sans-serif' }}>
+              {{ beginner:'🌱 Iniciante', intermediate:'🌿 Intermediário', advanced:'🌳 Avançado' }[student.level]}
+            </span>
+          )}
         </div>
         <button style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 20, padding: '6px 12px', color: '#fff', fontSize: 11, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', display: 'flex', alignItems: 'center', gap: 5 }} onClick={onLogout}>
           <Icon name="logout" size={13} color="#fff" />{lang === 'pt' ? 'Sair' : 'Logout'}
@@ -169,7 +174,11 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                                 {done && <Icon name="check" size={12} color="#fff" />}
                               </div>
                               <div style={{ flex: 1 }}>
-                                <p style={{ ...ir(600, 13), color: done ? '#8faf8f' : B.dark, textDecoration: done ? 'line-through' : 'none' }}>{lang === 'pt' ? task.pt : task.en}</p>
+                                <p style={{ ...ir(600, 13), color: done ? '#8faf8f' : B.dark, textDecoration: done ? 'line-through' : 'none' }}>
+                                  {lang === 'pt'
+                                    ? (student.level && task.variations?.[student.level]?.pt) || task.pt
+                                    : (student.level && task.variations?.[student.level]?.en) || task.en}
+                                </p>
                                 {task.link && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
                               </div>
                               <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
