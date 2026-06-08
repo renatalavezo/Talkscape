@@ -8,6 +8,9 @@ import { JOURNEYS, JOURNEY_MAP } from '../constants/journeys'
 import Avatar from './Avatar'
 import Icon from './Icon'
 import Logo from './Logo'
+
+const SIMPLE_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
+const SIMPLE_LABEL = { beginner:'🌱 Iniciante', intermediate:'🌿 Intermediário', advanced:'🌳 Avançado' }
 import CalSection from './CalSection'
 
 export default function TeacherDash({ t, lang, setLang, students, courseStudents, cadastrosPendentes, db, upDb, onPreview, onPreviewCourse, onLogout }) {
@@ -674,6 +677,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                           <p style={{ ...pp(600, 14), color: B.dark }}>{s.name}</p>
                           {jrn && <span style={{ fontSize: 10, background: jrn.color + '22', color: jrn.color, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif', border: `1px solid ${jrn.color}44` }}>{jrn.icon} {lang === 'pt' ? jrn.pt : jrn.en}</span>}
+                          {(() => { const sl = SIMPLE_LEVEL[lm.level]; return sl ? <span style={{ fontSize: 10, background: '#e8f4fd', color: '#2563eb', borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{SIMPLE_LABEL[sl]}</span> : null })()}
                         </div>
                         <p style={{ ...ir(400, 11), color: B.light }}>@{s.username}</p>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
@@ -732,12 +736,19 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                   <div>
                     <div style={{ ...S.card, marginBottom: 14 }}>
                       <p style={S.lbl}>{t.levelLabel}</p>
-                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
                         {CEFR_META.map(c => {
                           const active = (db[`lv_${selS.id}`] || 'A1') === c.level
                           return <button key={c.level} style={{ ...S.chip, background: active ? c.color : B.bege, color: active ? c.text : B.mid, fontSize: 13, padding: '8px 16px', fontWeight: 700 }} onClick={() => upDb({ [`lv_${selS.id}`]: c.level })}>{c.icon} {c.level}</button>
                         })}
                       </div>
+                      {(() => { const sl = SIMPLE_LEVEL[db[`lv_${selS.id}`] || 'A1']; return (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#e8f4fd', borderRadius: 10, padding: '8px 12px' }}>
+                          <span style={{ ...ir(400, 12), color: '#2563eb' }}>Nível nas Jornadas:</span>
+                          <span style={{ ...pp(700, 13), color: '#2563eb' }}>{SIMPLE_LABEL[sl]}</span>
+                          <span style={{ ...ir(400, 11), color: '#64a0d4' }}>(as tasks das jornadas se adaptam automaticamente)</span>
+                        </div>
+                      )})()}
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px,1fr))', gap: 9 }}>
                       {(PLAN[lvOf(selS.id)] || []).map(w => {

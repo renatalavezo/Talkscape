@@ -7,10 +7,15 @@ import { STUDY_HABITS, HW_HABITS } from '../constants/habits'
 import { todayStr, weekDays } from '../utils'
 import Logo from './Logo'
 import CalSection from './CalSection'
+import Icon from './Icon'
+import { JOURNEY_MAP } from '../constants/journeys'
+
+const CEFR_TO_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 
 export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, isPreview, onBack }) {
   const [tab, setTab]       = useState('dashboard')
   const [activeWeek, setAW] = useState(1)
+  const [jSelWeek, setJSelWeek] = useState(1)
   const [newPwd, setNewPwd] = useState('')
   const [pwdMsg, setPwdMsg] = useState('')
 
@@ -78,9 +83,21 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
   const wTasks   = getWT(activeWeek)
   const hasExtra = !!(db[`ex_${sid}_${lvl}_w${activeWeek}`] || []).length
 
+  const jid       = db[`jrn_${sid}`]
+  const journey   = jid ? JOURNEY_MAP[jid] : null
+  const simpleLevel = CEFR_TO_LEVEL[lvl] || 'beginner'
+  const jChecked  = db[`jsd_${sid}`] || {}
+  const jAllWeeks = journey ? [...(journey.weeks || []), ...(db[`jew_${sid}_${jid}`] || [])] : []
+  const jSelW     = jAllWeeks.find(w => w.week === jSelWeek) || jAllWeeks[0]
+  const jGetTasks = wn => { const ck = `jt_${sid}_${jid}_w${wn}`; return db[ck]?.length ? db[ck] : (journey?.weeks.find(w => w.week === wn)?.tasks || []) }
+  const jTasks    = jSelW ? jGetTasks(jSelW.week) : []
+  const jToggle   = (taskId) => upDb({ [`jsd_${sid}`]: { ...jChecked, [taskId]: !jChecked[taskId] } })
+
   const TABS = [
     ['dashboard', t.tabDash], ['plan', t.stPlanTab], ['hw', t.tabHWst],
-    ['habits', t.tabHabits], ['calendar', t.tabCalSt], ['info', t.tabInfoSt],
+    ['habits', t.tabHabits], ['calendar', t.tabCalSt],
+    ...(journey ? [['journey', lang === 'pt' ? `${journey.icon} Jornada` : `${journey.icon} Journey`]] : []),
+    ['info', t.tabInfoSt],
   ]
 
   return (
@@ -411,6 +428,65 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
               <div style={{ ...S.card, marginBottom: 14, borderLeft: `4px solid ${B.laranja}` }}>
                 <p style={S.lbl}>📌 {t.infoNotesLabel}</p>
                 <p style={{ ...ir(400, 14), color: B.dark, whiteSpace: 'pre-wrap', lineHeight: 1.7 }}>{infoNotes}</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Journey tab */}
+        {tab === 'journey' && journey && (
+          <div style={{ padding: '4px 0 16px' }}>
+            <div style={{ background: journey.color, borderRadius: 14, padding: '14px 18px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: 26 }}>{journey.icon}</span>
+              <div style={{ flex: 1 }}>
+                <p style={{ ...pp(700, 15), color: '#fff' }}>{lang === 'pt' ? journey.pt : journey.en}</p>
+                <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.8)' }}>{lang === 'pt' ? journey.desc.pt : journey.desc.en}</p>
+              </div>
+              <span style={{ background: 'rgba(255,255,255,0.25)', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#fff', fontFamily: 'Poppins,sans-serif' }}>
+                {{ beginner:'🌱 Iniciante', intermediate:'🌿 Intermediário', advanced:'🌳 Avançado' }[simpleLevel]}
+              </span>
+            </div>
+
+            {/* Week selector */}
+            <div style={{ overflowX: 'auto', marginBottom: 14 }}>
+              <div style={{ display: 'flex', gap: 7, minWidth: 'max-content', paddingBottom: 4 }}>
+                {jAllWeeks.map(w => {
+                  const wt = jGetTasks(w.week); const wpct = wt.length ? Math.round(wt.filter(tk => jChecked[tk.id]).length / wt.length * 100) : 0
+                  return (
+                    <button key={w.week} onClick={() => setJSelWeek(w.week)}
+                      style={{ ...S.chip, background: jSelWeek === w.week ? journey.color : B.bege, color: jSelWeek === w.week ? '#fff' : B.mid, fontSize: 11, padding: '7px 12px', whiteSpace: 'nowrap' }}>
+                      {lang === 'pt' ? 'Sem' : 'Wk'} {w.week}{wpct === 100 ? ' ✓' : ` · ${wpct}%`}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {jSelW && (
+              <div style={S.card}>
+                <p style={{ ...pp(700, 14), color: B.dark, marginBottom: 14 }}>{lang === 'pt' ? `Semana ${jSelW.week}` : `Week ${jSelW.week}`}: {jSelW.theme[lang] || jSelW.theme.en}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {jTasks.map(task => {
+                    const cm = CAT[task.cat] || CAT.grammar
+                    const done = jChecked[task.id]
+                    const displayText = lang === 'pt'
+                      ? (task.variations?.[simpleLevel]?.pt || task.pt)
+                      : (task.variations?.[simpleLevel]?.en || task.en)
+                    return (
+                      <div key={task.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: done ? B.bege : B.cream, borderRadius: 10, padding: '10px 12px', border: `1.5px solid ${done ? B.oliva + '44' : B.border}`, cursor: 'pointer' }}
+                        onClick={() => jToggle(task.id)}>
+                        <div style={{ width: 20, height: 20, borderRadius: 6, border: `2px solid ${done ? B.oliva : B.border}`, background: done ? B.oliva : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1 }}>
+                          {done && <Icon name="check" size={12} color="#fff" />}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <p style={{ ...ir(600, 13), color: done ? B.light : B.dark, textDecoration: done ? 'line-through' : 'none' }}>{displayText}</p>
+                          {task.link && !done && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 11), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{lang === 'pt' ? 'Acessar recurso' : 'Open resource'}</a>}
+                        </div>
+                        <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             )}
           </div>
