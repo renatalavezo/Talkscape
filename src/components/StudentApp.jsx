@@ -9,6 +9,7 @@ import Logo from './Logo'
 import CalSection from './CalSection'
 import Icon from './Icon'
 import { JOURNEY_MAP } from '../constants/journeys'
+import { JOURNEY_RESOURCES, TYPE_ICON } from '../constants/journeyResources'
 
 const CEFR_TO_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 
@@ -487,6 +488,23 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                     )
                   })}
                 </div>
+                {(() => {
+                  const res = JOURNEY_RESOURCES[jid]?.[simpleLevel]?.[jSelWeek] || []
+                  if (!res.length) return null
+                  return (
+                    <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${B.border}` }}>
+                      <p style={{ ...pp(600, 12), color: B.mid, marginBottom: 8 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Weekly resources'}</p>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                        {res.map((r, i) => (
+                          <a key={i} href={r.url} target="_blank" rel="noreferrer"
+                            style={{ display: 'flex', alignItems: 'center', gap: 5, background: B.bege, borderRadius: 20, padding: '5px 12px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}` }}>
+                            {TYPE_ICON[r.type]} {r.label}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })()}
               </div>
             )}
           </div>

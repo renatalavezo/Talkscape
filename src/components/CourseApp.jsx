@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { B, CAT } from '../constants/colors'
 import { ir, pp, S } from '../constants/styles'
 import { JOURNEYS, JOURNEY_MAP } from '../constants/journeys'
+import { JOURNEY_RESOURCES, TYPE_ICON } from '../constants/journeyResources'
 import Avatar from './Avatar'
 import Icon from './Icon'
 import Logo from './Logo'
@@ -186,6 +187,24 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                           )
                         })}
                       </div>
+                      {(() => {
+                        const lvl = student.level || 'beginner'
+                        const res = JOURNEY_RESOURCES[jid]?.[lvl]?.[selWeek] || []
+                        if (!res.length) return null
+                        return (
+                          <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #f0e8e0' }}>
+                            <p style={{ ...pp(600, 12), color: B.mid, marginBottom: 8 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Weekly resources'}</p>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                              {res.map((r, i) => (
+                                <a key={i} href={r.url} target="_blank" rel="noreferrer"
+                                  style={{ display: 'flex', alignItems: 'center', gap: 5, background: '#f5f0eb', borderRadius: 20, padding: '5px 12px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: '1px solid #e8ddd4' }}>
+                                  {TYPE_ICON[r.type]} {r.label}
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )
+                      })()}
                     </div>
                   )
                 })() : (
