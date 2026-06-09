@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { B, CAT } from '../constants/colors'
 import { ir, pp, S } from '../constants/styles'
 import { CEFR_META } from '../constants/cefr'
@@ -13,6 +13,7 @@ import Logo from './Logo'
 const SIMPLE_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 const SIMPLE_LABEL = { beginner:'🌱 Iniciante', intermediate:'🌿 Intermediário', advanced:'🌳 Avançado' }
 import CalSection from './CalSection'
+import { hashPassword } from '../utils'
 
 export default function TeacherDash({ t, lang, setLang, students, courseStudents, cadastrosPendentes, db, upDb, onPreview, onPreviewCourse, onLogout }) {
   const [sel, setSel]               = useState(null)
@@ -157,11 +158,12 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
     setJWeek(1)
   }
 
-  const addStudent = () => {
+  const addStudent = async () => {
     if (!newName.trim() || !newUser.trim() || !newPass.trim()) { setAddErr(t.fillAll); return }
     if (students.find(s => (s.username || '').toLowerCase() === newUser.trim().toLowerCase())) { setAddErr(t.usernameExists); return }
     const id = Date.now().toString(), av = AVATARS[students.length % AVATARS.length]
-    upDb({ students: [...students, { id, name: newName.trim(), avatar: av, username: newUser.trim(), password: newPass.trim() }] })
+    const hashed = await hashPassword(newPass.trim())
+    upDb({ students: [...students, { id, name: newName.trim(), avatar: av, username: newUser.trim(), password: hashed }] })
     if (fromCadastroId) {
       upDb({ cadastros_pendentes: (cadastrosPendentes || []).filter(c => c.id !== fromCadastroId) })
       setFromCadastroId(null)
@@ -287,11 +289,12 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
               {JOURNEYS.map(j => <option key={j.id} value={j.id}>{j.icon} {j.pt}</option>)}
             </select>
             {courseAddErr && <p style={{ ...ir(600, 12), color: B.marrom, marginBottom: 10 }}>{courseAddErr}</p>}
-            <button style={{ ...S.btn(B.laranja), width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={() => {
+            <button style={{ ...S.btn(B.laranja), width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={async () => {
               if (!courseNewName.trim() || !courseNewEmail.trim() || !courseNewPass.trim()) { setCourseAddErr('Preencha todos os campos.'); return }
               if ((courseStudents || []).find(s => s.email.toLowerCase() === courseNewEmail.trim().toLowerCase())) { setCourseAddErr('Email já cadastrado.'); return }
               const id = `cs_${Date.now()}`
-              upDb({ courseStudents: [...(courseStudents || []), { id, name: courseNewName.trim(), email: courseNewEmail.trim().toLowerCase(), password: courseNewPass.trim(), active: false, avatar: 'Lily', jid: courseNewJid || null, createdAt: new Date().toISOString().slice(0,10) }] })
+              const hashed = await hashPassword(courseNewPass.trim())
+              upDb({ courseStudents: [...(courseStudents || []), { id, name: courseNewName.trim(), email: courseNewEmail.trim().toLowerCase(), password: hashed, active: false, avatar: 'Lily', jid: courseNewJid || null, createdAt: new Date().toISOString().slice(0,10) }] })
               if (courseNewJid) upDb({ [`cjrn_${id}`]: courseNewJid })
               setCourseNewName(''); setCourseNewEmail(''); setCourseNewPass(''); setCourseNewJid(''); setCourseAddErr(''); setShowAddCourse(false)
             }}>

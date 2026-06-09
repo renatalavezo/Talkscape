@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "talkscape_v1": {
+      ".read": false,
+      ".write": false,
+      "students": {
+        ".read": false,
+        ".write": false
+      },
+      "courseStudents": {
+        ".read": false,
+        ".write": false
+      }
+    }
+  }
+}

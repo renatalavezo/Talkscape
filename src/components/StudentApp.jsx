@@ -4,7 +4,7 @@ import { ir, pp, S } from '../constants/styles'
 import { CEFR_META } from '../constants/cefr'
 import { PLAN } from '../constants/plan'
 import { STUDY_HABITS, HW_HABITS } from '../constants/habits'
-import { todayStr, weekDays } from '../utils'
+import { todayStr, weekDays, hashPassword } from '../utils'
 import Logo from './Logo'
 import CalSection from './CalSection'
 import Icon from './Icon'
@@ -413,9 +413,10 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
               {pwdMsg && <p style={{ ...ir(600, 12), color: pwdMsg === 'ok' ? B.oliva : '#DC2626', margin: '6px 0' }}>
                 {pwdMsg === 'ok' ? (lang === 'pt' ? '✓ Senha alterada com sucesso!' : '✓ Password changed!') : pwdMsg}
               </p>}
-              <button style={{ ...S.btn(B.laranja), marginTop: 8 }} onClick={() => {
+              <button style={{ ...S.btn(B.laranja), marginTop: 8 }} onClick={async () => {
                 if (newPwd.trim().length < 6) { setPwdMsg(lang === 'pt' ? 'Mínimo 6 caracteres.' : 'Minimum 6 characters.'); return }
-                upDb({ students: students.map(s => s.id === sid ? { ...s, password: newPwd.trim() } : s) })
+                const hashed = await hashPassword(newPwd.trim())
+                upDb({ students: students.map(s => s.id === sid ? { ...s, password: hashed } : s) })
                 setNewPwd(''); setPwdMsg('ok')
               }}>{lang === 'pt' ? 'Salvar nova senha' : 'Save new password'}</button>
             </div>

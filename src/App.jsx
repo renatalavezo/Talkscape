@@ -4,7 +4,7 @@ import { rtdb, dbLoad, dbSave } from './firebase'
 import { TR } from './constants/translations'
 import { B } from './constants/colors'
 import { ir } from './constants/styles'
-import { TEACHER_PASS } from './utils'
+import { TEACHER_PASS, checkPassword, studentDbSlice, safeStudents } from './utils'
 import Logo from './components/Logo'
 import Splash from './components/Splash'
 import TeacherPass from './components/TeacherPass'
@@ -67,32 +67,43 @@ export default function App() {
   const courseStudents = Array.isArray(db.courseStudents) ? db.courseStudents : Object.values(db.courseStudents || {})
   const cadastrosPendentes = Array.isArray(db.cadastros_pendentes) ? db.cadastros_pendentes : Object.values(db.cadastros_pendentes || {})
 
-  const doStudentLogin = () => {
+  const doStudentLogin = async () => {
     const u = loginU.trim().toLowerCase()
     const p = loginP.trim()
     if (!u) { setLoginErr(t.noAccount); return }
-    const s = students.find(s =>
-      (s.username || '').trim().toLowerCase() === u && (s.password || '').trim() === p
-    )
-    if (s) { setId(s.id); setView('student'); setLoginErr(''); return }
-    const cs = courseStudents.find(s =>
-      (s.email || '').trim().toLowerCase() === u && (s.password || '').trim() === p
-    )
-    if (!cs) { setLoginErr(t.wrongLogin); return }
-    if (!cs.active) { setLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
-    setId(cs.id); setView('course'); setLoginErr('')
+    // Check particular students
+    for (const s of students) {
+      if ((s.username || '').trim().toLowerCase() === u) {
+        if (await checkPassword(p, s.password)) {
+          setId(s.id); setView('student'); setLoginErr(''); return
+        }
+      }
+    }
+    // Check course students
+    for (const cs of courseStudents) {
+      if ((cs.email || '').trim().toLowerCase() === u) {
+        if (await checkPassword(p, cs.password)) {
+          if (!cs.active) { setLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
+          setId(cs.id); setView('course'); setLoginErr(''); return
+        }
+      }
+    }
+    setLoginErr(t.wrongLogin)
   }
 
-  const doCourseLogin = () => {
+  const doCourseLogin = async () => {
     const u = courseLoginU.trim().toLowerCase()
     const p = courseLoginP.trim()
     if (!u) { setCourseLoginErr('Preencha seu email.'); return }
-    const s = courseStudents.find(s =>
-      (s.email || '').trim().toLowerCase() === u && (s.password || '').trim() === p
-    )
-    if (!s) { setCourseLoginErr('Email ou senha incorretos.'); return }
-    if (!s.active) { setCourseLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
-    setId(s.id); setView('course'); setCourseLoginErr('')
+    for (const s of courseStudents) {
+      if ((s.email || '').trim().toLowerCase() === u) {
+        if (await checkPassword(p, s.password)) {
+          if (!s.active) { setCourseLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
+          setId(s.id); setView('course'); setCourseLoginErr(''); return
+        }
+      }
+    }
+    setCourseLoginErr('Email ou senha incorretos.')
   }
 
   if (loading) return (
@@ -105,6 +116,9 @@ export default function App() {
     </div>
   )
 
+  // Slice of db with only the logged-in student's own keys — no other students' data
+  const studentSlice = activeId ? studentDbSlice(db, activeId) : {}
+
   return (
     <>
       {view === 'splash'   && <Splash t={t} lang={lang} setLang={setLang} onTeacher={() => setView('t-pass')} onStudent={() => setView('s-login')} onExplore={() => setView('landing')} onCourse={() => setView('c-login')} />}
@@ -112,10 +126,10 @@ export default function App() {
       {view === 't-pass'   && <TeacherPass t={t} val={passVal} setVal={setPassVal} err={passErr} onSubmit={() => { if (passVal === (db.teacherPass || TEACHER_PASS)) { setView('teacher'); setPassErr(false) } else setPassErr(true) }} onBack={() => { setView('splash'); setPassVal(''); setPassErr(false) }} />}
       {view === 'teacher'  && <TeacherDash t={t} lang={lang} setLang={setLang} students={students} courseStudents={courseStudents} cadastrosPendentes={cadastrosPendentes} db={db} upDb={upDb} onPreview={id => { setId(id); setView('preview') }} onPreviewCourse={id => { setId(id); setView('course-preview') }} onLogout={() => setView('splash')} />}
       {view === 's-login'  && <StudentLogin t={t} lang={lang} setLang={setLang} u={loginU} setU={setLoginU} p={loginP} setP={setLoginP} err={loginErr} onLogin={doStudentLogin} onBack={() => { setView('splash'); setLoginErr('') }} />}
-      {(view === 'student' || view === 'preview') && <StudentApp t={t} lang={lang} setLang={setLang} sid={activeId} students={students} db={db} upDb={upDb} isPreview={view === 'preview'} onBack={() => setView(view === 'preview' ? 'teacher' : 'splash')} />}
+      {(view === 'student' || view === 'preview') && <StudentApp t={t} lang={lang} setLang={setLang} sid={activeId} students={safeStudents(students)} db={view === 'preview' ? db : studentSlice} upDb={upDb} isPreview={view === 'preview'} onBack={() => setView(view === 'preview' ? 'teacher' : 'splash')} />}
       {view === 'c-login'  && <CourseLogin lang={lang} u={courseLoginU} setU={setCourseLoginU} p={courseLoginP} setP={setCourseLoginP} err={courseLoginErr} onLogin={doCourseLogin} onBack={() => { setView('landing'); setCourseLoginErr('') }} />}
-      {view === 'course'         && <CourseApp lang={lang} sid={activeId} courseStudents={courseStudents} db={db} upDb={upDb} onLogout={() => setView('landing')} />}
-      {view === 'course-preview' && <CourseApp lang={lang} sid={activeId} courseStudents={courseStudents} db={db} upDb={upDb} onLogout={() => setView('teacher')} />}
+      {view === 'course'         && <CourseApp lang={lang} sid={activeId} courseStudents={safeStudents(courseStudents)} db={studentSlice} upDb={upDb} onLogout={() => setView('landing')} />}
+      {view === 'course-preview' && <CourseApp lang={lang} sid={activeId} courseStudents={safeStudents(courseStudents)} db={db} upDb={upDb} onLogout={() => setView('teacher')} />}
     </>
   )
 }
