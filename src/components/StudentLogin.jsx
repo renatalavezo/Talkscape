@@ -16,22 +16,7 @@ export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, 
           {lang === 'pt' ? 'Aluna particular ou das Jornadas — mesma tela!' : 'Private or Journey student — same screen!'}
         </p>
 
-        <div style={{ background: B.cream, borderRadius: 12, padding: '12px 14px', marginBottom: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-            <span style={{ fontSize: 14 }}>👩‍💻</span>
-            <p style={{ ...ir(400, 12), color: B.mid, lineHeight: 1.5 }}>
-              {lang === 'pt' ? <><strong style={{ color: B.dark }}>Aluna particular:</strong> entre com seu <strong>usuário</strong>.</> : <><strong style={{ color: B.dark }}>Private student:</strong> sign in with your <strong>username</strong>.</>}
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-            <span style={{ fontSize: 14 }}>🗺️</span>
-            <p style={{ ...ir(400, 12), color: B.mid, lineHeight: 1.5 }}>
-              {lang === 'pt' ? <><strong style={{ color: B.dark }}>Aluna das Jornadas:</strong> entre com seu <strong>email</strong>.</> : <><strong style={{ color: B.dark }}>Journey student:</strong> sign in with your <strong>email</strong>.</>}
-            </p>
-          </div>
-        </div>
-
-        <div style={{ marginBottom: 12 }}>
+<div style={{ marginBottom: 12 }}>
           <label style={S.lbl}>{lang === 'pt' ? 'Usuário ou email' : 'Username or email'}</label>
           <input style={S.inp} placeholder={lang === 'pt' ? 'seu_usuario ou email@email.com' : 'your_username or email@email.com'}
             value={u} onChange={e => setU(e.target.value)} onKeyDown={e => e.key === 'Enter' && onLogin()} />
