@@ -5,6 +5,7 @@ import { CEFR_META } from '../constants/cefr'
 import { PLAN } from '../constants/plan'
 import { AVATARS } from '../constants/avatars'
 import { JOURNEYS, JOURNEY_MAP } from '../constants/journeys'
+import { JOURNEY_RESOURCES, TYPE_ICON } from '../constants/journeyResources'
 import Avatar from './Avatar'
 import Icon from './Icon'
 import Logo from './Logo'
@@ -473,6 +474,23 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         )
                       })}
                     </div>
+                    {(() => {
+                      const res = JOURNEY_RESOURCES[selJBase]?.['intermediate']?.[selJBaseWeek] || []
+                      if (!res.length) return null
+                      return (
+                        <div style={{ marginBottom: 12, padding: '10px 12px', background: '#f5f0eb', borderRadius: 10, border: `1px solid ${B.border}` }}>
+                          <p style={{ ...pp(600, 11), color: B.mid, marginBottom: 7 }}>🔗 {lang === 'pt' ? 'Recursos da semana (intermediário)' : 'Week resources (intermediate)'}</p>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                            {res.map((r, i) => (
+                              <a key={i} href={r.url} target="_blank" rel="noreferrer"
+                                style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#fff', borderRadius: 20, padding: '4px 10px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}` }}>
+                                {TYPE_ICON[r.type]} {r.label}
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })()}
                     <div style={{ background: B.bege, borderRadius: 10, padding: 12, border: `1.5px solid ${B.border}` }}>
                       <p style={{ ...pp(600, 11), color: B.marrom, marginBottom: 8 }}>{lang === 'pt' ? 'Adicionar tarefa à base' : 'Add task to base'}</p>
                       <input style={{ ...S.inp, marginBottom: 6, fontSize: 12 }} placeholder="Task (English)" value={nJBTaskEn} onChange={e => setNJBTaskEn(e.target.value)} />
@@ -863,6 +881,24 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                   )
                                 })}
                               </div>
+                              {(() => {
+                                const sl = SIMPLE_LEVEL[db[`lv_${selS.id}`] || 'A1'] || 'beginner'
+                                const res = JOURNEY_RESOURCES[currentJid]?.[sl]?.[jWeek] || []
+                                if (!res.length) return null
+                                return (
+                                  <div style={{ marginBottom: 12, padding: '10px 12px', background: '#f5f0eb', borderRadius: 10, border: `1px solid ${B.border}` }}>
+                                    <p style={{ ...pp(600, 11), color: B.mid, marginBottom: 7 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Week resources'}</p>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                                      {res.map((r, i) => (
+                                        <a key={i} href={r.url} target="_blank" rel="noreferrer"
+                                          style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#fff', borderRadius: 20, padding: '4px 10px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}` }}>
+                                          {TYPE_ICON[r.type]} {r.label}
+                                        </a>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )
+                              })()}
                               <div style={{ background: B.bege, borderRadius: 10, padding: 12, border: `1.5px solid ${B.border}` }}>
                                 <p style={{ ...pp(600, 11), color: B.marrom, marginBottom: 8 }}>{t.addTask}</p>
                                 <input style={{ ...S.inp, marginBottom: 6, fontSize: 12 }} placeholder="Task (English)" value={nJTaskEn} onChange={e => setNJTaskEn(e.target.value)} />
