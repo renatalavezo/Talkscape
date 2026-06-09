@@ -6,6 +6,7 @@ import { PLAN } from '../constants/plan'
 import { STUDY_HABITS, HW_HABITS } from '../constants/habits'
 import { todayStr, weekDays, hashPassword } from '../utils'
 import Logo from './Logo'
+import Avatar from './Avatar'
 import CalSection from './CalSection'
 import Icon from './Icon'
 import { JOURNEY_MAP } from '../constants/journeys'
@@ -176,7 +177,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
             )}
             {/* Hero */}
             <div style={{ background: `linear-gradient(135deg,${B.marrom},${B.laranja} 60%,${B.rosa})`, borderRadius: 20, padding: '22px 20px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 52, flexShrink: 0 }}>{student.avatar}</span>
+              <Avatar seed={student.avatar || 'Lily'} size={64} />
               <div style={{ flex: 1, minWidth: 140 }}>
                 <p style={{ ...pp(800, 18), color: '#fff', marginBottom: 4 }}>{lang === 'pt' ? `Olá, ${student.name}!` : `Hi, ${student.name}!`}</p>
                 <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.75)', marginBottom: 12 }}>{lang === 'pt' ? 'Continue sua jornada com Teacher Renata' : 'Continue your journey with Teacher Renata'}</p>
