@@ -430,9 +430,10 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                       )}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 14 }}>
-                      {tasks.map(task => {
+                      {tasks.map((task, ti) => {
                         const cm = CAT[task.cat] || CAT.grammar
                         const isEditing = jBaseEditTask?.id === task.id
+                        const r = (JOURNEY_RESOURCES[selJBase]?.['intermediate']?.[selJBaseWeek] || [])[ti]
                         return (
                           <div key={task.id} style={{ background: B.cream, borderRadius: 10, border: `1.5px solid ${B.border}`, overflow: 'hidden' }}>
                             {isEditing ? (
@@ -462,6 +463,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                   <p style={{ ...ir(600, 12), color: B.dark }}>{task.en}</p>
                                   <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{task.pt}</p>
                                   {task.link && <a href={task.link} target="_blank" rel="noreferrer" style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
+                                  {r && <a href={r.url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f5f0eb', borderRadius: 20, padding: '3px 9px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 4 }}>{TYPE_ICON[r.type]} {r.label}</a>}
                                 </div>
                                 <button style={{ background: B.bege, border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => setJBaseEditTask({ ...task })}><Icon name="edit" size={13} color={B.mid} /></button>
                                 <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => {
@@ -474,22 +476,6 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         )
                       })}
                     </div>
-                    {(() => {
-                      const res = JOURNEY_RESOURCES[selJBase]?.['intermediate']?.[selJBaseWeek] || []
-                      return (
-                        <div style={{ marginBottom: 12, padding: '10px 12px', background: '#f5f0eb', borderRadius: 10, border: `1px solid ${B.border}` }}>
-                          <p style={{ ...pp(600, 11), color: B.mid, marginBottom: 7 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Week resources'} {res.length ? '' : '(sem recursos)'}</p>
-                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                            {res.map((r, i) => (
-                              <a key={i} href={r.url} target="_blank" rel="noreferrer"
-                                style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#fff', borderRadius: 20, padding: '4px 10px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}` }}>
-                                {TYPE_ICON[r.type]} {r.label}
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                      )
-                    })()}
                     <div style={{ background: B.bege, borderRadius: 10, padding: 12, border: `1.5px solid ${B.border}` }}>
                       <p style={{ ...pp(600, 11), color: B.marrom, marginBottom: 8 }}>{lang === 'pt' ? 'Adicionar tarefa à base' : 'Add task to base'}</p>
                       <input style={{ ...S.inp, marginBottom: 6, fontSize: 12 }} placeholder="Task (English)" value={nJBTaskEn} onChange={e => setNJBTaskEn(e.target.value)} />
@@ -843,9 +829,10 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                               </div>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 14 }}>
                                 {tasks.length === 0 && <p style={{ ...ir(400, 13), color: B.light, textAlign: 'center', padding: '12px 0' }}>{t.noTasks}</p>}
-                                {tasks.map(task => {
+                                {tasks.map((task, ti) => {
                                   const cm = CAT[task.cat] || CAT.grammar
                                   const isEditing = jEditTask?.id === task.id
+                                  const r = (JOURNEY_RESOURCES[currentJid]?.[SIMPLE_LEVEL[db[`lv_${selS.id}`] || 'A1'] || 'beginner']?.[jWeek] || [])[ti]
                                   return (
                                     <div key={task.id} style={{ background: B.cream, borderRadius: 10, border: `1.5px solid ${B.border}`, overflow: 'hidden' }}>
                                       {isEditing ? (
@@ -871,6 +858,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                             <p style={{ ...ir(600, 12), color: B.dark }}>{task.en}</p>
                                             <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{task.pt}</p>
                                             {task.link && <a href={task.link} target="_blank" rel="noreferrer" style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
+                                            {r && <a href={r.url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f5f0eb', borderRadius: 20, padding: '3px 9px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 4 }}>{TYPE_ICON[r.type]} {r.label}</a>}
                                           </div>
                                           <button style={{ background: B.bege, border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => setJEditTask({ ...task })}><Icon name="edit" size={13} color={B.mid} /></button>
                                           <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => delJTask(selS.id, currentJid, jWeek, task.id)}><Icon name="delete" size={13} color="#DC2626" /></button>
@@ -880,24 +868,6 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                   )
                                 })}
                               </div>
-                              {(() => {
-                                const sl = SIMPLE_LEVEL[db[`lv_${selS.id}`] || 'A1'] || 'beginner'
-                                const res = JOURNEY_RESOURCES[currentJid]?.[sl]?.[jWeek] || []
-                                if (!res.length) return null
-                                return (
-                                  <div style={{ marginBottom: 12, padding: '10px 12px', background: '#f5f0eb', borderRadius: 10, border: `1px solid ${B.border}` }}>
-                                    <p style={{ ...pp(600, 11), color: B.mid, marginBottom: 7 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Week resources'}</p>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                                      {res.map((r, i) => (
-                                        <a key={i} href={r.url} target="_blank" rel="noreferrer"
-                                          style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#fff', borderRadius: 20, padding: '4px 10px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}` }}>
-                                          {TYPE_ICON[r.type]} {r.label}
-                                        </a>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )
-                              })()}
                               <div style={{ background: B.bege, borderRadius: 10, padding: 12, border: `1.5px solid ${B.border}` }}>
                                 <p style={{ ...pp(600, 11), color: B.marrom, marginBottom: 8 }}>{t.addTask}</p>
                                 <input style={{ ...S.inp, marginBottom: 6, fontSize: 12 }} placeholder="Task (English)" value={nJTaskEn} onChange={e => setNJTaskEn(e.target.value)} />

@@ -165,9 +165,10 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                         </div>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                        {tasks.map(task => {
+                        {tasks.map((task, ti) => {
                           const done = !!checked[task.id]
                           const cm = CAT[task.cat] || CAT.grammar
+                          const r = (JOURNEY_RESOURCES[jid]?.[student.level || 'beginner']?.[selWeek] || [])[ti]
                           return (
                             <div key={task.id} onClick={() => upDb({ [`cjsd_${sid}`]: { ...checked, [task.id]: !done } })}
                               style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 13px', background: done ? '#f5faf5' : '#fdf8f5', borderRadius: 12, border: `1.5px solid ${done ? '#b6d4b6' : '#edddd4'}`, cursor: 'pointer', transition: 'all 0.15s' }}>
@@ -181,29 +182,13 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                                     : (student.level && task.variations?.[student.level]?.en) || task.en}
                                 </p>
                                 {task.link && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
+                                {r && <a href={r.url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: '#f5f0eb', borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: '1px solid #e8ddd4', marginTop: 5 }}>{TYPE_ICON[r.type]} {r.label}</a>}
                               </div>
                               <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
                             </div>
                           )
                         })}
                       </div>
-                      {(() => {
-                        const lvl = student.level || 'beginner'
-                        const res = JOURNEY_RESOURCES[jid]?.[lvl]?.[selWeek] || []
-                        return (
-                          <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #f0e8e0' }}>
-                            <p style={{ ...pp(600, 12), color: B.mid, marginBottom: 8 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Weekly resources'} [{jid}/{lvl}/{String(selWeek)}/{res.length}]</p>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                              {res.map((r, i) => (
-                                <a key={i} href={r.url} target="_blank" rel="noreferrer"
-                                  style={{ display: 'flex', alignItems: 'center', gap: 5, background: '#f5f0eb', borderRadius: 20, padding: '5px 12px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: '1px solid #e8ddd4' }}>
-                                  {TYPE_ICON[r.type]} {r.label}
-                                </a>
-                              ))}
-                            </div>
-                          </div>
-                        )
-                      })()}
                     </div>
                   )
                 })() : (

@@ -467,9 +467,10 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
               <div style={S.card}>
                 <p style={{ ...pp(700, 14), color: B.dark, marginBottom: 14 }}>{lang === 'pt' ? `Semana ${jSelW.week}` : `Week ${jSelW.week}`}: {jSelW.theme[lang] || jSelW.theme.en}</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {jTasks.map(task => {
+                  {jTasks.map((task, ti) => {
                     const cm = CAT[task.cat] || CAT.grammar
                     const done = jChecked[task.id]
+                    const r = (JOURNEY_RESOURCES[jid]?.[simpleLevel]?.[jSelWeek] || [])[ti]
                     const displayText = lang === 'pt'
                       ? (task.variations?.[simpleLevel]?.pt || task.pt)
                       : (task.variations?.[simpleLevel]?.en || task.en)
@@ -482,29 +483,13 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                         <div style={{ flex: 1 }}>
                           <p style={{ ...ir(600, 13), color: done ? B.light : B.dark, textDecoration: done ? 'line-through' : 'none' }}>{displayText}</p>
                           {task.link && !done && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 11), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{lang === 'pt' ? 'Acessar recurso' : 'Open resource'}</a>}
+                          {r && <a href={r.url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: B.bege, borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 5 }}>{TYPE_ICON[r.type]} {r.label}</a>}
                         </div>
                         <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
                       </div>
                     )
                   })}
                 </div>
-                {(() => {
-                  const res = JOURNEY_RESOURCES[jid]?.[simpleLevel]?.[jSelWeek] || []
-                  if (!res.length) return null
-                  return (
-                    <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${B.border}` }}>
-                      <p style={{ ...pp(600, 12), color: B.mid, marginBottom: 8 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Weekly resources'}</p>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                        {res.map((r, i) => (
-                          <a key={i} href={r.url} target="_blank" rel="noreferrer"
-                            style={{ display: 'flex', alignItems: 'center', gap: 5, background: B.bege, borderRadius: 20, padding: '5px 12px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}` }}>
-                            {TYPE_ICON[r.type]} {r.label}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )
-                })()}
               </div>
             )}
           </div>
