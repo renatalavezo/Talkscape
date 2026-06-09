@@ -6,6 +6,7 @@ import Icon from './Icon'
 import { dbLoad, dbSave } from '../firebase'
 import { hashPassword } from '../utils'
 import { AVATARS } from '../constants/avatars'
+import { JOURNEYS } from '../constants/journeys'
 
 const INSTAGRAM = 'https://www.instagram.com/talkscape.byrenata'
 const WHATSAPP = 'https://wa.me/5511986704076?text=Olá%20Renata!%20Vim%20pelo%20TalkScape%20e%20quero%20saber%20mais%20sobre%20as%20aulas.'
