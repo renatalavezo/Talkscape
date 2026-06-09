@@ -1,17 +1,14 @@
 import { initializeApp, getApps } from 'firebase/app'
 import { getDatabase, ref, get, set } from 'firebase/database'
 
-// ── Firebase configuration ─────────────────────────────────────────
-// Create a free project at https://console.firebase.google.com
-// Enable Realtime Database, then paste your project config below.
 const firebaseConfig = {
-  apiKey:            'TALKSCAPE',
-  authDomain:        'TALKSCAPE.firebaseapp.com',
-  databaseURL:       'https://TALKSCAPE-default-rtdb.firebaseio.com',
-  projectId:         'TALKSCAPE',
-  storageBucket:     'TALKSCAPE.appspot.com',
-  messagingSenderId: 'TALKSCAPE',
-  appId:             'TALKSCAPE',
+  apiKey:            'AIzaSyB95bx2d_rf6IRxGP3XM3byz-tTGDJ3xWE',
+  authDomain:        'talkscape-by-renata.firebaseapp.com',
+  databaseURL:       'https://talkscape-by-renata-default-rtdb.firebaseio.com',
+  projectId:         'talkscape-by-renata',
+  storageBucket:     'talkscape-by-renata.firebasestorage.app',
+  messagingSenderId: '1085953776570',
+  appId:             '1:1085953776570:web:62e52e73a7ed7e02931b83',
 }
 
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
