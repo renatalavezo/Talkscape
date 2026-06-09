@@ -661,6 +661,33 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                     ))}
                   </div>
                 )}
+                {students.filter(s => s.active === false).length > 0 && (
+                  <div style={{ ...S.card, marginBottom: 16, border: `1.5px solid ${B.rosa}66`, background: B.rosa + '08' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                      <div style={{ width: 8, height: 8, borderRadius: '50%', background: B.rosa }} />
+                      <p style={{ ...pp(700, 13), color: B.dark }}>{lang === 'pt' ? 'Novas alunas (aguardando ativação)' : 'New students (pending activation)'}</p>
+                      <span style={{ background: B.rosa, color: '#fff', borderRadius: 20, padding: '2px 8px', fontSize: 11, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{students.filter(s => s.active === false).length}</span>
+                    </div>
+                    {students.filter(s => s.active === false).map(s => (
+                      <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', background: B.white, borderRadius: 12, marginBottom: 8, border: `1px solid ${B.border}`, flexWrap: 'wrap' }}>
+                        <Avatar seed={s.avatar || 'Lily'} size={36} />
+                        <div style={{ flex: 1, minWidth: 120 }}>
+                          <p style={{ ...pp(600, 13), color: B.dark }}>{s.name}</p>
+                          <p style={{ ...ir(400, 11), color: B.light }}>{s.email} · {s.phone}</p>
+                          <p style={{ ...ir(400, 10), color: B.light }}>@{s.username}</p>
+                        </div>
+                        <button style={{ ...S.btn(B.oliva), fontSize: 12, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
+                          onClick={() => upDb({ students: students.map(x => x.id === s.id ? { ...x, active: true } : x) })}>
+                          <Icon name="check" size={13} color="#fff" />{lang === 'pt' ? 'Ativar' : 'Activate'}
+                        </button>
+                        <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 8, padding: '8px 10px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                          onClick={() => upDb({ students: students.filter(x => x.id !== s.id) })}>
+                          <Icon name="delete" size={14} color="#DC2626" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
                 <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
                   <div style={{ flex: 1, position: 'relative' }}>
                     <Icon name="search" size={15} color={B.light} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />

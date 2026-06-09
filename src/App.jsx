@@ -76,10 +76,13 @@ export default function App() {
     if (!u) { setLoginErr(t.noAccount); return }
     setLoggingIn(true)
     try {
-      // Check particular students
+      // Check particular students (by username or email)
       for (const s of students) {
-        if ((s.username || '').trim().toLowerCase() === u) {
+        const matchUser  = (s.username || '').trim().toLowerCase() === u
+        const matchEmail = (s.email    || '').trim().toLowerCase() === u
+        if (matchUser || matchEmail) {
           if (await checkPassword(p, s.password)) {
+            if (s.active === false) { setLoginErr(lang === 'pt' ? 'Seu acesso ainda não foi liberado. Aguarde o contato de Teacher Renata.' : 'Your access is not active yet. Teacher Renata will reach out soon.'); return }
             setId(s.id); setView('student'); setLoginErr(''); return
           }
         }
@@ -140,7 +143,7 @@ export default function App() {
       {view === 't-pass'   && <TeacherPass t={t} val={passVal} setVal={setPassVal} err={passErr} onSubmit={() => { if (passVal === (db.teacherPass || TEACHER_PASS)) { setView('teacher'); setPassErr(false) } else setPassErr(true) }} onBack={() => { setView('splash'); setPassVal(''); setPassErr(false) }} />}
       {view === 'teacher'  && <TeacherDash t={t} lang={lang} setLang={setLang} students={students} courseStudents={courseStudents} cadastrosPendentes={cadastrosPendentes} db={db} upDb={upDb} onPreview={id => { setId(id); setView('preview') }} onPreviewCourse={id => { setId(id); setView('course-preview') }} onLogout={() => setView('splash')} />}
       {view === 's-login'  && <StudentLogin t={t} lang={lang} setLang={setLang} u={loginU} setU={setLoginU} p={loginP} setP={setLoginP} err={loginErr} busy={loggingIn} onLogin={doStudentLogin} onBack={() => { setView('splash'); setLoginErr('') }} onRegister={() => setView('register')} />}
-      {view === 'register' && <Register lang={lang} onBack={() => setView('s-login')} courseStudents={courseStudents} upDb={upDb} />}
+      {view === 'register' && <Register lang={lang} onBack={() => setView('s-login')} students={students} upDb={upDb} />}
       {(view === 'student' || view === 'preview') && <StudentApp t={t} lang={lang} setLang={setLang} sid={activeId} students={safeStudents(students)} db={view === 'preview' ? db : studentSlice} upDb={upDb} isPreview={view === 'preview'} onBack={() => setView(view === 'preview' ? 'teacher' : 'splash')} />}
       {view === 'c-login'  && <CourseLogin lang={lang} u={courseLoginU} setU={setCourseLoginU} p={courseLoginP} setP={setCourseLoginP} err={courseLoginErr} busy={loggingIn} onLogin={doCourseLogin} onBack={() => { setView('landing'); setCourseLoginErr('') }} />}
       {view === 'course'         && <CourseApp lang={lang} sid={activeId} courseStudents={safeStudents(courseStudents)} db={studentSlice} upDb={upDb} onLogout={() => setView('landing')} />}
