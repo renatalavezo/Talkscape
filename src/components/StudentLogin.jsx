@@ -2,7 +2,7 @@ import { B } from '../constants/colors'
 import { ir, pp, S } from '../constants/styles'
 import Logo from './Logo'
 
-export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, busy, onLogin, onBack }) {
+export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, busy, onLogin, onBack, onRegister }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})`, padding: 20 }}>
       <div style={{ background: B.white, borderRadius: 24, padding: '44px 36px', maxWidth: 380, width: '100%', boxShadow: '0 40px 80px rgba(44,24,16,0.3)' }}>
@@ -58,18 +58,27 @@ export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, 
           <button style={{ background: 'none', border: `1.5px solid ${B.border}`, borderRadius: 20, padding: '6px 16px', fontSize: 12, color: B.mid, cursor: 'pointer' }} onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}>{t.switchLang}</button>
         </div>
 
-        <p style={{ ...ir(400, 11), color: B.light, textAlign: 'center', marginTop: 16 }}>
-          {lang === 'pt' ? 'Não tem acesso ainda?' : "Don't have access yet?"}
-        </p>
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 8 }}>
-          <a href="https://wa.me/5511986704076?text=Olá%20Renata!%20Quero%20começar%20no%20TalkScape." target="_blank" rel="noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: '#25D366', color: '#fff', borderRadius: 10, fontSize: 12, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif' }}>
-            WhatsApp
-          </a>
-          <a href="https://www.instagram.com/talkscape.byrenata" target="_blank" rel="noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: '#E1306C', color: '#fff', borderRadius: 10, fontSize: 12, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif' }}>
-            Instagram
-          </a>
+        <div style={{ borderTop: `1px solid ${B.border}`, marginTop: 20, paddingTop: 20, textAlign: 'center' }}>
+          <p style={{ ...ir(400, 12), color: B.mid, marginBottom: 10 }}>
+            {lang === 'pt' ? 'Ainda não tem conta?' : "Don't have an account yet?"}
+          </p>
+          <button style={{ width: '100%', padding: '11px', borderRadius: 12, border: `2px solid ${B.marrom}`, background: 'transparent', color: B.marrom, fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', marginBottom: 14 }}
+            onClick={onRegister}>
+            {lang === 'pt' ? 'Criar conta' : 'Create account'}
+          </button>
+          <p style={{ ...ir(400, 11), color: B.light, marginBottom: 8 }}>
+            {lang === 'pt' ? 'Dúvidas? Fale comigo:' : 'Questions? Talk to me:'}
+          </p>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+            <a href="https://wa.me/5511986704076?text=Olá%20Renata!%20Quero%20começar%20no%20TalkScape." target="_blank" rel="noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: '#25D366', color: '#fff', borderRadius: 10, fontSize: 12, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif' }}>
+              WhatsApp
+            </a>
+            <a href="https://www.instagram.com/talkscape.byrenata" target="_blank" rel="noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', background: '#E1306C', color: '#fff', borderRadius: 10, fontSize: 12, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif' }}>
+              Instagram
+            </a>
+          </div>
         </div>
       </div>
     </div>

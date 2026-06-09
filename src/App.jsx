@@ -14,6 +14,7 @@ import StudentApp from './components/StudentApp'
 import LandingPage from './components/LandingPage'
 import CourseLogin from './components/CourseLogin'
 import CourseApp from './components/CourseApp'
+import Register from './components/Register'
 
 export default function App() {
   const [db, setDb]             = useState({})
@@ -138,7 +139,8 @@ export default function App() {
       {view === 'landing'  && <LandingPage onBack={() => setView('splash')} onStudent={() => setView('s-login')} onCourse={() => setView('c-login')} />}
       {view === 't-pass'   && <TeacherPass t={t} val={passVal} setVal={setPassVal} err={passErr} onSubmit={() => { if (passVal === (db.teacherPass || TEACHER_PASS)) { setView('teacher'); setPassErr(false) } else setPassErr(true) }} onBack={() => { setView('splash'); setPassVal(''); setPassErr(false) }} />}
       {view === 'teacher'  && <TeacherDash t={t} lang={lang} setLang={setLang} students={students} courseStudents={courseStudents} cadastrosPendentes={cadastrosPendentes} db={db} upDb={upDb} onPreview={id => { setId(id); setView('preview') }} onPreviewCourse={id => { setId(id); setView('course-preview') }} onLogout={() => setView('splash')} />}
-      {view === 's-login'  && <StudentLogin t={t} lang={lang} setLang={setLang} u={loginU} setU={setLoginU} p={loginP} setP={setLoginP} err={loginErr} busy={loggingIn} onLogin={doStudentLogin} onBack={() => { setView('splash'); setLoginErr('') }} />}
+      {view === 's-login'  && <StudentLogin t={t} lang={lang} setLang={setLang} u={loginU} setU={setLoginU} p={loginP} setP={setLoginP} err={loginErr} busy={loggingIn} onLogin={doStudentLogin} onBack={() => { setView('splash'); setLoginErr('') }} onRegister={() => setView('register')} />}
+      {view === 'register' && <Register lang={lang} onBack={() => setView('s-login')} courseStudents={courseStudents} upDb={upDb} />}
       {(view === 'student' || view === 'preview') && <StudentApp t={t} lang={lang} setLang={setLang} sid={activeId} students={safeStudents(students)} db={view === 'preview' ? db : studentSlice} upDb={upDb} isPreview={view === 'preview'} onBack={() => setView(view === 'preview' ? 'teacher' : 'splash')} />}
       {view === 'c-login'  && <CourseLogin lang={lang} u={courseLoginU} setU={setCourseLoginU} p={courseLoginP} setP={setCourseLoginP} err={courseLoginErr} busy={loggingIn} onLogin={doCourseLogin} onBack={() => { setView('landing'); setCourseLoginErr('') }} />}
       {view === 'course'         && <CourseApp lang={lang} sid={activeId} courseStudents={safeStudents(courseStudents)} db={studentSlice} upDb={upDb} onLogout={() => setView('landing')} />}
