@@ -16,7 +16,6 @@ const CEFR_TO_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'int
 
 export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, isPreview, onBack }) {
   const [tab, setTab]       = useState('dashboard')
-  const [activeWeek, setAW] = useState(1)
   const [jSelWeek, setJSelWeek] = useState(1)
   const [newPwd, setNewPwd] = useState('')
   const [pwdMsg, setPwdMsg] = useState('')
@@ -30,8 +29,6 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
   const sd        = db[dk] || {}
   const checked   = sd.checked || {}
   const scores    = sd.scores  || {}
-  const notes     = sd.notes   || {}
-  const errors    = sd.errors  || {}
   const fb        = db[`fb_${sid}`]  || ''
   const hw        = db[`hw_${sid}`]  || []
   const mats      = db[`mat_${sid}`] || []
@@ -54,15 +51,6 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
   const wPct     = wn => { const ts = getWT(wn); return ts.length ? Math.round(ts.filter(tk => checked[tk.id]).length / ts.length * 100) : 0 }
 
   const upS        = patch => upDb({ [dk]: { ...sd, ...patch } })
-  const toggleTask = id    => upS({ checked: { ...checked, [id]: !checked[id] } })
-  const markError  = (id, wn) => {
-    upS({ errors: { ...errors, [id]: true } })
-    const ek = `ex_${sid}_${lvl}_w${wn}`
-    const existing = db[ek] || []
-    const wData = plan.find(w => w.week === wn)
-    const newX = (wData?.extras || []).filter(e => !existing.find(x => x.id === e.id))
-    if (newX.length) upDb({ [ek]: [...existing, ...newX] })
-  }
   const toggleHW = id => upDb({ [`hw_${sid}`]: hw.map(h => h.id === id ? { ...h, done: !h.done } : h) })
 
   const habK   = `hab_${sid}`
@@ -82,9 +70,6 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
     return s
   })()
 
-  const curWeek  = allWeekDefs.find(w => w.week === activeWeek) || allWeekDefs[0]
-  const wTasks   = getWT(activeWeek)
-  const hasExtra = !!(db[`ex_${sid}_${lvl}_w${activeWeek}`] || []).length
 
   const jid       = db[`jrn_${sid}`]
   const journey   = jid ? JOURNEY_MAP[jid] : null
@@ -99,9 +84,8 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
   const jToggle   = (taskId) => upDb({ [`jsd_${sid}`]: { ...jChecked, [taskId]: !jChecked[taskId] } })
 
   const TABS = [
-    ['dashboard', t.tabDash], ['plan', t.stPlanTab], ['hw', t.tabHWst],
+    ['dashboard', t.tabDash], ['journey', lang === 'pt' ? 'Jornada' : 'Journey'], ['hw', t.tabHWst],
     ['habits', t.tabHabits], ['calendar', t.tabCalSt],
-    ...(journey ? [['journey', lang === 'pt' ? `${journey.icon} Jornada` : `${journey.icon} Journey`]] : []),
     ['info', t.tabInfoSt],
   ]
 
@@ -170,7 +154,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                     ? 'Aqui você acompanha seu progresso. Para começar a estudar, vá até a aba Plano e abra a Semana 1.'
                     : 'This is where you track your progress. To start studying, go to the Plan tab and open Week 1.'}
                 </p>
-                <button style={{ ...S.btn(B.laranja), fontSize: 13, padding: '9px 16px', display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={() => { setTab('plan'); upDb({ [`seenWelcome_${sid}`]: true }) }}>
+                <button style={{ ...S.btn(B.laranja), fontSize: 13, padding: '9px 16px', display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={() => { setTab('journey'); upDb({ [`seenWelcome_${sid}`]: true }) }}>
                   <Icon name="plan" size={14} color="#fff" />{lang === 'pt' ? 'Ir para o Plano' : 'Go to the Plan'}
                 </button>
               </div>
@@ -249,92 +233,6 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         )}
 
         {/* Plan tab */}
-        {tab === 'plan' && (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {/* Week selector */}
-            <div style={{ overflowX: 'auto', padding: '10px 14px 0', background: B.cream, borderBottom: `1px solid ${B.border}`, flexShrink: 0 }}>
-              <div style={{ display: 'flex', gap: 8, paddingBottom: 10, minWidth: 'max-content' }}>
-                <div style={{ padding: '6px 10px', background: lvm.color, borderRadius: 9, display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
-                  <span style={{ fontSize: 13 }}>{lvm.icon}</span>
-                  <span style={{ ...pp(700, 10), color: lvm.text, whiteSpace: 'nowrap' }}>{lvl}</span>
-                </div>
-                {allWeekDefs.map(w => {
-                  const p = wPct(w.week), act = activeWeek === w.week
-                  const hx = !!(db[`ex_${sid}_${lvl}_w${w.week}`] || []).length || !!db[`pt_${sid}_${lvl}_w${w.week}`]
-                  return (
-                    <button key={w.week} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', padding: '8px 12px', borderRadius: 10, border: `2px solid ${act ? B.marrom : 'transparent'}`, background: act ? B.marrBg : B.white, cursor: 'pointer', fontFamily: 'inherit', flexShrink: 0, minWidth: 110 }} onClick={() => setAW(w.week)}>
-                      <span style={{ ...ir(600, 9), color: B.light, textTransform: 'uppercase' }}>{t.week} {w.week}{hx ? ' ✏️' : ''}</span>
-                      <span style={{ ...ir(600, 10), color: B.dark, marginTop: 1, whiteSpace: 'nowrap' }}>{w.theme[lang].length > 16 ? w.theme[lang].slice(0, 15) + '…' : w.theme[lang]}</span>
-                      <div style={{ width: '100%', height: 3, background: B.bege, borderRadius: 99, marginTop: 4, overflow: 'hidden' }}><div style={{ height: '100%', width: `${p}%`, background: p === 100 ? B.oliva : B.marrom, borderRadius: 99 }} /></div>
-                      <span style={{ ...pp(700, 9), color: B.marrom, marginTop: 2 }}>{p}%</span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 14px' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
-                <div style={{ flex: 1 }}>
-                  <h2 style={{ ...pp(700, 15), color: B.dark }}>{t.week} {curWeek?.week}: {curWeek?.theme[lang]}</h2>
-                  <p style={{ ...ir(400, 11), color: B.light, marginTop: 2 }}>
-                    {wTasks.filter(tk => checked[tk.id]).length} {t.of} {wTasks.length} {t.tasksDone}
-                    {hasExtra && <span style={{ color: B.laranja, marginLeft: 8 }}>{t.adaptiveMsg}</span>}
-                  </p>
-                </div>
-                <svg width="48" height="48" viewBox="0 0 48 48" style={{ flexShrink: 0 }}>
-                  <circle cx="24" cy="24" r="19" fill="none" stroke={B.bege} strokeWidth="5" />
-                  <circle cx="24" cy="24" r="19" fill="none" stroke={wPct(activeWeek) === 100 ? B.oliva : B.marrom} strokeWidth="5" strokeDasharray={`${wPct(activeWeek) / 100 * 119.4} 119.4`} strokeLinecap="round" transform="rotate(-90 24 24)" style={{ transition: 'stroke-dasharray 0.5s' }} />
-                  <text x="24" y="28" textAnchor="middle" fontSize="10" fontWeight="800" fill={B.dark} fontFamily="Poppins,sans-serif">{wPct(activeWeek)}%</text>
-                </svg>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 18 }}>
-                {wTasks.map(task => {
-                  const cm = CAT[task.cat] || CAT.grammar
-                  const isDone = !!checked[task.id], hasErr = !!errors[task.id]
-                  const basePlanTasks = (PLAN[lvl] || []).flatMap(w => w.tasks)
-                  const isEx = !basePlanTasks.find(tk => tk.id === task.id)
-                  return (
-                    <div key={task.id} style={{ borderRadius: 11, border: `1.5px solid ${isDone ? B.rosaD : isEx ? B.laranja : B.border}`, background: isDone ? B.marrBg : isEx ? B.larBg : B.white, padding: '11px 13px', transition: 'all 0.15s' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }} onClick={() => toggleTask(task.id)}>
-                        <div style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${isDone ? B.marrom : B.border}`, background: isDone ? B.marrom : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
-                          {isDone && <span style={{ color: '#fff', fontSize: 13, fontWeight: 900 }}>✓</span>}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <p style={{ ...ir(600, 12), color: isDone ? B.mid : B.dark, textDecoration: isDone ? 'line-through' : 'none' }}>
-                            {isEx && <span style={{ color: B.larD, fontSize: 10, fontWeight: 700, marginRight: 3 }}>{t.extraTag}</span>}
-                            {task.en}
-                          </p>
-                          <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{task.pt}</p>
-                        </div>
-                        <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
-                      </div>
-                      {!isDone && !hasErr && (
-                        <button style={{ marginTop: 7, marginLeft: 32, background: 'none', border: `1px solid ${B.rosaD}`, borderRadius: 7, padding: '3px 9px', fontSize: 10, color: B.rosaD, cursor: 'pointer', fontFamily: 'inherit' }} onClick={() => markError(task.id, activeWeek)}>{t.markError}</button>
-                      )}
-                      {hasErr && !isDone && <p style={{ ...ir(400, 9), color: B.rosaD, marginTop: 4, marginLeft: 32 }}>✏️ Extra tasks added above!</p>}
-                    </div>
-                  )
-                })}
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 11 }}>
-                <div style={S.card}>
-                  <p style={S.lbl}>📝 {t.testScore}</p>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-                    <input type="number" min="0" max="100" style={{ ...S.inp, width: 72, fontSize: 15 }} value={scores[`week${activeWeek}`] || ''} onChange={e => upS({ scores: { ...scores, [`week${activeWeek}`]: Number(e.target.value) } })} placeholder="0–100" />
-                    {scores[`week${activeWeek}`] > 0 && <span style={{ ...pp(800, 26), color: GRADE(scores[`week${activeWeek}`]).c }}>{GRADE(scores[`week${activeWeek}`]).l}</span>}
-                  </div>
-                </div>
-                <div style={S.card}>
-                  <p style={S.lbl}>💬 {t.notesLabel}</p>
-                  <textarea style={S.ta} rows={3} placeholder={t.notesPh} value={notes[`week${activeWeek}`] || ''} onChange={e => upS({ notes: { ...notes, [`week${activeWeek}`]: e.target.value } })} />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Homework tab */}
         {tab === 'hw' && (
@@ -474,6 +372,17 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         )}
 
         {/* Journey tab */}
+        {tab === 'journey' && !journey && (
+          <div style={{ padding: '60px 20px', textAlign: 'center' }}>
+            <span style={{ fontSize: 48 }}>🗺️</span>
+            <p style={{ ...pp(700, 16), color: B.dark, marginTop: 16, marginBottom: 8 }}>
+              {lang === 'pt' ? 'Nenhuma jornada atribuída ainda' : 'No journey assigned yet'}
+            </p>
+            <p style={{ ...ir(400, 13), color: B.mid }}>
+              {lang === 'pt' ? 'Teacher Renata vai configurar sua jornada em breve!' : 'Teacher Renata will set up your journey soon!'}
+            </p>
+          </div>
+        )}
         {tab === 'journey' && journey && (
           <div style={{ padding: '4px 0 16px' }}>
             <div style={{ background: journey.color, borderRadius: 14, padding: '14px 18px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
