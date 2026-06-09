@@ -78,6 +78,76 @@ export const JOURNEYS = [
       }},
     {id:'ge30',en:'Exercise: Spelling and punctuation — common mistakes',pt:'Exercício: ortografia',cat:'writing'},
   ]},
+  { week:7, theme:{en:'Talking About the Past',pt:'Falando Sobre o Passado'}, tasks:[
+    {id:'ge31',en:'Watch: Past Simple explained — regular & irregular verbs (BBC)',pt:'Assista: Passado simples — verbos regulares e irregulares',cat:'grammar',link:'https://www.youtube.com/watch?v=Vp4nFvUVQ_Q'},
+    {id:'ge32',en:'Exercise: Past Simple practice — British Council',pt:'Exercício: Pratique o Passado Simples',cat:'grammar',link:'https://learnenglish.britishcouncil.org/grammar/a1-a2/past-simple'},
+    {id:'ge33',en:'Study: 50 most common irregular verbs',pt:'Estude: os 50 verbos irregulares mais comuns',cat:'vocab',link:'https://www.englishpage.com/irregularverbs/irregularverbs.html'},
+    {id:'ge34',en:'Listen: A short story in the past tense — elllo.org',pt:'Ouça: uma história curta no passado',cat:'listening',link:'https://www.elllo.org/english/levels/index.htm'},
+    {id:'ge35',en:'Write about what you did last weekend',pt:'Escreva sobre o que você fez no último fim de semana',cat:'writing',
+      variations:{
+        beginner:{pt:'Escreva 4 frases simples sobre seu fim de semana usando verbos no passado (went, ate, saw...)',en:'Write 4 simple sentences about your weekend using past verbs (went, ate, saw...)'},
+        advanced:{pt:'Escreva um parágrafo de 8 frases sobre seu fim de semana misturando passado simples e contínuo',en:'Write an 8-sentence paragraph about your weekend mixing past simple and continuous'},
+      }},
+  ]},
+  { week:8, theme:{en:'Plans & The Future',pt:'Planos & O Futuro'}, tasks:[
+    {id:'ge36',en:"Watch: 'going to' vs 'will' — when to use each",pt:"Assista: 'going to' vs 'will' — quando usar cada um",cat:'grammar',link:'https://www.youtube.com/watch?v=lEW9ucECp7E'},
+    {id:'ge37',en:'Exercise: Future forms practice — British Council',pt:'Exercício: formas de futuro',cat:'grammar',link:'https://learnenglish.britishcouncil.org/grammar/a1-a2/future-plans'},
+    {id:'ge38',en:'Vocabulary: Time expressions — tomorrow, next week, soon',pt:'Vocabulário: expressões de tempo — tomorrow, next week, soon',cat:'vocab',link:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},
+    {id:'ge39',en:'Listen: People talking about their plans (6 Minute English)',pt:'Ouça: pessoas falando sobre seus planos',cat:'listening',link:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},
+    {id:'ge40',en:'Speaking: Say 5 things you are going to do this week',pt:'Fala: diga 5 coisas que você vai fazer esta semana',cat:'speaking',link:'https://vocaroo.com',
+      variations:{
+        beginner:{pt:'Grave-se dizendo 3 planos simples usando "I\'m going to..."',en:'Record yourself saying 3 simple plans using "I\'m going to..."'},
+        advanced:{pt:'Grave-se falando 60 segundos sobre seus planos para o mês, justificando cada um',en:'Record yourself speaking for 60 seconds about your plans for the month, giving a reason for each'},
+      }},
+  ]},
+  { week:9, theme:{en:'Everyday Situations',pt:'Situações do Dia a Dia'}, tasks:[
+    {id:'ge41',en:'Phrases: Shopping — How much is it? / Can I try it on?',pt:'Frases: compras — How much is it? / Can I try it on?',cat:'speaking',link:'https://learnenglish.britishcouncil.org/general-english/business-english/shopping'},
+    {id:'ge42',en:'Phrases: Asking for directions — Where is...? / Turn left',pt:'Frases: pedir direções — Where is...? / Turn left',cat:'speaking',link:'https://www.youtube.com/results?search_query=asking+for+directions+english'},
+    {id:'ge43',en:'Vocabulary: At the restaurant — menu, order, bill',pt:'Vocabulário: no restaurante — menu, order, bill',cat:'vocab',link:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},
+    {id:'ge44',en:'Listen: A conversation at a café — practice ordering',pt:'Ouça: uma conversa num café — pratique pedir',cat:'listening',link:'https://www.elllo.org/english/levels/index.htm'},
+    {id:'ge45',en:'Roleplay: Order a meal and ask for the bill',pt:'Roleplay: peça uma refeição e peça a conta',cat:'speaking',
+      variations:{
+        beginner:{pt:'Use frases prontas para pedir uma bebida e a conta — pode ler de um roteiro',en:'Use ready-made phrases to order a drink and the bill — you can read from a script'},
+        advanced:{pt:'Faça o roleplay completo sem roteiro: peça, pergunte sobre o prato e resolva um problema no pedido',en:'Do the full roleplay without a script: order, ask about a dish and solve a problem with the order'},
+      }},
+  ]},
+  { week:10, theme:{en:'Describing People & Things',pt:'Descrevendo Pessoas & Coisas'}, tasks:[
+    {id:'ge46',en:'Vocabulary: Adjectives for appearance & personality',pt:'Vocabulário: adjetivos de aparência e personalidade',cat:'vocab',link:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},
+    {id:'ge47',en:'Grammar: Comparatives & superlatives — bigger, the best',pt:'Gramática: comparativos e superlativos — bigger, the best',cat:'grammar',link:'https://learnenglish.britishcouncil.org/grammar/a1-a2/comparative-superlative-adjectives'},
+    {id:'ge48',en:'Exercise: Practice comparatives — Perfect English Grammar',pt:'Exercício: pratique comparativos',cat:'grammar',link:'https://www.perfect-english-grammar.com/comparatives-and-superlatives.html'},
+    {id:'ge49',en:'Watch: How to describe people in English',pt:'Assista: como descrever pessoas em inglês',cat:'listening',link:'https://www.youtube.com/results?search_query=describing+people+english+a2'},
+    {id:'ge50',en:'Write: Describe a person you admire (60 words)',pt:'Escreva: descreva uma pessoa que você admira (60 palavras)',cat:'writing',
+      variations:{
+        beginner:{pt:'Escreva 4 frases descrevendo a aparência e a personalidade de alguém',en:'Write 4 sentences describing someone\'s appearance and personality'},
+        advanced:{pt:'Escreva um parágrafo de 80 palavras descrevendo a pessoa e comparando-a com você',en:'Write an 80-word paragraph describing the person and comparing them to yourself'},
+      }},
+  ]},
+  { week:11, theme:{en:'Speaking With Confidence',pt:'Falando Com Confiança'}, tasks:[
+    {id:'ge51',en:'Watch: Connected speech — why English sounds fast',pt:'Assista: connected speech — por que o inglês soa rápido',cat:'pronunciation',link:'https://www.youtube.com/results?search_query=connected+speech+english+pronunciation'},
+    {id:'ge52',en:'Practice: Common pronunciation sounds for Brazilians (TH, R)',pt:'Pratique: sons difíceis para brasileiros (TH, R)',cat:'pronunciation',link:'https://www.youtube.com/results?search_query=th+sound+pronunciation+for+brazilians'},
+    {id:'ge53',en:'Vocabulary: Filler phrases — Well, you know, I mean',pt:'Vocabulário: frases de apoio — Well, you know, I mean',cat:'speaking',link:'https://learnenglish.britishcouncil.org/skills/speaking'},
+    {id:'ge54',en:'Listen & repeat: Shadowing practice with a short clip',pt:'Ouça e repita: prática de shadowing com um clipe curto',cat:'listening',link:'https://www.elllo.org/english/levels/index.htm'},
+    {id:'ge55',en:'Record yourself answering: What did you do today?',pt:'Grave-se respondendo: What did you do today?',cat:'speaking',link:'https://vocaroo.com',
+      variations:{
+        beginner:{pt:'Grave 3 frases sobre seu dia, falando devagar e com clareza',en:'Record 3 sentences about your day, speaking slowly and clearly'},
+        advanced:{pt:'Grave 60–90 segundos sobre seu dia com fluidez, usando filler phrases naturalmente',en:'Record 60–90 seconds about your day fluently, using filler phrases naturally'},
+      }},
+  ]},
+  { week:12, theme:{en:'Putting It All Together',pt:'Juntando Tudo'}, tasks:[
+    {id:'ge56',en:'Review: Redo your favorite exercise from weeks 1–11',pt:'Revisão: refaça seu exercício favorito das semanas 1–11',cat:'grammar'},
+    {id:'ge57',en:'Take a free A2 level test — British Council',pt:'Faça um teste de nível A2 gratuito — British Council',cat:'reading',link:'https://learnenglish.britishcouncil.org/english-levels/take-an-english-test'},
+    {id:'ge58',en:'Listen: A full A2 conversation without subtitles',pt:'Ouça: uma conversa A2 completa sem legendas',cat:'listening',link:'https://www.elllo.org/english/levels/index.htm'},
+    {id:'ge59',en:'Have a 5-minute conversation (italki / language exchange)',pt:'Tenha uma conversa de 5 minutos (italki / intercâmbio)',cat:'speaking',link:'https://www.italki.com/en/community',
+      variations:{
+        beginner:{pt:'Converse 5 minutos sobre temas que você já praticou — pode usar anotações',en:'Have a 5-minute conversation about topics you have practiced — you can use notes'},
+        advanced:{pt:'Converse 10 minutos sobre temas variados sem anotações, fazendo e respondendo perguntas',en:'Have a 10-minute conversation on varied topics without notes, asking and answering questions'},
+      }},
+    {id:'ge60',en:'Write a short text about your English journey so far',pt:'Escreva um texto curto sobre sua jornada no inglês até aqui',cat:'writing',
+      variations:{
+        beginner:{pt:'Escreva 5 frases sobre o que você aprendeu e o que quer aprender a seguir',en:'Write 5 sentences about what you learned and what you want to learn next'},
+        advanced:{pt:'Escreva um parágrafo de 100 palavras refletindo sobre seu progresso e definindo metas',en:'Write a 100-word paragraph reflecting on your progress and setting goals'},
+      }},
+  ]},
 ]},
   {
     id: 'business', icon: '💼', color: '#5C6F4F',
