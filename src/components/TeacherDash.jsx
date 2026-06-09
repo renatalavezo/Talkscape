@@ -5,7 +5,7 @@ import { CEFR_META } from '../constants/cefr'
 import { PLAN } from '../constants/plan'
 import { AVATARS } from '../constants/avatars'
 import { JOURNEYS, JOURNEY_MAP } from '../constants/journeys'
-import { JOURNEY_RESOURCES, TYPE_ICON, pickResource } from '../constants/journeyResources'
+import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 import Avatar from './Avatar'
 import Icon from './Icon'
 import Logo from './Logo'
@@ -832,7 +832,9 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                 {tasks.map((task, ti) => {
                                   const cm = CAT[task.cat] || CAT.grammar
                                   const isEditing = jEditTask?.id === task.id
-                                  const r = pickResource(JOURNEY_RESOURCES[currentJid]?.[SIMPLE_LEVEL[db[`lv_${selS.id}`] || 'A1'] || 'beginner']?.[jWeek], task.cat, ti)
+                                  const stLevel = SIMPLE_LEVEL[db[`lv_${selS.id}`] || 'A1'] || 'beginner'
+                                  const r = pickResource(JOURNEY_RESOURCES[currentJid]?.[stLevel]?.[jWeek], task.cat, ti)
+                                  const hint = !task.variations?.[stLevel] ? levelHint(stLevel, task.cat, lang) : null
                                   return (
                                     <div key={task.id} style={{ background: B.cream, borderRadius: 10, border: `1.5px solid ${B.border}`, overflow: 'hidden' }}>
                                       {isEditing ? (
@@ -857,6 +859,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                           <div style={{ flex: 1 }}>
                                             <p style={{ ...ir(600, 12), color: B.dark }}>{task.en}</p>
                                             <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{task.pt}</p>
+                                            {hint && <p style={{ ...ir(400, 10), color: stLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 2, fontStyle: 'italic' }}>{stLevel === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
                                             {task.link && <a href={task.link} target="_blank" rel="noreferrer" style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
                                             {r && <a href={r.url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f5f0eb', borderRadius: 20, padding: '3px 9px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 4 }}>{TYPE_ICON[r.type]} {r.label}</a>}
                                           </div>

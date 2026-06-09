@@ -377,3 +377,36 @@ export function pickResource(resArr, cat, index) {
   }
   return resArr[index] || null
 }
+
+// Automatic difficulty hint shown when a task has no level-specific variation.
+// Adapts to the student's level and the activity category.
+const LEVEL_HINT = {
+  beginner: {
+    speaking:      { pt: 'Fale devagar e com frases curtas — use um roteiro escrito se precisar.', en: 'Speak slowly with short phrases — use a written script if you need to.' },
+    writing:       { pt: 'Escreva poucas frases simples — pode usar um modelo pronto como base.', en: 'Write a few simple sentences — you can use a ready-made template as a base.' },
+    listening:     { pt: 'Ouça com legendas e repita quantas vezes precisar.', en: 'Listen with subtitles and repeat as many times as you need.' },
+    reading:       { pt: 'Leia com calma e use o dicionário para as palavras novas.', en: 'Read slowly and use a dictionary for new words.' },
+    vocab:         { pt: 'Comece pelas palavras mais essenciais e revise aos poucos.', en: 'Start with the most essential words and review little by little.' },
+    grammar:       { pt: 'Faça os exemplos mais básicos com calma, um de cada vez.', en: 'Do the most basic examples calmly, one at a time.' },
+    pronunciation: { pt: 'Repita devagar, imitando o áudio som por som.', en: 'Repeat slowly, imitating the audio sound by sound.' },
+    _:             { pt: 'Faça a versão simplificada no seu ritmo.', en: 'Do the simplified version at your own pace.' },
+  },
+  advanced: {
+    speaking:      { pt: 'Fale sem roteiro, com fluidez, opiniões próprias e vocabulário avançado.', en: 'Speak without a script, fluently, with your own opinions and advanced vocabulary.' },
+    writing:       { pt: 'Escreva mais, sem modelos, variando estruturas e registro.', en: 'Write more, without templates, varying structures and register.' },
+    listening:     { pt: 'Ouça sem legendas e resuma o conteúdo com suas palavras.', en: 'Listen without subtitles and summarize the content in your own words.' },
+    reading:       { pt: 'Leia textos mais longos e interprete também as entrelinhas.', en: 'Read longer texts and interpret what is implied between the lines too.' },
+    vocab:         { pt: 'Vá além do básico: sinônimos, collocations e nuances de uso.', en: 'Go beyond the basics: synonyms, collocations and nuances of use.' },
+    grammar:       { pt: 'Use estruturas mais complexas e explore os casos de exceção.', en: 'Use more complex structures and explore the exceptions.' },
+    pronunciation: { pt: 'Trabalhe entonação, ritmo e os sons mais difíceis.', en: 'Work on intonation, rhythm and the trickiest sounds.' },
+    _:             { pt: 'Aprofunde a tarefa, sem apoios e com mais detalhe.', en: 'Take the task further, without support and in more detail.' },
+  },
+}
+
+// Returns a short auto difficulty hint for a level + category, or null.
+export function levelHint(level, cat, lang) {
+  const map = LEVEL_HINT[level]
+  if (!map) return null
+  const h = map[cat] || map._
+  return (lang === 'pt' ? h.pt : h.en)
+}

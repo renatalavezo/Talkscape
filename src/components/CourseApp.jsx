@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { B, CAT } from '../constants/colors'
 import { ir, pp, S } from '../constants/styles'
 import { JOURNEYS, JOURNEY_MAP } from '../constants/journeys'
-import { JOURNEY_RESOURCES, TYPE_ICON, pickResource } from '../constants/journeyResources'
+import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 import Avatar from './Avatar'
 import Icon from './Icon'
 import Logo from './Logo'
@@ -169,6 +169,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                           const done = !!checked[task.id]
                           const cm = CAT[task.cat] || CAT.grammar
                           const r = pickResource(JOURNEY_RESOURCES[jid]?.[student.level || 'beginner']?.[selWeek], task.cat, ti)
+                          const hint = !task.variations?.[student.level] ? levelHint(student.level, task.cat, lang) : null
                           return (
                             <div key={task.id} onClick={() => upDb({ [`cjsd_${sid}`]: { ...checked, [task.id]: !done } })}
                               style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 13px', background: done ? '#f5faf5' : '#fdf8f5', borderRadius: 12, border: `1.5px solid ${done ? '#b6d4b6' : '#edddd4'}`, cursor: 'pointer', transition: 'all 0.15s' }}>
@@ -181,6 +182,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                                     ? (student.level && task.variations?.[student.level]?.pt) || task.pt
                                     : (student.level && task.variations?.[student.level]?.en) || task.en}
                                 </p>
+                                {hint && <p style={{ ...ir(400, 10.5), color: student.level === 'advanced' ? B.oliva : B.laranja, marginTop: 3, fontStyle: 'italic' }}>{student.level === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
                                 {task.link && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
                                 {r && <a href={r.url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: '#f5f0eb', borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: '1px solid #e8ddd4', marginTop: 5 }}>{TYPE_ICON[r.type]} {r.label}</a>}
                               </div>

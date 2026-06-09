@@ -9,7 +9,7 @@ import Logo from './Logo'
 import CalSection from './CalSection'
 import Icon from './Icon'
 import { JOURNEY_MAP } from '../constants/journeys'
-import { JOURNEY_RESOURCES, TYPE_ICON, pickResource } from '../constants/journeyResources'
+import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 
 const CEFR_TO_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 
@@ -474,6 +474,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                     const displayText = lang === 'pt'
                       ? (task.variations?.[simpleLevel]?.pt || task.pt)
                       : (task.variations?.[simpleLevel]?.en || task.en)
+                    const hint = !task.variations?.[simpleLevel] ? levelHint(simpleLevel, task.cat, lang) : null
                     return (
                       <div key={task.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: done ? B.bege : B.cream, borderRadius: 10, padding: '10px 12px', border: `1.5px solid ${done ? B.oliva + '44' : B.border}`, cursor: 'pointer' }}
                         onClick={() => jToggle(task.id)}>
@@ -482,6 +483,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                         </div>
                         <div style={{ flex: 1 }}>
                           <p style={{ ...ir(600, 13), color: done ? B.light : B.dark, textDecoration: done ? 'line-through' : 'none' }}>{displayText}</p>
+                          {hint && !done && <p style={{ ...ir(400, 10.5), color: simpleLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 3, fontStyle: 'italic' }}>{simpleLevel === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
                           {task.link && !done && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 11), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{lang === 'pt' ? 'Acessar recurso' : 'Open resource'}</a>}
                           {r && <a href={r.url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: B.bege, borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 5 }}>{TYPE_ICON[r.type]} {r.label}</a>}
                         </div>
