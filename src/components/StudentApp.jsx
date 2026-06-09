@@ -19,6 +19,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
   const [jSelWeek, setJSelWeek] = useState(1)
   const [newPwd, setNewPwd] = useState('')
   const [pwdMsg, setPwdMsg] = useState('')
+  const [showLogout, setShowLogout] = useState(false)
 
   const student   = students.find(s => s.id === sid) || { name: '?', avatar: '🎒' }
   const lvl       = db[`lv_${sid}`] || 'A1'
@@ -118,9 +119,26 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         </div>
         <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
           <button style={{ ...S.chip, background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 10, padding: '5px 8px' }} onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}>{t.switchLang}</button>
-          <button style={{ ...S.chip, background: 'rgba(255,255,255,0.12)', color: '#fff', fontSize: 10, padding: '5px 8px' }} onClick={onBack}>←</button>
+          {isPreview ? (
+            <button style={{ ...S.chip, background: 'rgba(255,255,255,0.12)', color: '#fff', fontSize: 10, padding: '5px 8px', display: 'flex', alignItems: 'center', gap: 4 }} onClick={onBack}><Icon name="back" size={12} color="#fff" />{lang === 'pt' ? 'Voltar' : 'Back'}</button>
+          ) : (
+            <button style={{ ...S.chip, background: 'rgba(255,255,255,0.12)', color: '#fff', fontSize: 10, padding: '5px 8px', display: 'flex', alignItems: 'center', gap: 4 }} onClick={() => setShowLogout(true)}><Icon name="logout" size={12} color="#fff" />{lang === 'pt' ? 'Sair' : 'Logout'}</button>
+          )}
         </div>
       </header>
+
+      {showLogout && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: 20 }} onClick={() => setShowLogout(false)}>
+          <div style={{ background: '#fff', borderRadius: 18, padding: '24px 22px', maxWidth: 320, width: '100%', boxShadow: '0 20px 60px rgba(44,24,16,0.3)' }} onClick={e => e.stopPropagation()}>
+            <p style={{ ...pp(700, 16), color: B.dark, marginBottom: 6 }}>{lang === 'pt' ? 'Quer mesmo sair?' : 'Log out?'}</p>
+            <p style={{ ...ir(400, 13), color: B.mid, marginBottom: 18 }}>{lang === 'pt' ? 'Seu progresso está salvo. Você pode voltar quando quiser.' : 'Your progress is saved. You can come back any time.'}</p>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button style={{ ...S.btn(B.bege), flex: 1, color: B.dark }} onClick={() => setShowLogout(false)}>{lang === 'pt' ? 'Cancelar' : 'Cancel'}</button>
+              <button style={{ ...S.btn(B.laranja), flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={onBack}><Icon name="logout" size={14} color="#fff" />{lang === 'pt' ? 'Sair' : 'Log out'}</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isPreview && <div style={{ background: '#FEF3C7', padding: '6px 16px', fontSize: 11, color: '#92400E', fontWeight: 600 }}>👁 Teacher Renata — preview</div>}
       {fb && <div style={{ background: B.larBg, borderLeft: `4px solid ${B.laranja}`, padding: '9px 16px', margin: '12px 14px 0', borderRadius: 9, fontSize: 12, color: B.dark }}><strong style={{ color: B.larD }}>{t.teacherFbLabel}</strong> {fb}</div>}
@@ -137,6 +155,23 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         {/* Dashboard tab */}
         {tab === 'dashboard' && (
           <div style={{ padding: '20px 14px', maxWidth: 860, margin: '0 auto' }}>
+            {/* Welcome / first step */}
+            {!isPreview && !db[`seenWelcome_${sid}`] && (
+              <div style={{ background: B.larBg, border: `1.5px solid ${B.laranja}55`, borderRadius: 16, padding: '16px 18px', marginBottom: 16, position: 'relative' }}>
+                <button style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }} onClick={() => upDb({ [`seenWelcome_${sid}`]: true })}>
+                  <Icon name="close" size={16} color={B.light} />
+                </button>
+                <p style={{ ...pp(700, 15), color: B.dark, marginBottom: 6 }}>👋 {lang === 'pt' ? `Bem-vinda, ${student.name}!` : `Welcome, ${student.name}!`}</p>
+                <p style={{ ...ir(400, 13), color: B.mid, lineHeight: 1.6, marginBottom: 12 }}>
+                  {lang === 'pt'
+                    ? 'Aqui você acompanha seu progresso. Para começar a estudar, vá até a aba Plano e abra a Semana 1.'
+                    : 'This is where you track your progress. To start studying, go to the Plan tab and open Week 1.'}
+                </p>
+                <button style={{ ...S.btn(B.laranja), fontSize: 13, padding: '9px 16px', display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={() => { setTab('plan'); upDb({ [`seenWelcome_${sid}`]: true }) }}>
+                  <Icon name="plan" size={14} color="#fff" />{lang === 'pt' ? 'Ir para o Plano' : 'Go to the Plan'}
+                </button>
+              </div>
+            )}
             {/* Hero */}
             <div style={{ background: `linear-gradient(135deg,${B.marrom},${B.laranja} 60%,${B.rosa})`, borderRadius: 20, padding: '22px 20px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
               <span style={{ fontSize: 52, flexShrink: 0 }}>{student.avatar}</span>

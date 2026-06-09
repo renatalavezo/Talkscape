@@ -15,6 +15,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
   const [sent, setSent] = useState(false)
   const [newPwd, setNewPwd] = useState('')
   const [pwdMsg, setPwdMsg] = useState('')
+  const [showLogout, setShowLogout] = useState(false)
 
   const student = courseStudents.find(s => s.id === sid)
   if (!student) return null
@@ -72,10 +73,23 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
             </span>
           )}
         </div>
-        <button style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 20, padding: '6px 12px', color: '#fff', fontSize: 11, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', display: 'flex', alignItems: 'center', gap: 5 }} onClick={onLogout}>
+        <button style={{ background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: 20, padding: '6px 12px', color: '#fff', fontSize: 11, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => setShowLogout(true)}>
           <Icon name="logout" size={13} color="#fff" />{lang === 'pt' ? 'Sair' : 'Logout'}
         </button>
       </header>
+
+      {showLogout && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: 20 }} onClick={() => setShowLogout(false)}>
+          <div style={{ background: '#fff', borderRadius: 18, padding: '24px 22px', maxWidth: 320, width: '100%', boxShadow: '0 20px 60px rgba(44,24,16,0.3)' }} onClick={e => e.stopPropagation()}>
+            <p style={{ ...pp(700, 16), color: B.dark, marginBottom: 6 }}>{lang === 'pt' ? 'Quer mesmo sair?' : 'Log out?'}</p>
+            <p style={{ ...ir(400, 13), color: B.mid, marginBottom: 18 }}>{lang === 'pt' ? 'Seu progresso está salvo. Você pode voltar quando quiser.' : 'Your progress is saved. You can come back any time.'}</p>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button style={{ ...S.btn(B.bege), flex: 1, color: B.dark }} onClick={() => setShowLogout(false)}>{lang === 'pt' ? 'Cancelar' : 'Cancel'}</button>
+              <button style={{ ...S.btn(B.laranja), flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={onLogout}><Icon name="logout" size={14} color="#fff" />{lang === 'pt' ? 'Sair' : 'Log out'}</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero welcome strip */}
       <div style={{ background: `linear-gradient(135deg, ${B.marrom}ee 0%, ${B.laranja}cc 100%)`, padding: '20px 20px 28px', position: 'relative', overflow: 'hidden' }}>
@@ -110,6 +124,19 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
         {/* Journey tab */}
         {tab === 'journey' && (
           <div>
+            {!db[`seenWelcome_${sid}`] && journey && (
+              <div style={{ background: B.larBg, border: `1.5px solid ${B.laranja}55`, borderRadius: 16, padding: '14px 16px', marginBottom: 14, position: 'relative' }}>
+                <button style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }} onClick={() => upDb({ [`seenWelcome_${sid}`]: true })}>
+                  <Icon name="close" size={16} color={B.light} />
+                </button>
+                <p style={{ ...pp(700, 14), color: B.dark, marginBottom: 5 }}>👋 {lang === 'pt' ? `Bem-vinda, ${student.name}!` : `Welcome, ${student.name}!`}</p>
+                <p style={{ ...ir(400, 12.5), color: B.mid, lineHeight: 1.6 }}>
+                  {lang === 'pt'
+                    ? 'Sua jornada está organizada por semanas. Toque na Semana 1 abaixo para ver suas primeiras atividades. 🌱'
+                    : 'Your journey is organized by weeks. Tap Week 1 below to see your first activities. 🌱'}
+                </p>
+              </div>
+            )}
             {jids.length > 1 && (
               <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
                 {jids.map(id => JOURNEY_MAP[id] && (

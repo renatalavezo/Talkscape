@@ -3,7 +3,7 @@ import { ir, pp, S } from '../constants/styles'
 import Logo from './Logo'
 import Icon from './Icon'
 
-export default function CourseLogin({ lang, u, setU, p, setP, err, onLogin, onBack }) {
+export default function CourseLogin({ lang, u, setU, p, setP, err, busy, onLogin, onBack }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})`, padding: '32px 20px' }}>
       <div style={{ marginBottom: 24 }}>
@@ -47,9 +47,9 @@ export default function CourseLogin({ lang, u, setU, p, setP, err, onLogin, onBa
           </div>
         )}
 
-        <button style={{ ...S.btn(B.laranja), width: '100%', fontSize: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 12 }} onClick={onLogin}>
+        <button style={{ ...S.btn(B.laranja), width: '100%', fontSize: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 12, opacity: busy ? 0.7 : 1, cursor: busy ? 'wait' : 'pointer' }} onClick={onLogin} disabled={busy}>
           <Icon name="next" size={16} color="#fff" />
-          {lang === 'pt' ? 'Entrar' : 'Sign in'}
+          {busy ? (lang === 'pt' ? 'Entrando...' : 'Signing in...') : (lang === 'pt' ? 'Entrar' : 'Sign in')}
         </button>
 
         <button style={{ ...S.btn(B.bege), width: '100%', fontSize: 14, color: B.dark, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={onBack}>

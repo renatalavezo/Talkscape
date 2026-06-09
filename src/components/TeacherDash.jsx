@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { B, CAT } from '../constants/colors'
 import { ir, pp, S } from '../constants/styles'
 import { CEFR_META } from '../constants/cefr'

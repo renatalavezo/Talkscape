@@ -2,7 +2,7 @@ import { B } from '../constants/colors'
 import { ir, pp, S } from '../constants/styles'
 import Logo from './Logo'
 
-export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, onLogin, onBack }) {
+export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, busy, onLogin, onBack }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})`, padding: 20 }}>
       <div style={{ background: B.white, borderRadius: 24, padding: '44px 36px', maxWidth: 380, width: '100%', boxShadow: '0 40px 80px rgba(44,24,16,0.3)' }}>
@@ -16,13 +16,19 @@ export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, 
           {lang === 'pt' ? 'Aluna particular ou das Jornadas — mesma tela!' : 'Private or Journey student — same screen!'}
         </p>
 
-        <div style={{ background: B.cream, borderRadius: 12, padding: '10px 14px', marginBottom: 20, display: 'flex', gap: 8 }}>
-          <span style={{ fontSize: 16 }}>💡</span>
-          <p style={{ ...ir(400, 12), color: B.mid, lineHeight: 1.6 }}>
-            {lang === 'pt'
-              ? 'Aluna particular: use seu usuário. Aluna das Jornadas: use seu email.'
-              : 'Private student: use your username. Journey student: use your email.'}
-          </p>
+        <div style={{ background: B.cream, borderRadius: 12, padding: '12px 14px', marginBottom: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+            <span style={{ fontSize: 14 }}>👩‍💻</span>
+            <p style={{ ...ir(400, 12), color: B.mid, lineHeight: 1.5 }}>
+              {lang === 'pt' ? <><strong style={{ color: B.dark }}>Aluna particular:</strong> entre com seu <strong>usuário</strong>.</> : <><strong style={{ color: B.dark }}>Private student:</strong> sign in with your <strong>username</strong>.</>}
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+            <span style={{ fontSize: 14 }}>🗺️</span>
+            <p style={{ ...ir(400, 12), color: B.mid, lineHeight: 1.5 }}>
+              {lang === 'pt' ? <><strong style={{ color: B.dark }}>Aluna das Jornadas:</strong> entre com seu <strong>email</strong>.</> : <><strong style={{ color: B.dark }}>Journey student:</strong> sign in with your <strong>email</strong>.</>}
+            </p>
+          </div>
         </div>
 
         <div style={{ marginBottom: 12 }}>
@@ -43,8 +49,8 @@ export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, 
           </div>
         )}
 
-        <button style={{ ...S.btn(B.laranja), width: '100%', marginBottom: 12, fontSize: 15 }} onClick={onLogin}>
-          {lang === 'pt' ? 'Entrar' : 'Sign in'}
+        <button style={{ ...S.btn(B.laranja), width: '100%', marginBottom: 12, fontSize: 15, opacity: busy ? 0.7 : 1, cursor: busy ? 'wait' : 'pointer' }} onClick={onLogin} disabled={busy}>
+          {busy ? (lang === 'pt' ? 'Entrando...' : 'Signing in...') : (lang === 'pt' ? 'Entrar' : 'Sign in')}
         </button>
 
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
