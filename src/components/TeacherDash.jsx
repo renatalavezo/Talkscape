@@ -476,10 +476,9 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                     </div>
                     {(() => {
                       const res = JOURNEY_RESOURCES[selJBase]?.['intermediate']?.[selJBaseWeek] || []
-                      if (!res.length) return null
                       return (
                         <div style={{ marginBottom: 12, padding: '10px 12px', background: '#f5f0eb', borderRadius: 10, border: `1px solid ${B.border}` }}>
-                          <p style={{ ...pp(600, 11), color: B.mid, marginBottom: 7 }}>🔗 {lang === 'pt' ? 'Recursos da semana (intermediário)' : 'Week resources (intermediate)'}</p>
+                          <p style={{ ...pp(600, 11), color: B.mid, marginBottom: 7 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Week resources'} {res.length ? '' : '(sem recursos)'}</p>
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                             {res.map((r, i) => (
                               <a key={i} href={r.url} target="_blank" rel="noreferrer"
