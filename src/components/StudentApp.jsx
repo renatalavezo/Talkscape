@@ -89,6 +89,8 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
   const journey   = jid ? JOURNEY_MAP[jid] : null
   const simpleLevel = CEFR_TO_LEVEL[lvl] || 'beginner'
   const jChecked  = db[`jsd_${sid}`] || {}
+  const visited   = db[`resv_${sid}`] || {}
+  const markVisited = url => upDb({ [`resv_${sid}`]: { ...visited, [url]: true } })
   const jAllWeeks = journey ? [...(journey.weeks || []), ...(db[`jew_${sid}_${jid}`] || [])] : []
   const jSelW     = jAllWeeks.find(w => w.week === jSelWeek) || jAllWeeks[0]
   const jGetTasks = wn => { const ck = `jt_${sid}_${jid}_w${wn}`; return db[ck]?.length ? db[ck] : (journey?.weeks.find(w => w.week === wn)?.tasks || []) }
@@ -118,7 +120,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
           <span style={{ ...ir(700, 11), color: B.rosa, flexShrink: 0 }}>{pct}%</span>
         </div>
         <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
-          <button style={{ ...S.chip, background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 10, padding: '5px 8px' }} onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}>{t.switchLang}</button>
+          <button style={{ ...S.chip, background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: 10, padding: '5px 8px', display: 'flex', alignItems: 'center', gap: 4 }} onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}><Icon name="globe" size={11} color="#fff" />{t.switchLang}</button>
           {isPreview ? (
             <button style={{ ...S.chip, background: 'rgba(255,255,255,0.12)', color: '#fff', fontSize: 10, padding: '5px 8px', display: 'flex', alignItems: 'center', gap: 4 }} onClick={onBack}><Icon name="back" size={12} color="#fff" />{lang === 'pt' ? 'Voltar' : 'Back'}</button>
           ) : (
@@ -521,7 +523,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                           <p style={{ ...ir(600, 13), color: done ? B.light : B.dark, textDecoration: done ? 'line-through' : 'none' }}>{displayText}</p>
                           {hint && !done && <p style={{ ...ir(400, 10.5), color: simpleLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 3, fontStyle: 'italic' }}>{simpleLevel === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
                           {task.link && !done && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 11), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{lang === 'pt' ? 'Acessar recurso' : 'Open resource'}</a>}
-                          {r && <a href={r.url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: B.bege, borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 5 }}>{TYPE_ICON[r.type]} {r.label}</a>}
+                          {r && (() => { const v = !!visited[r.url]; return <a href={r.url} target="_blank" rel="noreferrer" onClick={e => { e.stopPropagation(); markVisited(r.url) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: v ? '#eef2eb' : B.bege, borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: v ? B.oliva : B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${v ? B.oliva + '55' : B.border}`, marginTop: 5 }}>{v ? '✓' : TYPE_ICON[r.type]} {r.label}</a> })()}
                         </div>
                         <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
                       </div>

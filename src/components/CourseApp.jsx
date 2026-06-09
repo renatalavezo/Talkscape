@@ -25,6 +25,8 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
   const journey = jid ? JOURNEY_MAP[jid] : null
   const checked = db[`cjsd_${sid}`] || {}
   const habits = db[`chab_${sid}`] || {}
+  const visited = db[`resv_${sid}`] || {}
+  const markVisited = url => upDb({ [`resv_${sid}`]: { ...visited, [url]: true } })
   const today = new Date().toISOString().slice(0, 10)
   const todayHabits = habits[today] || {}
   const questions = db[`cq_${sid}`] || []
@@ -163,7 +165,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                     const isSelected = selWeek === w.week
                     const isDone = wPct === 100
                     return (
-                      <button key={w.week} onClick={() => setSelWeek(isSelected ? null : w.week)}
+                      <button key={w.week} onClick={() => setSelWeek(w.week)}
                         style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: '12px 14px', borderRadius: 14, border: `2px solid ${isSelected ? journey.color : isDone ? journey.color + '55' : '#e8ddd4'}`, background: isSelected ? journey.color : isDone ? journey.color + '12' : '#fff', cursor: 'pointer', minWidth: 76, boxShadow: isSelected ? `0 4px 14px ${journey.color}44` : '0 2px 6px rgba(44,24,16,0.06)', transition: 'all 0.15s' }}>
                         <p style={{ ...pp(800, 14), color: isSelected ? '#fff' : journey.color }}>{isDone ? '✓' : (lang === 'pt' ? `S${w.week}` : `W${w.week}`)}</p>
                         <p style={{ ...ir(400, 10), color: isSelected ? 'rgba(255,255,255,0.85)' : B.light, textAlign: 'center', maxWidth: 80, lineHeight: 1.3 }}>{w.theme[lang] || w.theme.en}</p>
@@ -211,7 +213,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                                 </p>
                                 {hint && <p style={{ ...ir(400, 10.5), color: student.level === 'advanced' ? B.oliva : B.laranja, marginTop: 3, fontStyle: 'italic' }}>{student.level === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
                                 {task.link && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
-                                {r && <a href={r.url} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: '#f5f0eb', borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: '1px solid #e8ddd4', marginTop: 5 }}>{TYPE_ICON[r.type]} {r.label}</a>}
+                                {r && (() => { const v = !!visited[r.url]; return <a href={r.url} target="_blank" rel="noreferrer" onClick={e => { e.stopPropagation(); markVisited(r.url) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: v ? '#eef2eb' : '#f5f0eb', borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: v ? B.oliva : B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${v ? B.oliva + '55' : '#e8ddd4'}`, marginTop: 5 }}>{v ? '✓' : TYPE_ICON[r.type]} {r.label}</a> })()}
                               </div>
                               <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
                             </div>
