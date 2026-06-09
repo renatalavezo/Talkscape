@@ -190,10 +190,9 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                       {(() => {
                         const lvl = student.level || 'beginner'
                         const res = JOURNEY_RESOURCES[jid]?.[lvl]?.[selWeek] || []
-                        if (!res.length) return null
                         return (
                           <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid #f0e8e0' }}>
-                            <p style={{ ...pp(600, 12), color: B.mid, marginBottom: 8 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Weekly resources'}</p>
+                            <p style={{ ...pp(600, 12), color: B.mid, marginBottom: 8 }}>🔗 {lang === 'pt' ? 'Recursos da semana' : 'Weekly resources'} [{jid}/{lvl}/{String(selWeek)}/{res.length}]</p>
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                               {res.map((r, i) => (
                                 <a key={i} href={r.url} target="_blank" rel="noreferrer"
