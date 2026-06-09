@@ -9,7 +9,7 @@ import Logo from './Logo'
 import CalSection from './CalSection'
 import Icon from './Icon'
 import { JOURNEY_MAP } from '../constants/journeys'
-import { JOURNEY_RESOURCES, TYPE_ICON } from '../constants/journeyResources'
+import { JOURNEY_RESOURCES, TYPE_ICON, pickResource } from '../constants/journeyResources'
 
 const CEFR_TO_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 
@@ -470,7 +470,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                   {jTasks.map((task, ti) => {
                     const cm = CAT[task.cat] || CAT.grammar
                     const done = jChecked[task.id]
-                    const r = (JOURNEY_RESOURCES[jid]?.[simpleLevel]?.[jSelWeek] || [])[ti]
+                    const r = pickResource(JOURNEY_RESOURCES[jid]?.[simpleLevel]?.[jSelWeek], task.cat, ti)
                     const displayText = lang === 'pt'
                       ? (task.variations?.[simpleLevel]?.pt || task.pt)
                       : (task.variations?.[simpleLevel]?.en || task.en)

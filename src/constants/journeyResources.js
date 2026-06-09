@@ -354,3 +354,26 @@ export const JOURNEY_RESOURCES = {
 }
 
 export const TYPE_ICON = { video:'📹', podcast:'🎧', reading:'📖', exercise:'✏️', vocab:'📚' }
+
+// Preferred resource type(s) for each activity category
+const CAT_TO_TYPES = {
+  pronunciation: ['video', 'podcast'],
+  grammar:       ['exercise'],
+  vocab:         ['vocab'],
+  listening:     ['podcast', 'video'],
+  writing:       ['reading', 'exercise'],
+  speaking:      ['video', 'podcast'],
+  reading:       ['reading'],
+}
+
+// Pick the resource that best matches an activity's category.
+// Falls back to the resource at the same position so links still spread out.
+export function pickResource(resArr, cat, index) {
+  if (!resArr || !resArr.length) return null
+  const prefs = CAT_TO_TYPES[cat] || []
+  for (const ty of prefs) {
+    const match = resArr.find(r => r.type === ty)
+    if (match) return match
+  }
+  return resArr[index] || null
+}

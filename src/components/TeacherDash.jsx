@@ -5,7 +5,7 @@ import { CEFR_META } from '../constants/cefr'
 import { PLAN } from '../constants/plan'
 import { AVATARS } from '../constants/avatars'
 import { JOURNEYS, JOURNEY_MAP } from '../constants/journeys'
-import { JOURNEY_RESOURCES, TYPE_ICON } from '../constants/journeyResources'
+import { JOURNEY_RESOURCES, TYPE_ICON, pickResource } from '../constants/journeyResources'
 import Avatar from './Avatar'
 import Icon from './Icon'
 import Logo from './Logo'
@@ -433,7 +433,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                       {tasks.map((task, ti) => {
                         const cm = CAT[task.cat] || CAT.grammar
                         const isEditing = jBaseEditTask?.id === task.id
-                        const r = (JOURNEY_RESOURCES[selJBase]?.['intermediate']?.[selJBaseWeek] || [])[ti]
+                        const r = pickResource(JOURNEY_RESOURCES[selJBase]?.['intermediate']?.[selJBaseWeek], task.cat, ti)
                         return (
                           <div key={task.id} style={{ background: B.cream, borderRadius: 10, border: `1.5px solid ${B.border}`, overflow: 'hidden' }}>
                             {isEditing ? (
@@ -832,7 +832,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                 {tasks.map((task, ti) => {
                                   const cm = CAT[task.cat] || CAT.grammar
                                   const isEditing = jEditTask?.id === task.id
-                                  const r = (JOURNEY_RESOURCES[currentJid]?.[SIMPLE_LEVEL[db[`lv_${selS.id}`] || 'A1'] || 'beginner']?.[jWeek] || [])[ti]
+                                  const r = pickResource(JOURNEY_RESOURCES[currentJid]?.[SIMPLE_LEVEL[db[`lv_${selS.id}`] || 'A1'] || 'beginner']?.[jWeek], task.cat, ti)
                                   return (
                                     <div key={task.id} style={{ background: B.cream, borderRadius: 10, border: `1.5px solid ${B.border}`, overflow: 'hidden' }}>
                                       {isEditing ? (
