@@ -3,8 +3,9 @@ import { B } from '../constants/colors'
 import { ir, pp } from '../constants/styles'
 import Logo from './Logo'
 import Icon from './Icon'
-import { JOURNEYS } from '../constants/journeys'
 import { dbLoad, dbSave } from '../firebase'
+import { hashPassword } from '../utils'
+import { AVATARS } from '../constants/avatars'
 
 const INSTAGRAM = 'https://www.instagram.com/talkscape.byrenata'
 const WHATSAPP = 'https://wa.me/5511986704076?text=Olá%20Renata!%20Vim%20pelo%20TalkScape%20e%20quero%20saber%20mais%20sobre%20as%20aulas.'
@@ -123,41 +124,35 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
   const [tipo, setTipo] = useState('particular')
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
   const [senha, setSenha] = useState('')
-  const [selJids, setSelJids] = useState([])
-  const [selLevel, setSelLevel] = useState('')
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState('')
+  const [done, setDone] = useState(false)
 
-  const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setSenha(''); setSelJids([]); setSelLevel(''); setErr(''); setShowModal(true) }
-
-  const toggleJid = jid => setSelJids(prev => prev.includes(jid) ? prev.filter(x => x !== jid) : [...prev, jid])
+  const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setPhone(''); setSenha(''); setErr(''); setShowModal(true) }
 
   const handleSubmit = async () => {
     if (!nome.trim() || !email.trim() || !senha.trim()) { setErr('Preencha todos os campos.'); return }
+    if (tipo === 'particular' && !phone.trim()) { setErr('Preencha seu celular.'); return }
     if (senha.trim().length < 6) { setErr('A senha deve ter pelo menos 6 caracteres.'); return }
     setLoading(true); setErr('')
     try {
       const fresh = await dbLoad()
       const em = email.trim().toLowerCase()
-      const id = `${tipo === 'particular' ? 's' : 'cs'}_${Date.now()}`
+      const hashed = await hashPassword(senha.trim())
+      const avatar = AVATARS[Math.floor(Math.random() * AVATARS.length)]
+      const id = `${tipo === 'particular' ? 'st' : 'cs'}_${Date.now()}_${Math.random().toString(36).slice(2,6)}`
       if (tipo === 'particular') {
         const students = Array.isArray(fresh.students) ? fresh.students : Object.values(fresh.students || {})
-        await dbSave({
-          ...fresh,
-          students: [...students, { id, name: nome.trim(), username: em, email: em, password: senha.trim(), avatar: 'Lily', createdAt: new Date().toISOString().slice(0, 10) }]
-        })
+        const username = nome.trim().toLowerCase().replace(/\s+/g, '.').replace(/[^a-z0-9.]/g, '') + '_' + id.slice(-4)
+        await dbSave({ ...fresh, students: [...students, { id, name: nome.trim(), username, email: em, phone: phone.trim(), password: hashed, avatar, active: false, createdAt: new Date().toISOString().slice(0,10) }] })
       } else {
         const cursos = Array.isArray(fresh.courseStudents) ? fresh.courseStudents : Object.values(fresh.courseStudents || {})
-        await dbSave({
-          ...fresh,
-          courseStudents: [...cursos, { id, name: nome.trim(), email: em, password: senha.trim(), active: false, avatar: 'Lily', jids: selJids, jid: selJids[0] || null, level: selLevel || null, createdAt: new Date().toISOString().slice(0, 10) }]
-        })
+        await dbSave({ ...fresh, courseStudents: [...cursos, { id, name: nome.trim(), email: em, password: hashed, active: false, avatar, createdAt: new Date().toISOString().slice(0,10) }] })
       }
-      const payLink = tipo === 'curso'
-        ? (selJids.length >= 8 ? ASAAS_LINK_ALL : ASAAS_LINKS[Math.max(selJids.length, 1) - 1])
-        : LINK_PAGAMENTO_ASAAS
-      window.location.href = payLink
+      setShowModal(false)
+      setDone(true)
     } catch(e) {
       setErr('Erro ao salvar. Tente novamente.'); setLoading(false)
     }
@@ -165,6 +160,28 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
 
   return (
     <div style={{ minHeight: '100vh', background: B.cream, fontFamily: 'Inter, sans-serif' }}>
+
+      {done && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div style={{ background: '#fff', borderRadius: 24, padding: 36, width: '100%', maxWidth: 380, textAlign: 'center', boxShadow: '0 24px 60px rgba(44,24,16,0.35)' }}>
+            <div style={{ fontSize: 52, marginBottom: 16 }}>🎉</div>
+            <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 800, fontSize: 20, color: '#2c1810', marginBottom: 10 }}>Cadastro recebido!</p>
+            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#8a7060', lineHeight: 1.6, marginBottom: 24 }}>
+              {tipo === 'particular'
+                ? 'Teacher Renata vai entrar em contato para liberar seu acesso. Fique de olho no WhatsApp! 💬'
+                : 'Assim que confirmarmos seu pagamento, liberamos seu acesso. Fique de olho no WhatsApp! 💬'}
+            </p>
+            <a href="https://wa.me/5511986704076" target="_blank" rel="noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '11px 22px', background: '#25D366', color: '#fff', borderRadius: 50, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 4px 14px rgba(37,211,102,0.35)', marginBottom: 14 }}>
+              WhatsApp Teacher Renata
+            </a>
+            <br />
+            <button style={{ background: 'none', border: 'none', color: '#b0a090', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', marginTop: 4 }} onClick={() => setDone(false)}>
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
 
       {showModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }} onClick={() => setShowModal(false)}>
@@ -185,58 +202,35 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
             </div>
 
 
+            {/* Nome */}
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Nome completo</p>
             <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
               placeholder="Seu nome completo" value={nome} onChange={e => { setNome(e.target.value); setErr('') }} />
 
+            {/* Email */}
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Email</p>
             <input type="email" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
               placeholder="seuemail@email.com" value={email} onChange={e => { setEmail(e.target.value); setErr('') }} />
 
+            {/* Celular — só para particular */}
+            {tipo === 'particular' && (<>
+              <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Celular (WhatsApp)</p>
+              <input type="tel" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
+                placeholder="(11) 99999-9999" value={phone} onChange={e => { setPhone(e.target.value); setErr('') }} />
+            </>)}
+
+            {/* Senha */}
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Senha de acesso</p>
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 6 }}>Mínimo 6 caracteres.</p>
-            <input type="password" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: tipo === 'curso' ? 20 : 20, boxSizing: 'border-box', outline: 'none' }}
+            <input type="password" style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 22, boxSizing: 'border-box', outline: 'none' }}
               placeholder="••••••••" value={senha} onChange={e => { setSenha(e.target.value); setErr('') }}
               onKeyDown={e => e.key === 'Enter' && handleSubmit()} />
-
-            {tipo === 'curso' && (
-              <div style={{ marginBottom: 20 }}>
-                <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Qual(is) jornada(s) você quer?</p>
-                <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 10 }}>Selecione uma ou mais. A Renata confirma após o pagamento.</p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  {JOURNEYS.map(j => {
-                    const sel = selJids.includes(j.id)
-                    return (
-                      <button key={j.id} onClick={() => toggleJid(j.id)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 20, border: `1.5px solid ${sel ? '#d46427' : '#e0d4c8'}`, background: sel ? '#fdf0e6' : '#fff', color: sel ? '#d46427' : '#8a7060', fontSize: 12, fontWeight: sel ? 700 : 400, fontFamily: 'Inter,sans-serif', cursor: 'pointer', transition: 'all 0.15s' }}>
-                        <span>{j.icon}</span>{j.pt}
-                      </button>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
-
-            {tipo === 'curso' && (
-              <div style={{ marginBottom: 20 }}>
-                <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 4 }}>Qual é o seu nível de inglês?</p>
-                <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 11, color: '#b0a090', marginBottom: 10 }}>Isso ajuda a Renata a personalizar o conteúdo para você.</p>
-                <div style={{ display: 'flex', gap: 8 }}>
-                  {[['beginner','🌱 Iniciante'],['intermediate','🌿 Intermediário'],['advanced','🌳 Avançado']].map(([k, lb]) => (
-                    <button key={k} onClick={() => setSelLevel(k)}
-                      style={{ flex: 1, padding: '8px 6px', borderRadius: 10, border: `1.5px solid ${selLevel === k ? '#d46427' : '#e0d4c8'}`, background: selLevel === k ? '#fdf0e6' : '#fff', color: selLevel === k ? '#d46427' : '#8a7060', fontSize: 11, fontWeight: selLevel === k ? 700 : 400, fontFamily: 'Inter,sans-serif', cursor: 'pointer', transition: 'all 0.15s', textAlign: 'center' }}>
-                      {lb}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {err && <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#DC2626', marginBottom: 14, background: '#FEE2E2', padding: '8px 12px', borderRadius: 8 }}>{err}</p>}
 
             <button disabled={loading} onClick={handleSubmit}
               style={{ width: '100%', padding: '14px', background: loading ? '#e0c4a8' : '#d46427', border: 'none', borderRadius: 12, color: '#fff', fontSize: 15, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: loading ? 'not-allowed' : 'pointer' }}>
-              {loading ? 'Salvando...' : tipo === 'curso' ? 'Criar conta e ir para o pagamento →' : 'Continuar →'}
+              {loading ? 'Salvando...' : 'Criar conta →'}
             </button>
           </div>
         </div>
