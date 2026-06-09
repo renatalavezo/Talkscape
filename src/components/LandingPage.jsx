@@ -184,11 +184,6 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
               ))}
             </div>
 
-            <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 12, color: '#8a7060', marginBottom: 20, lineHeight: 1.6, background: '#fdf8f5', borderRadius: 10, padding: '10px 12px' }}>
-              {tipo === 'particular'
-                ? '📚 Você já pode acessar a plataforma após o cadastro. Será redirecionada para o pagamento.'
-                : '✨ Após o cadastro você aguarda a confirmação do pagamento para acessar a plataforma.'}
-            </p>
 
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 12, color: '#8a7060', marginBottom: 6 }}>Nome completo</p>
             <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: '1.5px solid #e0d4c8', fontSize: 14, fontFamily: 'Inter,sans-serif', marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
