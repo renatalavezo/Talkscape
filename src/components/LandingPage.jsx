@@ -8,6 +8,7 @@ import { hashPassword } from '../utils'
 import { AVATARS } from '../constants/avatars'
 import { JOURNEYS } from '../constants/journeys'
 
+const FORMS_LINK = 'https://forms.gle/MgL1cMDT9gijCeWD9'
 const INSTAGRAM = 'https://www.instagram.com/talkscape.byrenata'
 const WHATSAPP = 'https://wa.me/5511986704076?text=Olá%20Renata!%20Vim%20pelo%20TalkScape%20e%20quero%20saber%20mais%20sobre%20as%20aulas.'
 const LINK_PAGAMENTO_ASAAS = 'https://www.asaas.com/c/ri6cdcimyr50t33r'
@@ -244,7 +245,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <button onClick={onStudent} style={{ padding: '8px 14px', background: B.bege, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 600, color: B.dark, cursor: 'pointer', fontFamily: 'inherit' }}>
             Já sou aluna
           </button>
-<button onClick={() => openModal('particular')} style={{ padding: '8px 14px', background: B.laranja, border: 'none', borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>Quero começar</button>
+<a href={FORMS_LINK} target="_blank" rel="noreferrer" style={{ padding: '8px 14px', background: B.laranja, borderRadius: 10, fontSize: 12, fontWeight: 700, color: '#fff', textDecoration: 'none', fontFamily: 'Poppins,sans-serif' }}>Quero começar</a>
         </div>
       </header>
 
@@ -258,7 +259,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <p style={{ ...ir(400, 16), color: 'rgba(255,255,255,0.85)', marginBottom: 40, lineHeight: 1.7 }}>
             Aulas particulares com acompanhamento real e jornadas de aprendizado estruturadas para quem quer evoluir no inglês de forma consistente, respeitando seu ritmo e seus objetivos.
           </p>
-          <button onClick={() => openModal('particular')} style={{ display: 'inline-block', padding: '13px 28px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 14, fontWeight: 700, border: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)', maxWidth: 300, textAlign: 'center', lineHeight: 1.4, cursor: 'pointer' }}>Quero começar minha jornada</button>
+          <a href={FORMS_LINK} target="_blank" rel="noreferrer" style={{ display: 'inline-block', padding: '13px 28px', background: B.white, color: B.marrom, borderRadius: 14, fontSize: 14, fontWeight: 700, fontFamily: 'Poppins,sans-serif', boxShadow: '0 8px 24px rgba(44,24,16,0.25)', maxWidth: 300, textAlign: 'center', lineHeight: 1.4, textDecoration: 'none' }}>Quero começar minha jornada</a>
         </div>
       </section>
 
@@ -429,9 +430,9 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
                 <div style={{ background: B.oliva + '22', borderRadius: 8, padding: '6px 12px', marginBottom: 20 }}>
                   <p style={{ ...pp(600, 12), color: B.oliva }}>+ R$ 35/mês por jornada adicional</p>
                 </div>
-                <button onClick={() => openModal('curso')} style={{ width: '100%', padding: '14px', background: '#d46427', border: 'none', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: 'pointer' }}>
+                <a href={FORMS_LINK} target="_blank" rel="noreferrer" style={{ display: 'block', width: '100%', padding: '14px', background: '#d46427', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 700, fontFamily: 'Poppins,sans-serif', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}>
                   Quero me inscrever na Jornada Digital →
-                </button>
+                </a>
               </div>
             </div>
           </div>
