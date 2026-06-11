@@ -7,6 +7,7 @@ import { STUDY_HABITS, HW_HABITS } from '../constants/habits'
 import { todayStr, weekDays, hashPassword } from '../utils'
 import Logo from './Logo'
 import Avatar from './Avatar'
+import { AVATARS } from '../constants/avatars'
 import CalSection from './CalSection'
 import Icon from './Icon'
 import { JOURNEY_MAP } from '../constants/journeys'
@@ -336,12 +337,23 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         {tab === 'info' && (
           <div style={{ padding: '20px 14px', maxWidth: 660, margin: '0 auto' }}>
             <h2 style={{ ...pp(700, 17), color: B.dark, marginBottom: 18 }}>{t.yourInfo}</h2>
-            {!infoGen && !infoNotes && mats.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '40px 0', color: B.light }}>
-                <span style={{ fontSize: 40 }}>📋</span>
-                <p style={{ ...ir(400, 14), marginTop: 12 }}>{t.noInfoYet}</p>
+
+            {/* Avatar picker */}
+            <div style={{ ...S.card, marginBottom: 14 }}>
+              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 4 }}>🎨 {lang === 'pt' ? 'Seu avatar' : 'Your avatar'}</p>
+              <p style={{ ...ir(400, 12), color: B.light, marginBottom: 12 }}>{lang === 'pt' ? 'Escolha um personagem para te representar' : 'Choose a character to represent you'}</p>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
+                <Avatar seed={student.avatar || 'Lily'} size={72} />
               </div>
-            )}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
+                {AVATARS.map(seed => (
+                  <button key={seed} onClick={() => upDb({ students: students.map(s => s.id === sid ? { ...s, avatar: seed } : s) })}
+                    style={{ borderRadius: '50%', cursor: 'pointer', border: student.avatar === seed ? `3px solid ${B.laranja}` : '2px solid transparent', background: '#f0ebe4', padding: 2, transition: 'all 0.15s' }}>
+                    <Avatar seed={seed} size={40} />
+                  </button>
+                ))}
+              </div>
+            </div>
             <div style={{ ...S.card, marginBottom: 14, borderLeft: `4px solid ${B.laranja}` }}>
               <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 12 }}>🔑 {lang === 'pt' ? 'Alterar senha' : 'Change password'}</p>
               <input type="password" style={S.inp} placeholder={lang === 'pt' ? 'Nova senha (mín. 6 caracteres)' : 'New password (min. 6 chars)'}
