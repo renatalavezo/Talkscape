@@ -28,6 +28,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
   const [copiedId, setCopiedId]     = useState(null)
   const [newName, setNewName]       = useState('')
   const [newUser, setNewUser]       = useState('')
+  const [newEmail, setNewEmail]     = useState('')
   const [newPass, setNewPass]       = useState('')
   const [fbDraft, setFbDraft]       = useState('')
   const [infoGen, setInfoGen]       = useState('')
@@ -163,12 +164,12 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
     if (students.find(s => (s.username || '').toLowerCase() === newUser.trim().toLowerCase())) { setAddErr(t.usernameExists); return }
     const id = Date.now().toString(), av = AVATARS[students.length % AVATARS.length]
     const hashed = await hashPassword(newPass.trim())
-    upDb({ students: [...students, { id, name: newName.trim(), avatar: av, username: newUser.trim(), password: hashed }] })
+    upDb({ students: [...students, { id, name: newName.trim(), avatar: av, username: newUser.trim(), email: newEmail.trim().toLowerCase() || null, password: hashed }] })
     if (fromCadastroId) {
       upDb({ cadastros_pendentes: (cadastrosPendentes || []).filter(c => c.id !== fromCadastroId) })
       setFromCadastroId(null)
     }
-    setNewName(''); setNewUser(''); setNewPass(''); setAddErr(''); setShowAdd(false)
+    setNewName(''); setNewUser(''); setNewEmail(''); setNewPass(''); setAddErr(''); setShowAdd(false)
   }
 
   const deleteStudent = s => { upDb({ students: students.filter(x => x.id !== s.id) }); setSel(null); setDelConfirm(null) }
@@ -229,6 +230,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
               <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }} onClick={() => setShowAdd(false)}><Icon name="close" size={20} color={B.light} /></button>
             </div>
             <input style={{ ...S.inp, marginBottom: 10 }} placeholder={t.stPh} value={newName} onChange={e => setNewName(e.target.value)} />
+            <input style={{ ...S.inp, marginBottom: 10 }} type="email" placeholder="Email (para login)" value={newEmail} onChange={e => setNewEmail(e.target.value)} />
             <input style={{ ...S.inp, marginBottom: 10 }} placeholder={t.userPh} value={newUser} onChange={e => setNewUser(e.target.value)} />
             <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
               <input style={{ ...S.inp, flex: 1, marginBottom: 0 }} placeholder={t.passSt} value={newPass} onChange={e => setNewPass(e.target.value)} onKeyDown={e => e.key === 'Enter' && addStudent()} />
@@ -1011,6 +1013,12 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                 {dtab === 'info' && (
                   <div style={S.card}>
                     <p style={{ ...S.lbl, display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="info" size={13} color={B.mid} />{t.infoLabel}</p>
+                    <p style={{ ...ir(600, 12), color: B.mid, marginBottom: 6 }}>Email (login da aluna)</p>
+                    <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+                      <input style={{ ...S.inp, flex: 1, marginBottom: 0 }} type="email" placeholder="email@email.com"
+                        defaultValue={selS.email || ''}
+                        onBlur={e => { if (e.target.value.trim()) upDb({ students: students.map(s => s.id === selS.id ? { ...s, email: e.target.value.trim().toLowerCase() } : s) }) }} />
+                    </div>
                     <p style={{ ...ir(600, 12), color: B.mid, marginBottom: 6 }}>{t.infoGenLabel}</p>
                     <textarea style={{ ...S.ta, marginBottom: 14 }} rows={4} placeholder={t.infoGenPh} value={infoGen} onChange={e => setInfoGen(e.target.value)} />
                     <p style={{ ...ir(600, 12), color: B.mid, marginBottom: 6 }}>{t.infoNotesLabel}</p>
