@@ -16,9 +16,9 @@ export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, 
           {lang === 'pt' ? 'Aluna particular ou das Jornadas — mesma tela!' : 'Private or Journey student — same screen!'}
         </p>
 
-<div style={{ marginBottom: 12 }}>
-          <label style={S.lbl}>{lang === 'pt' ? 'Usuário ou email' : 'Username or email'}</label>
-          <input style={S.inp} placeholder={lang === 'pt' ? 'seu_usuario ou email@email.com' : 'your_username or email@email.com'}
+        <div style={{ marginBottom: 12 }}>
+          <label style={S.lbl}>Email</label>
+          <input style={S.inp} placeholder="seu@email.com"
             value={u} onChange={e => setU(e.target.value)} onKeyDown={e => e.key === 'Enter' && onLogin()} />
         </div>
         <div style={{ marginBottom: 20 }}>
