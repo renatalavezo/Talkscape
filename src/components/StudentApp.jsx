@@ -16,11 +16,12 @@ import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../consta
 const CEFR_TO_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 
 export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, isPreview, onBack }) {
-  const [tab, setTab]       = useState('dashboard')
+  const [tab, setTab]           = useState('dashboard')
   const [jSelWeek, setJSelWeek] = useState(1)
-  const [newPwd, setNewPwd] = useState('')
-  const [pwdMsg, setPwdMsg] = useState('')
+  const [newPwd, setNewPwd]     = useState('')
+  const [pwdMsg, setPwdMsg]     = useState('')
   const [showLogout, setShowLogout] = useState(false)
+  const [tourStep, setTourStep] = useState(0)
 
   const student   = students.find(s => s.id === sid) || { name: '?', avatar: '🎒' }
   const lvl       = db[`lv_${sid}`] || 'A1'
@@ -114,6 +115,52 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
           )}
         </div>
       </header>
+
+      {/* Onboarding tour — first login only */}
+      {!isPreview && !db[`seenTour_${sid}`] && (() => {
+        const pt = lang === 'pt'
+        const steps = [
+          { icon: '👋', title: pt ? `Bem-vinda, ${student.name}!` : `Welcome, ${student.name}!`, desc: pt ? 'Este é o seu espaço de estudos no TalkScape. Deixa eu te mostrar como tudo funciona em 5 passos rápidos!' : "This is your TalkScape study space. Let me show you how everything works in 5 quick steps!" },
+          { icon: '🗺️', title: pt ? 'Jornada' : 'Journey', desc: pt ? 'Aqui ficam suas atividades semanais. Cada semana tem tarefas de listening, speaking, grammar e mais. Marque as feitas e acompanhe seu progresso!' : 'Here are your weekly activities. Each week has tasks for listening, speaking, grammar and more. Check them off and track your progress!' },
+          { icon: '📚', title: pt ? 'Lição' : 'Homework', desc: pt ? 'Teacher Renata envia tarefas extras por aqui. Quando aparecer algo novo, você recebe na aba Lição.' : 'Teacher Renata sends extra tasks here. When something new arrives, it shows up in the Homework tab.' },
+          { icon: '🔥', title: pt ? 'Hábitos' : 'Habits', desc: pt ? 'Registre seus hábitos de estudo diários aqui. Manter uma sequência de dias seguidos faz toda a diferença!' : 'Log your daily study habits here. Keeping a daily streak makes all the difference!' },
+          { icon: '🏠', title: pt ? 'Início' : 'Home', desc: pt ? 'No Início você vê seu progresso geral, nota média e gráfico por semana. É sua visão geral de tudo!' : 'On Home you see your overall progress, average score and weekly chart. It\'s your big picture view!' },
+        ]
+        const step = steps[tourStep]
+        const isLast = tourStep === steps.length - 1
+        const dismiss = () => { upDb({ [`seenTour_${sid}`]: true }) }
+        return (
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: 20 }}>
+            <div style={{ background: '#fff', borderRadius: 22, padding: '32px 28px', maxWidth: 360, width: '100%', boxShadow: '0 24px 60px rgba(44,24,16,0.35)', textAlign: 'center' }}>
+              <div style={{ fontSize: 52, marginBottom: 12 }}>{step.icon}</div>
+              <p style={{ ...pp(800, 18), color: B.dark, marginBottom: 10 }}>{step.title}</p>
+              <p style={{ ...ir(400, 14), color: B.mid, lineHeight: 1.65, marginBottom: 28 }}>{step.desc}</p>
+              {/* progress dots */}
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 6, marginBottom: 22 }}>
+                {steps.map((_, i) => (
+                  <div key={i} style={{ width: i === tourStep ? 18 : 7, height: 7, borderRadius: 99, background: i === tourStep ? B.laranja : B.bege, transition: 'all 0.2s' }} />
+                ))}
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                {tourStep > 0 && (
+                  <button style={{ flex: 1, padding: '11px', borderRadius: 12, border: `1.5px solid ${B.border}`, background: 'transparent', color: B.mid, fontSize: 14, cursor: 'pointer', fontFamily: 'inherit' }}
+                    onClick={() => setTourStep(s => s - 1)}>
+                    {pt ? '← Voltar' : '← Back'}
+                  </button>
+                )}
+                <button style={{ flex: 2, padding: '11px', borderRadius: 12, border: 'none', background: B.laranja, color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}
+                  onClick={() => isLast ? dismiss() : setTourStep(s => s + 1)}>
+                  {isLast ? (pt ? 'Começar! 🚀' : 'Let\'s go! 🚀') : (pt ? 'Próximo →' : 'Next →')}
+                </button>
+              </div>
+              <button style={{ background: 'none', border: 'none', color: B.light, fontSize: 12, cursor: 'pointer', marginTop: 14, fontFamily: 'inherit' }}
+                onClick={dismiss}>
+                {pt ? 'Pular tour' : 'Skip tour'}
+              </button>
+            </div>
+          </div>
+        )
+      })()}
 
       {showLogout && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: 20 }} onClick={() => setShowLogout(false)}>
