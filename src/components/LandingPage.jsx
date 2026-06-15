@@ -329,7 +329,53 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
         </div>
       </section>
 
-      {/* PLANOS INDIVIDUAIS */}
+      {/* JORNADAS DIGITAIS */}
+      <section style={{ background: `linear-gradient(135deg,${B.marrom}11,${B.laranja}11)`, border: `1.5px solid ${B.laranja}22`, padding: '72px 24px' }}>
+        <div style={{ maxWidth: 760, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <span style={{ background: B.laranja, color: '#fff', borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>✨ Novo</span>
+            <h2 style={{ ...pp(700, 28), color: B.dark, marginTop: 16, marginBottom: 8 }}>Jornada Digital</h2>
+            <p style={{ ...ir(400, 15), color: B.mid, maxWidth: 520, margin: '0 auto 16px' }}>12 semanas de inglês estruturado com suporte real da Renata — sem precisar de aula ao vivo.</p>
+            <div style={{ background: B.cream, borderRadius: 14, padding: '16px 20px', maxWidth: 480, margin: '0 auto', textAlign: 'left' }}>
+              <p style={{ ...pp(700, 13), color: B.dark, marginBottom: 6 }}>🗺️ O que é uma Jornada?</p>
+              <p style={{ ...ir(400, 13), color: B.mid, lineHeight: 1.65 }}>
+                Uma Jornada é um programa de estudo autônomo de 12 semanas, com atividades semanais de listening, speaking, gramática e vocabulário — tudo organizado dentro da plataforma TalkScape. Você estuda no seu ritmo, com o suporte da Renata sempre que precisar.
+              </p>
+            </div>
+          </div>
+
+            <div style={{ background: B.white, borderRadius: 20, border: `2px solid ${B.laranja}44`, overflow: 'hidden', boxShadow: `0 12px 40px ${B.laranja}18` }}>
+            <div style={{ background: B.laranja, padding: '20px 28px' }}>
+              <p style={{ ...pp(700, 20), color: '#fff' }}>Jornada TalkScape Digital</p>
+              <p style={{ ...ir(400, 13), color: 'rgba(255,255,255,0.85)' }}>Acesso à plataforma + jornada à sua escolha</p>
+            </div>
+            <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
+              <div>
+                <p style={{ ...pp(600, 13), color: B.mid, marginBottom: 12 }}>O que inclui:</p>
+                {['Acesso completo à plataforma TalkScape', '1 jornada de 12 semanas incluída', 'Habit tracker diário', 'Espaço de dúvidas com a Renata', 'Adicione jornadas extras por R$ 19,90/mês cada'].map((item, i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: i === 4 ? B.oliva : B.laranja, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Icon name="check" size={11} color="#fff" />
+                    </div>
+                    <p style={{ ...ir(400, 13), color: B.dark }}>{item}</p>
+                  </div>
+                ))}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                <p style={{ ...ir(400, 13), color: B.mid, marginBottom: 4 }}>a partir de</p>
+                <p style={{ ...pp(800, 44), color: B.laranja, lineHeight: 1 }}>R$ 59,90</p>
+                <p style={{ ...ir(400, 12), color: B.mid, marginBottom: 8 }}>/mês · 1 jornada</p>
+                <div style={{ background: B.oliva + '22', borderRadius: 8, padding: '6px 12px', marginBottom: 20 }}>
+                  <p style={{ ...pp(600, 12), color: B.oliva }}>+ R$ 19,90/mês por jornada adicional</p>
+                </div>
+                <button onClick={() => openModal('curso')} style={{ width: '100%', padding: '14px', background: '#d46427', border: 'none', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: 'pointer' }}>
+                  Quero me inscrever na Jornada Digital →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section style={{ background: B.white, padding: '72px 24px' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <h2 style={{ ...pp(700, 28), color: B.dark, textAlign: 'center', marginBottom: 8 }}>Aulas particulares com Teacher Renata</h2>
@@ -400,54 +446,6 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
                 Quero entrar na lista de espera
               </a>
               <p style={{ ...ir(400, 11), color: B.mid, textAlign: 'center', marginTop: 8 }}>A turma abre quando completar 3 inscrições</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* JORNADAS DIGITAIS */}
-      <section style={{ background: `linear-gradient(135deg,${B.marrom}11,${B.laranja}11)`, border: `1.5px solid ${B.laranja}22`, padding: '72px 24px' }}>
-        <div style={{ maxWidth: 760, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{ background: B.laranja, color: '#fff', borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>✨ Novo</span>
-            <h2 style={{ ...pp(700, 28), color: B.dark, marginTop: 16, marginBottom: 8 }}>Jornada Digital</h2>
-            <p style={{ ...ir(400, 15), color: B.mid, maxWidth: 520, margin: '0 auto 16px' }}>12 semanas de inglês estruturado com suporte real da Renata — sem precisar de aula ao vivo.</p>
-            <div style={{ background: B.cream, borderRadius: 14, padding: '16px 20px', maxWidth: 480, margin: '0 auto', textAlign: 'left' }}>
-              <p style={{ ...pp(700, 13), color: B.dark, marginBottom: 6 }}>🗺️ O que é uma Jornada?</p>
-              <p style={{ ...ir(400, 13), color: B.mid, lineHeight: 1.65 }}>
-                Uma Jornada é um programa de estudo autônomo de 12 semanas, com atividades semanais de listening, speaking, gramática e vocabulário — tudo organizado dentro da plataforma TalkScape. Você estuda no seu ritmo, com o suporte da Renata sempre que precisar.
-              </p>
-            </div>
-          </div>
-
-            <div style={{ background: B.white, borderRadius: 20, border: `2px solid ${B.laranja}44`, overflow: 'hidden', boxShadow: `0 12px 40px ${B.laranja}18` }}>
-            <div style={{ background: B.laranja, padding: '20px 28px' }}>
-              <p style={{ ...pp(700, 20), color: '#fff' }}>Jornada TalkScape Digital</p>
-              <p style={{ ...ir(400, 13), color: 'rgba(255,255,255,0.85)' }}>Acesso à plataforma + jornada à sua escolha</p>
-            </div>
-            <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
-              <div>
-                <p style={{ ...pp(600, 13), color: B.mid, marginBottom: 12 }}>O que inclui:</p>
-                {['Acesso completo à plataforma TalkScape', '1 jornada de 12 semanas incluída', 'Habit tracker diário', 'Espaço de dúvidas com a Renata', 'Adicione jornadas extras por R$ 19,90/mês cada'].map((item, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: i === 4 ? B.oliva : B.laranja, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <Icon name="check" size={11} color="#fff" />
-                    </div>
-                    <p style={{ ...ir(400, 13), color: B.dark }}>{item}</p>
-                  </div>
-                ))}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-                <p style={{ ...ir(400, 13), color: B.mid, marginBottom: 4 }}>a partir de</p>
-                <p style={{ ...pp(800, 44), color: B.laranja, lineHeight: 1 }}>R$ 59,90</p>
-                <p style={{ ...ir(400, 12), color: B.mid, marginBottom: 8 }}>/mês · 1 jornada</p>
-                <div style={{ background: B.oliva + '22', borderRadius: 8, padding: '6px 12px', marginBottom: 20 }}>
-                  <p style={{ ...pp(600, 12), color: B.oliva }}>+ R$ 19,90/mês por jornada adicional</p>
-                </div>
-                <button onClick={() => openModal('curso')} style={{ width: '100%', padding: '14px', background: '#d46427', border: 'none', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: 'pointer' }}>
-                  Quero me inscrever na Jornada Digital →
-                </button>
-              </div>
             </div>
           </div>
         </div>
