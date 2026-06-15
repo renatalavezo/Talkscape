@@ -195,7 +195,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
 
             {/* Tipo selector */}
             <div style={{ display: 'flex', background: '#f5ede6', borderRadius: 12, padding: 4, marginBottom: 20, gap: 4 }}>
-              {[['particular', 'Aula particular'], ['curso', 'Jornada Digital']].map(([k, lb]) => (
+              {[['particular', 'Aula com Teacher Renata'], ['curso', 'Jornada Digital']].map(([k, lb]) => (
                 <button key={k} onClick={() => { setTipo(k); setErr('') }}
                   style={{ flex: 1, padding: '8px', borderRadius: 9, border: 'none', background: tipo === k ? '#fff' : 'transparent', color: tipo === k ? '#2c1810' : '#8a7060', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif', cursor: 'pointer', boxShadow: tipo === k ? '0 2px 6px rgba(44,24,16,0.1)' : 'none', transition: 'all 0.15s' }}>
                   {lb}
@@ -324,8 +324,8 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
       {/* PLANOS INDIVIDUAIS */}
       <section style={{ background: B.white, padding: '72px 24px' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <h2 style={{ ...pp(700, 28), color: B.dark, textAlign: 'center', marginBottom: 8 }}>Planos individuais</h2>
-          <p style={{ ...ir(400, 15), color: B.mid, textAlign: 'center', marginBottom: 48 }}>Quanto mais tempo, mais você economiza.</p>
+          <h2 style={{ ...pp(700, 28), color: B.dark, textAlign: 'center', marginBottom: 8 }}>Aulas particulares com Teacher Renata</h2>
+          <p style={{ ...ir(400, 15), color: B.mid, textAlign: 'center', marginBottom: 48 }}>Aulas individuais personalizadas para o seu ritmo e objetivo. Quanto mais tempo, mais você economiza.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
             {PLANS.map((plan, i) => <PlanCard key={i} plan={plan} onStudent={onStudent} onCourse={onCourse} />)}
           </div>
@@ -403,7 +403,13 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ background: B.laranja, color: '#fff', borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>✨ Novo</span>
             <h2 style={{ ...pp(700, 28), color: B.dark, marginTop: 16, marginBottom: 8 }}>Jornada Digital</h2>
-            <p style={{ ...ir(400, 15), color: B.mid, maxWidth: 480, margin: '0 auto' }}>12 semanas de inglês estruturado com suporte real da Renata — sem precisar de aula ao vivo.</p>
+            <p style={{ ...ir(400, 15), color: B.mid, maxWidth: 520, margin: '0 auto 16px' }}>12 semanas de inglês estruturado com suporte real da Renata — sem precisar de aula ao vivo.</p>
+            <div style={{ background: B.cream, borderRadius: 14, padding: '16px 20px', maxWidth: 480, margin: '0 auto', textAlign: 'left' }}>
+              <p style={{ ...pp(700, 13), color: B.dark, marginBottom: 6 }}>🗺️ O que é uma Jornada?</p>
+              <p style={{ ...ir(400, 13), color: B.mid, lineHeight: 1.65 }}>
+                Uma Jornada é um programa de estudo autônomo de 12 semanas, com atividades semanais de listening, speaking, gramática e vocabulário — tudo organizado dentro da plataforma TalkScape. Você estuda no seu ritmo, com o suporte da Renata sempre que precisar.
+              </p>
+            </div>
           </div>
 
             <div style={{ background: B.white, borderRadius: 20, border: `2px solid ${B.laranja}44`, overflow: 'hidden', boxShadow: `0 12px 40px ${B.laranja}18` }}>
@@ -414,7 +420,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
             <div style={{ padding: '28px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20 }}>
               <div>
                 <p style={{ ...pp(600, 13), color: B.mid, marginBottom: 12 }}>O que inclui:</p>
-                {['Acesso completo à plataforma TalkScape', '1 jornada de 12 semanas incluída', 'Habit tracker diário', 'Espaço de dúvidas com a Renata', 'Adicione jornadas extras por R$ 35/mês cada'].map((item, i) => (
+                {['Acesso completo à plataforma TalkScape', '1 jornada de 12 semanas incluída', 'Habit tracker diário', 'Espaço de dúvidas com a Renata', 'Adicione jornadas extras por R$ 19,90/mês cada'].map((item, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                     <div style={{ width: 18, height: 18, borderRadius: '50%', background: i === 4 ? B.oliva : B.laranja, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                       <Icon name="check" size={11} color="#fff" />
@@ -428,7 +434,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
                 <p style={{ ...pp(800, 44), color: B.laranja, lineHeight: 1 }}>R$ 59,90</p>
                 <p style={{ ...ir(400, 12), color: B.mid, marginBottom: 8 }}>/mês · 1 jornada</p>
                 <div style={{ background: B.oliva + '22', borderRadius: 8, padding: '6px 12px', marginBottom: 20 }}>
-                  <p style={{ ...pp(600, 12), color: B.oliva }}>+ R$ 35/mês por jornada adicional</p>
+                  <p style={{ ...pp(600, 12), color: B.oliva }}>+ R$ 19,90/mês por jornada adicional</p>
                 </div>
                 <a href={FORMS_LINK} target="_blank" rel="noreferrer" style={{ display: 'block', width: '100%', padding: '14px', background: '#d46427', borderRadius: 12, color: '#fff', fontSize: 14, fontWeight: 700, fontFamily: 'Poppins,sans-serif', textDecoration: 'none', textAlign: 'center', boxSizing: 'border-box' }}>
                   Quero me inscrever na Jornada Digital →
