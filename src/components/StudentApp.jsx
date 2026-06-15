@@ -12,6 +12,7 @@ import CalSection from './CalSection'
 import Icon from './Icon'
 import { JOURNEY_MAP } from '../constants/journeys'
 import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
+import ActivityModal from './ActivityModal'
 
 const CEFR_TO_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 
@@ -22,6 +23,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
   const [pwdMsg, setPwdMsg]     = useState('')
   const [showLogout, setShowLogout] = useState(false)
   const [tourStep, setTourStep] = useState(0)
+  const [actModal, setActModal] = useState(null) // { taskId, acts, taskText }
 
   const student   = students.find(s => s.id === sid) || { name: '?', avatar: '🎒' }
   const lvl       = db[`lv_${sid}`] || 'A1'
@@ -92,6 +94,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
   ]
 
   return (
+    <>
     <div style={S.app}>
       {/* Header */}
       <header style={{ background: B.marrom, height: 52, padding: '0 12px', display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
@@ -482,6 +485,8 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                       ? (task.variations?.[simpleLevel]?.pt || task.pt)
                       : (task.variations?.[simpleLevel]?.en || task.en)
                     const hint = !task.variations?.[simpleLevel] ? levelHint(simpleLevel, task.cat, lang) : null
+                    const taskActs = db[`acts_${jid}_w${jSelWeek}_${task.id}`] || []
+                    const actScore = db[`actScore_${sid}_${task.id}`]
                     return (
                       <div key={task.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: done ? B.bege : B.cream, borderRadius: 10, padding: '10px 12px', border: `1.5px solid ${done ? B.oliva + '44' : B.border}`, cursor: 'pointer' }}
                         onClick={() => jToggle(task.id)}>
@@ -493,6 +498,12 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                           {hint && !done && <p style={{ ...ir(400, 10.5), color: simpleLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 3, fontStyle: 'italic' }}>{simpleLevel === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
                           {task.link && !done && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 11), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{lang === 'pt' ? 'Acessar recurso' : 'Open resource'}</a>}
                           {r && (() => { const v = !!visited[r.url]; return <a href={r.url} target="_blank" rel="noreferrer" onClick={e => { e.stopPropagation(); markVisited(r.url) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: v ? '#eef2eb' : B.bege, borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: v ? B.oliva : B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${v ? B.oliva + '55' : B.border}`, marginTop: 5 }}>{v ? '✓' : TYPE_ICON[r.type]} {r.label}</a> })()}
+                          {taskActs.length > 0 && (
+                            <button onClick={e => { e.stopPropagation(); setActModal({ taskId: task.id, acts: taskActs, taskText: displayText }) }}
+                              style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 6, padding: '5px 11px', borderRadius: 20, border: `1.5px solid ${actScore !== undefined ? B.oliva : B.laranja}`, background: actScore !== undefined ? '#eef2eb' : B.laranja + '15', cursor: 'pointer', fontSize: 11, fontWeight: 700, fontFamily: 'Poppins,sans-serif', color: actScore !== undefined ? B.oliva : B.laranja }}>
+                              🎯 {lang === 'pt' ? 'Atividades' : 'Activities'}{actScore !== undefined ? ` · ${actScore}%` : ` (${taskActs.length})`}
+                            </button>
+                          )}
                         </div>
                         <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
                       </div>
@@ -505,5 +516,17 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         )}
       </div>
     </div>
+    {actModal && (
+      <ActivityModal
+        acts={actModal.acts}
+        lang={lang}
+        taskText={actModal.taskText}
+        taskId={actModal.taskId}
+        sid={sid}
+        upDb={upDb}
+        onClose={() => setActModal(null)}
+      />
+    )}
+    </>
   )
 }

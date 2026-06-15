@@ -9,6 +9,7 @@ import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../consta
 import Avatar from './Avatar'
 import Icon from './Icon'
 import Logo from './Logo'
+import ActivityEditor from './ActivityEditor'
 
 const SIMPLE_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 const SIMPLE_LABEL = { beginner:'🌱 Iniciante', intermediate:'🌿 Intermediário', advanced:'🌳 Avançado' }
@@ -76,6 +77,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
   const [nJBTaskPt, setNJBTaskPt]         = useState('')
   const [nJBTaskCat, setNJBTaskCat]       = useState('grammar')
   const [nJBTaskLink, setNJBTaskLink]     = useState('')
+  const [actExpandTask, setActExpandTask] = useState(null) // taskId with activities panel open
 
   const selS = students.find(s => s.id === sel)
 
@@ -886,17 +888,33 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                           </div>
                                         </div>
                                       ) : (
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '10px 12px' }}>
-                                          <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
-                                          <div style={{ flex: 1 }}>
-                                            <p style={{ ...ir(600, 12), color: B.dark }}>{task.en}</p>
-                                            <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{task.pt}</p>
-                                            {hint && <p style={{ ...ir(400, 10), color: stLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 2, fontStyle: 'italic' }}>{stLevel === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
-                                            {task.link && <a href={task.link} target="_blank" rel="noreferrer" style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
-                                            {r && <a href={r.url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f5f0eb', borderRadius: 20, padding: '3px 9px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 4 }}>{TYPE_ICON[r.type]} {r.label}</a>}
+                                        <div>
+                                          <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '10px 12px' }}>
+                                            <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
+                                            <div style={{ flex: 1 }}>
+                                              <p style={{ ...ir(600, 12), color: B.dark }}>{task.en}</p>
+                                              <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{task.pt}</p>
+                                              {hint && <p style={{ ...ir(400, 10), color: stLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 2, fontStyle: 'italic' }}>{stLevel === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
+                                              {task.link && <a href={task.link} target="_blank" rel="noreferrer" style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
+                                              {r && <a href={r.url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f5f0eb', borderRadius: 20, padding: '3px 9px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 4 }}>{TYPE_ICON[r.type]} {r.label}</a>}
+                                            </div>
+                                            <button title={lang === 'pt' ? 'Atividades' : 'Activities'}
+                                              style={{ background: actExpandTask === task.id ? B.laranja + '22' : B.bege, border: `1px solid ${actExpandTask === task.id ? B.laranja : B.border}`, borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: 13 }}
+                                              onClick={() => setActExpandTask(actExpandTask === task.id ? null : task.id)}>
+                                              🎯
+                                            </button>
+                                            <button style={{ background: B.bege, border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => setJEditTask({ ...task })}><Icon name="edit" size={13} color={B.mid} /></button>
+                                            <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => delJTask(selS.id, currentJid, jWeek, task.id)}><Icon name="delete" size={13} color="#DC2626" /></button>
                                           </div>
-                                          <button style={{ background: B.bege, border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => setJEditTask({ ...task })}><Icon name="edit" size={13} color={B.mid} /></button>
-                                          <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => delJTask(selS.id, currentJid, jWeek, task.id)}><Icon name="delete" size={13} color="#DC2626" /></button>
+                                          {actExpandTask === task.id && (
+                                            <div style={{ padding: '0 12px 12px' }}>
+                                              <ActivityEditor
+                                                acts={db[`acts_${currentJid}_w${jWeek}_${task.id}`] || []}
+                                                lang={lang}
+                                                onChange={acts => upDb({ [`acts_${currentJid}_w${jWeek}_${task.id}`]: acts })}
+                                              />
+                                            </div>
+                                          )}
                                         </div>
                                       )}
                                     </div>
