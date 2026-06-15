@@ -13,6 +13,7 @@ import Icon from './Icon'
 import { JOURNEY_MAP } from '../constants/journeys'
 import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 import ActivityModal from './ActivityModal'
+import { DEFAULT_ACTIVITIES } from '../constants/defaultActivities'
 
 const CEFR_TO_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 
@@ -485,7 +486,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                       ? (task.variations?.[simpleLevel]?.pt || task.pt)
                       : (task.variations?.[simpleLevel]?.en || task.en)
                     const hint = !task.variations?.[simpleLevel] ? levelHint(simpleLevel, task.cat, lang) : null
-                    const taskActs = db[`acts_${jid}_w${jSelWeek}_${task.id}`] || []
+                    const taskActs = db[`acts_${jid}_w${jSelWeek}_${task.id}`] || DEFAULT_ACTIVITIES[task.id] || []
                     const actScore = db[`actScore_${sid}_${task.id}`]
                     return (
                       <div key={task.id} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, background: done ? B.bege : B.cream, borderRadius: 10, padding: '10px 12px', border: `1.5px solid ${done ? B.oliva + '44' : B.border}`, cursor: 'pointer' }}
