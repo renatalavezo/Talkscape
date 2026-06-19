@@ -35,7 +35,7 @@ function keywordMatch(studentText, keywords = []) {
   })
 }
 
-function ActivityItem({ act, lang, onNext, isLast }) {
+function ActivityItem({ act, lang, onNext, isLast, onResult }) {
   const [sel, setSel]           = useState(null)
   const [text, setText]         = useState('')
   const [submitted, setSubmitted] = useState(false)
