@@ -81,7 +81,8 @@ export default function App() {
         const matchUser  = (s.username || '').trim().toLowerCase() === u
         const matchEmail = (s.email    || '').trim().toLowerCase() === u
         if (matchUser || matchEmail) {
-          if (await checkPassword(p, s.password)) {
+          const storedPwd = db[`pwd_${s.id}`] || s.password
+          if (await checkPassword(p, storedPwd)) {
             if (s.active === false) { setLoginErr(lang === 'pt' ? 'Seu acesso ainda não foi liberado. Aguarde o contato de Teacher Renata.' : 'Your access is not active yet. Teacher Renata will reach out soon.'); return }
             setId(s.id); setView('student'); setLoginErr(''); return
           }

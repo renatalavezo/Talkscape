@@ -415,7 +415,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
               <button style={{ ...S.btn(B.laranja), marginTop: 8 }} onClick={async () => {
                 if (newPwd.trim().length < 6) { setPwdMsg(lang === 'pt' ? 'Mínimo 6 caracteres.' : 'Minimum 6 characters.'); return }
                 const hashed = await hashPassword(newPwd.trim())
-                upDb({ students: students.map(s => s.id === sid ? { ...s, password: hashed } : s) })
+                upDb({ [`pwd_${sid}`]: hashed })
                 setNewPwd(''); setPwdMsg('ok')
               }}>{lang === 'pt' ? 'Salvar nova senha' : 'Save new password'}</button>
             </div>
