@@ -7,7 +7,12 @@ import {
   GraduationCap, Briefcase, Plane, Wrench, Film, Volume2,
   Lightbulb, Target, Sparkles, NotebookPen, LayoutDashboard,
   Zap, ScrollText, BookMarked, FileText, Music, Repeat,
-  ArrowLeft, Heart, MessageCircle, Layers
+  ArrowLeft, Heart, MessageCircle, Layers, Lock, Unlock,
+  Key, Palette, Pin, Paperclip, Leaf, Seedling, TreePine,
+  ChevronUp, ChevronDown, Image, Award, Clock, Send,
+  CheckCircle2, Circle, TrendingUp, User, Smile, ThumbsUp,
+  AlertTriangle, HelpCircle, Download, Upload, RefreshCw,
+  BookCheck, Pen, List, Grid3x3, Activity
 } from 'lucide-react'
 
 const icons = {
@@ -26,17 +31,26 @@ const icons = {
   logout:        LogOut,
   next:          ChevronRight,
   back:          ChevronLeft,
+  up:            ChevronUp,
+  down:          ChevronDown,
   // Ações
   add:           Plus,
   delete:        Trash2,
   edit:          Pencil,
   check:         Check,
+  checkCircle:   CheckCircle2,
   close:         X,
   reset:         RotateCcw,
+  refresh:       RefreshCw,
   save:          Save,
   link:          Link,
   search:        Search,
   alert:         AlertCircle,
+  warning:       AlertTriangle,
+  help:          HelpCircle,
+  send:          Send,
+  download:      Download,
+  upload:        Upload,
   // Abas do professor
   plan:          ClipboardList,
   feedback:      MessageCircle,
@@ -44,9 +58,11 @@ const icons = {
   info:          Info,
   habits:        Flame,
   progress:      BarChart2,
+  activity:      Activity,
   dashboard:     LayoutDashboard,
   streak:        Zap,
   trophy:        Trophy,
+  award:         Award,
   globe:         Globe,
   star:          Star,
   // Abas do aluno
@@ -73,6 +89,23 @@ const icons = {
   music:         Music,
   heart:         Heart,
   bookOpen:      BookOpen,
+  bookCheck:     BookCheck,
+  lock:          Lock,
+  unlock:        Unlock,
+  key:           Key,
+  palette:       Palette,
+  paperclip:     Paperclip,
+  leaf:          Leaf,
+  clock:         Clock,
+  image:         Image,
+  user:          User,
+  smile:         Smile,
+  thumbsUp:      ThumbsUp,
+  trendingUp:    TrendingUp,
+  circle:        Circle,
+  pen:           Pen,
+  list:          List,
+  grid:          Grid3x3,
 }
 
 export default function Icon({ name, size = 16, color = 'currentColor', style = {} }) {

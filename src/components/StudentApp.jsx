@@ -179,7 +179,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         </div>
       )}
 
-      {isPreview && <div style={{ background: '#FEF3C7', padding: '6px 16px', fontSize: 11, color: '#92400E', fontWeight: 600 }}>👁 Teacher Renata — preview</div>}
+      {isPreview && <div style={{ background: '#FEF3C7', padding: '6px 16px', fontSize: 11, color: '#92400E', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}><Icon name="eye" size={12} color="#92400E" />Teacher Renata — preview</div>}
       {fb && <div style={{ background: B.larBg, borderLeft: `4px solid ${B.laranja}`, padding: '9px 16px', margin: '12px 14px 0', borderRadius: 9, fontSize: 12, color: B.dark }}><strong style={{ color: B.larD }}>{t.teacherFbLabel}</strong> {fb}</div>}
 
       {/* Nav */}
@@ -200,7 +200,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                 <button style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }} onClick={() => upDb({ [`seenWelcome_${sid}`]: true })}>
                   <Icon name="close" size={16} color={B.light} />
                 </button>
-                <p style={{ ...pp(700, 15), color: B.dark, marginBottom: 6 }}>👋 {lang === 'pt' ? `Bem-vinda, ${student.name}!` : `Welcome, ${student.name}!`}</p>
+                <p style={{ ...pp(700, 15), color: B.dark, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="smile" size={18} color={B.laranja} />{lang === 'pt' ? `Bem-vinda, ${student.name}!` : `Welcome, ${student.name}!`}</p>
                 <p style={{ ...ir(400, 13), color: B.mid, lineHeight: 1.6, marginBottom: 12 }}>
                   {lang === 'pt'
                     ? 'Aqui você acompanha seu progresso. Para começar a estudar, vá até a aba Plano e abra a Semana 1.'
@@ -234,7 +234,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
 
             {/* Progress chart */}
             <div style={{ ...S.card, marginBottom: 20 }}>
-              <p style={S.lbl}>📊 {t.progressChart}</p>
+              <p style={{ ...S.lbl, display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="progress" size={14} color={B.mid} />{t.progressChart}</p>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 110, padding: '4px 0 0' }}>
                 {allWeekDefs.map((w, i) => {
                   const p = wPct(w.week), sc = scores[`week${w.week}`]
@@ -266,13 +266,13 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                       <p style={{ ...pp(700, 13), color: isCur ? c.text : B.dark }}>{c.level} — {c.label[lang]}</p>
                       {isCur && <p style={{ ...ir(500, 10), color: isCur ? c.text : B.light, opacity: 0.8, marginTop: 2 }}>{t.currentLevel}</p>}
                     </div>
-                    <span style={{ fontSize: 16 }}>{unlocked ? '✅' : '🔒'}</span>
+                    <Icon name={unlocked ? 'checkCircle' : 'lock'} size={16} color={unlocked ? '#059669' : B.border} />
                   </div>
                   {unlocked && (
                     <div style={{ padding: '12px 16px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: 6 }}>
                       {c.canDo[lang].map((item, j) => (
                         <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
-                          <span style={{ color: c.color, flexShrink: 0, fontSize: 11, marginTop: 1 }}>✦</span>
+                          <Icon name="check" size={11} color={c.color} style={{ flexShrink: 0, marginTop: 2 }} />
                           <p style={{ ...ir(400, 12), color: B.dark }}>{item}</p>
                         </div>
                       ))}
@@ -290,7 +290,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         {tab === 'hw' && (
           <div style={{ padding: '20px 14px', maxWidth: 660, margin: '0 auto' }}>
             <h2 style={{ ...pp(700, 17), color: B.dark, marginBottom: 16 }}>{t.hwLabel}</h2>
-            {hw.length === 0 && <div style={{ textAlign: 'center', padding: '40px 0', color: B.light }}><span style={{ fontSize: 40 }}>📝</span><p style={{ ...ir(400, 14), marginTop: 12 }}>{t.noHW}</p></div>}
+            {hw.length === 0 && <div style={{ textAlign: 'center', padding: '40px 0', color: B.light }}><Icon name="homework" size={40} color={B.border} /><p style={{ ...ir(400, 14), marginTop: 12 }}>{t.noHW}</p></div>}
             {hw.filter(h => !h.done).map(h => {
               const cm = CAT[h.cat] || CAT.grammar
               return (
@@ -299,7 +299,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                   <div style={{ flex: 1 }}>
                     <p style={{ ...ir(600, 13), color: B.dark }}>{h.en}</p>
                     <p style={{ ...ir(400, 11), color: B.mid, fontStyle: 'italic' }}>{h.pt}</p>
-                    {h.due && <p style={{ ...ir(600, 11), color: B.laranja, marginTop: 2 }}>📅 {h.due}</p>}
+                    {h.due && <p style={{ ...ir(600, 11), color: B.laranja, marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}><Icon name="calendar" size={11} color={B.laranja} />{h.due}</p>}
                   </div>
                   <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
                 </div>
@@ -307,10 +307,10 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
             })}
             {hw.filter(h => h.done).length > 0 && (
               <div style={{ marginTop: 16 }}>
-                <p style={{ ...ir(600, 11), color: B.light, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 8 }}>✓ {lang === 'pt' ? 'Concluídas' : 'Completed'}</p>
+                <p style={{ ...ir(600, 11), color: B.light, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}><Icon name="check" size={11} color={B.light} />{lang === 'pt' ? 'Concluídas' : 'Completed'}</p>
                 {hw.filter(h => h.done).map(h => (
                   <div key={h.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 13px', background: B.cream, borderRadius: 11, border: `1.5px solid ${B.border}`, marginBottom: 5, cursor: 'pointer', opacity: 0.65 }} onClick={() => toggleHW(h.id)}>
-                    <div style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${B.oliva}`, background: B.oliva, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><span style={{ color: '#fff', fontSize: 12, fontWeight: 900 }}>✓</span></div>
+                    <div style={{ width: 22, height: 22, borderRadius: 6, border: `2px solid ${B.oliva}`, background: B.oliva, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}><Icon name="check" size={13} color="#fff" /></div>
                     <p style={{ ...ir(600, 12), color: B.mid, textDecoration: 'line-through' }}>{h.en}</p>
                   </div>
                 ))}
@@ -318,7 +318,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
             )}
             {mats.length > 0 && (
               <div style={{ marginTop: 24 }}>
-                <p style={{ ...pp(600, 13), color: B.dark, marginBottom: 10 }}>📎 {lang === 'pt' ? 'Materiais de Teacher Renata' : 'Materials from Teacher Renata'}</p>
+                <p style={{ ...pp(600, 13), color: B.dark, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="paperclip" size={14} color={B.dark} />{lang === 'pt' ? 'Materiais de Teacher Renata' : 'Materials from Teacher Renata'}</p>
                 {mats.map(m => (
                   <div key={m.id} style={{ padding: '11px 13px', background: B.olivaBg, borderRadius: 11, border: `1.5px solid ${B.oliva}`, marginBottom: 7 }}>
                     <p style={{ ...ir(600, 13), color: B.dark }}>{m.title}</p>
@@ -338,9 +338,9 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 8 }}>
                 <div>
                   <p style={{ ...ir(600, 12), color: 'rgba(255,255,255,0.7)', marginBottom: 2 }}>{lang === 'pt' ? 'Hábitos' : 'Habits'}</p>
-                  <p style={{ ...pp(800, 22) }}>{streak > 0 ? `🔥 ${streak} ${t.streakLabel}` : t.noStreak}</p>
+                  <p style={{ ...pp(800, 22), display: 'flex', alignItems: 'center', gap: 8 }}>{streak > 0 && <Icon name="flame" size={22} color="#fff" />}{streak > 0 ? `${streak} ${t.streakLabel}` : t.noStreak}</p>
                 </div>
-                <span style={{ fontSize: 34 }}>{streak >= 7 ? '🏆' : streak >= 3 ? '⭐' : '📅'}</span>
+                <Icon name={streak >= 7 ? 'trophy' : streak >= 3 ? 'star' : 'calendar'} size={32} color="rgba(255,255,255,0.7)" />
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 5 }}>
                 {days.map((d, i) => {
@@ -349,17 +349,17 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                     <div key={d} style={{ textAlign: 'center' }}>
                       <p style={{ ...ir(500, 9), color: 'rgba(255,255,255,0.6)', marginBottom: 3 }}>{t.dayNames[i]}</p>
                       <div style={{ width: 28, height: 28, borderRadius: 7, background: isDone ? B.rosa : isT ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.08)', border: isT ? '2px solid rgba(255,255,255,0.6)' : '2px solid transparent', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>
-                        {isDone ? '✓' : isT ? '·' : ''}
+                        {isDone ? <Icon name="check" size={12} color="#fff" /> : null}
                       </div>
                     </div>
                   )
                 })}
               </div>
             </div>
-            {[[t.studyH, '📚', STUDY_HABITS, B.marrom], [t.hwH, '📝', HW_HABITS, B.oliva]].map(([title, emoji, habits, color]) => (
+            {[[t.studyH, 'bookOpen', STUDY_HABITS, B.marrom], [t.hwH, 'homework', HW_HABITS, B.oliva]].map(([title, iconName, habits, color]) => (
               <div key={title} style={{ background: B.white, borderRadius: 14, border: `1.5px solid ${B.border}`, overflow: 'hidden', marginBottom: 12 }}>
                 <div style={{ background: color, padding: '10px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <p style={{ ...pp(700, 13), color: '#fff' }}>{emoji} {title}</p>
+                  <p style={{ ...pp(700, 13), color: '#fff', display: 'flex', alignItems: 'center', gap: 7 }}><Icon name={iconName} size={15} color="#fff" />{title}</p>
                   <span style={{ background: 'rgba(255,255,255,0.25)', borderRadius: 20, padding: '2px 11px', fontSize: 11, color: '#fff', fontWeight: 700 }}>{habits.filter(h => !!todayH[h.id]).length}/{habits.length}</span>
                 </div>
                 {habits.map((h, i) => {
@@ -372,7 +372,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                         <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{h.pt}</p>
                       </div>
                       <div style={{ width: 24, height: 24, borderRadius: 6, border: `2px solid ${isDone ? color : B.border}`, background: isDone ? color : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s' }}>
-                        {isDone && <span style={{ color: '#fff', fontSize: 12, fontWeight: 900 }}>✓</span>}
+                        {isDone && <Icon name="check" size={13} color="#fff" />}
                       </div>
                     </div>
                   )
@@ -391,7 +391,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
 
             {/* Avatar picker */}
             <div style={{ ...S.card, marginBottom: 14 }}>
-              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 4 }}>🎨 {lang === 'pt' ? 'Seu avatar' : 'Your avatar'}</p>
+              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="smile" size={15} color={B.laranja} />{lang === 'pt' ? 'Seu avatar' : 'Your avatar'}</p>
               <p style={{ ...ir(400, 12), color: B.light, marginBottom: 12 }}>{lang === 'pt' ? 'Escolha um personagem para te representar' : 'Choose a character to represent you'}</p>
               <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
                 <Avatar seed={student.avatar || 'Lily'} size={72} />
@@ -406,11 +406,11 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
               </div>
             </div>
             <div style={{ ...S.card, marginBottom: 14, borderLeft: `4px solid ${B.laranja}` }}>
-              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 12 }}>🔑 {lang === 'pt' ? 'Alterar senha' : 'Change password'}</p>
+              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="key" size={15} color={B.laranja} />{lang === 'pt' ? 'Alterar senha' : 'Change password'}</p>
               <input type="password" style={S.inp} placeholder={lang === 'pt' ? 'Nova senha (mín. 6 caracteres)' : 'New password (min. 6 chars)'}
                 value={newPwd} onChange={e => { setNewPwd(e.target.value); setPwdMsg('') }} />
               {pwdMsg && <p style={{ ...ir(600, 12), color: pwdMsg === 'ok' ? B.oliva : '#DC2626', margin: '6px 0' }}>
-                {pwdMsg === 'ok' ? (lang === 'pt' ? '✓ Senha alterada com sucesso!' : '✓ Password changed!') : pwdMsg}
+                {pwdMsg === 'ok' ? <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Icon name="check" size={13} color={B.oliva} />{lang === 'pt' ? 'Senha alterada com sucesso!' : 'Password changed!'}</span> : pwdMsg}
               </p>}
               <button style={{ ...S.btn(B.laranja), marginTop: 8 }} onClick={async () => {
                 if (newPwd.trim().length < 6) { setPwdMsg(lang === 'pt' ? 'Mínimo 6 caracteres.' : 'Minimum 6 characters.'); return }
@@ -421,13 +421,13 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
             </div>
             {infoGen && (
               <div style={{ ...S.card, marginBottom: 14 }}>
-                <p style={S.lbl}>ℹ️ {t.infoGenLabel}</p>
+                <p style={{ ...S.lbl, display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="info" size={13} color={B.mid} />{t.infoGenLabel}</p>
                 <p style={{ ...ir(400, 14), color: B.dark, whiteSpace: 'pre-wrap', lineHeight: 1.7 }}>{infoGen}</p>
               </div>
             )}
             {infoNotes && (
               <div style={{ ...S.card, marginBottom: 14, borderLeft: `4px solid ${B.laranja}` }}>
-                <p style={S.lbl}>📌 {t.infoNotesLabel}</p>
+                <p style={{ ...S.lbl, display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="lightbulb" size={13} color={B.laranja} />{t.infoNotesLabel}</p>
                 <p style={{ ...ir(400, 14), color: B.dark, whiteSpace: 'pre-wrap', lineHeight: 1.7 }}>{infoNotes}</p>
               </div>
             )}
@@ -437,7 +437,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         {/* Journey tab */}
         {tab === 'journey' && !journey && (
           <div style={{ padding: '60px 20px', textAlign: 'center' }}>
-            <span style={{ fontSize: 48 }}>🗺️</span>
+            <Icon name="map" size={48} color={B.border} />
             <p style={{ ...pp(700, 16), color: B.dark, marginTop: 16, marginBottom: 8 }}>
               {lang === 'pt' ? 'Nenhuma jornada atribuída ainda' : 'No journey assigned yet'}
             </p>
@@ -499,13 +499,13 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                         </div>
                         <div style={{ flex: 1 }}>
                           <p style={{ ...ir(600, 13), color: done ? B.light : B.dark, textDecoration: done ? 'line-through' : 'none' }}>{displayText}</p>
-                          {hint && !done && <p style={{ ...ir(400, 10.5), color: simpleLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 3, fontStyle: 'italic' }}>{simpleLevel === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
+                          {hint && !done && <p style={{ ...ir(400, 10.5), color: simpleLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 3, fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 4 }}><Icon name={simpleLevel === 'advanced' ? 'trendingUp' : 'lightbulb'} size={10} color={simpleLevel === 'advanced' ? B.oliva : B.laranja} />{hint}</p>}
                           {task.link && !done && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 11), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{lang === 'pt' ? 'Acessar recurso' : 'Open resource'}</a>}
                           {r && (() => { const v = !!visited[r.url]; return <a href={r.url} target="_blank" rel="noreferrer" onClick={e => { e.stopPropagation(); markVisited(r.url) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: v ? '#eef2eb' : B.bege, borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: v ? B.oliva : B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${v ? B.oliva + '55' : B.border}`, marginTop: 5 }}>{v ? '✓' : TYPE_ICON[r.type]} {r.label}</a> })()}
                           {taskActs.length > 0 && (
                             <button onClick={e => { e.stopPropagation(); setActModal({ taskId: task.id, acts: taskActs, taskText: displayText, context: taskCtx }) }}
                               style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 6, padding: '5px 11px', borderRadius: 20, border: `1.5px solid ${actScore !== undefined ? B.oliva : B.laranja}`, background: actScore !== undefined ? '#eef2eb' : B.laranja + '15', cursor: 'pointer', fontSize: 11, fontWeight: 700, fontFamily: 'Poppins,sans-serif', color: actScore !== undefined ? B.oliva : B.laranja }}>
-                              🎯 {lang === 'pt' ? 'Atividades' : 'Activities'}{actScore !== undefined ? ` · ${actScore}%` : ` (${taskActs.length})`}
+                              <Icon name="target" size={12} color={actScore !== undefined ? B.oliva : B.laranja} />{lang === 'pt' ? 'Atividades' : 'Activities'}{actScore !== undefined ? ` · ${actScore}%` : ` (${taskActs.length})`}
                             </button>
                           )}
                         </div>

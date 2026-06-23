@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { B } from '../constants/colors'
 import { ir, pp } from '../constants/styles'
+import Icon from './Icon'
 
 const TYPE_LABELS = {
   mc:        { en: 'Multiple Choice',   pt: 'Múltipla Escolha' },
@@ -198,7 +199,7 @@ function ActivityItem({ act, lang, onNext, isLast, onResult }) {
         ) : (
           <>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, flex: 1 }}>
-              <span style={{ fontSize: 22, lineHeight: 1 }}>{correct ? '🎉' : '💪'}</span>
+              <Icon name={correct ? 'star' : 'repeat'} size={22} color={correct ? '#059669' : B.laranja} />
               <div>
                 <p style={{ fontWeight: 700, fontSize: 13, fontFamily: 'Inter,sans-serif', color: correct ? '#059669' : '#dc2626' }}>
                   {correct
@@ -211,8 +212,8 @@ function ActivityItem({ act, lang, onNext, isLast, onResult }) {
                   </p>
                 )}
                 {act.hint && (
-                  <p style={{ fontSize: 12, fontFamily: 'Inter,sans-serif', color: B.mid, marginTop: 4, lineHeight: 1.5, fontStyle: 'italic' }}>
-                    📌 {act.hint}
+                  <p style={{ fontSize: 12, fontFamily: 'Inter,sans-serif', color: B.mid, marginTop: 4, lineHeight: 1.5, fontStyle: 'italic', display: 'flex', alignItems: 'flex-start', gap: 5 }}>
+                    <Icon name="lightbulb" size={12} color={B.mid} style={{ marginTop: 2, flexShrink: 0 }} />{act.hint}
                   </p>
                 )}
               </div>
@@ -260,8 +261,8 @@ export default function ActivityModal({ acts, lang, taskText, context, onClose, 
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
           <div style={{ flex: 1, marginRight: 12 }}>
-            <p style={{ fontWeight: 700, fontSize: 15, fontFamily: 'Poppins,sans-serif', color: B.dark }}>
-              🎯 {lang === 'pt' ? 'Atividades' : 'Activities'}
+            <p style={{ fontWeight: 700, fontSize: 15, fontFamily: 'Poppins,sans-serif', color: B.dark, display: 'flex', alignItems: 'center', gap: 7 }}>
+              <Icon name="target" size={16} color={B.laranja} />{lang === 'pt' ? 'Atividades' : 'Activities'}
             </p>
             <p style={{ fontSize: 11, fontFamily: 'Inter,sans-serif', color: B.light, marginTop: 2, lineHeight: 1.4 }}>{taskText}</p>
           </div>
@@ -274,8 +275,8 @@ export default function ActivityModal({ acts, lang, taskText, context, onClose, 
         {/* Context panel (shown before first question) */}
         {showContext && context && !done && (
           <div style={{ background: `linear-gradient(135deg, ${B.laranja}18, ${B.marrom}08)`, border: `1.5px solid ${B.laranja}44`, borderRadius: 14, padding: 18, marginBottom: 16 }}>
-            <p style={{ fontWeight: 700, fontSize: 13, fontFamily: 'Poppins,sans-serif', color: B.marrom, marginBottom: 8 }}>
-              📖 {lang === 'pt' ? 'Antes de começar' : 'Before you start'}
+            <p style={{ fontWeight: 700, fontSize: 13, fontFamily: 'Poppins,sans-serif', color: B.marrom, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 7 }}>
+              <Icon name="bookOpen" size={14} color={B.marrom} />{lang === 'pt' ? 'Antes de começar' : 'Before you start'}
             </p>
             <p style={{ fontSize: 13, fontFamily: 'Inter,sans-serif', color: B.dark, lineHeight: 1.7 }}>{context}</p>
             <button onClick={() => setShowContext(false)}
@@ -312,7 +313,7 @@ export default function ActivityModal({ acts, lang, taskText, context, onClose, 
 
         {done && (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <div style={{ fontSize: 56, marginBottom: 16 }}>{score >= 80 ? '🏆' : score >= 60 ? '👏' : '💪'}</div>
+            <div style={{ marginBottom: 16 }}><Icon name={score >= 80 ? 'trophy' : score >= 60 ? 'award' : 'repeat'} size={52} color={score >= 80 ? '#D97706' : score >= 60 ? B.oliva : B.laranja} /></div>
             <p style={{ fontWeight: 800, fontSize: 32, fontFamily: 'Poppins,sans-serif', color: B.dark, marginBottom: 4 }}>{score}%</p>
             <p style={{ fontSize: 14, fontFamily: 'Inter,sans-serif', color: B.mid, marginBottom: 8 }}>
               {results.filter(Boolean).length}/{results.length} {lang === 'pt' ? 'corretas' : 'correct'}
