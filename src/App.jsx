@@ -112,7 +112,8 @@ export default function App() {
     try {
       for (const s of courseStudents) {
         if ((s.email || '').trim().toLowerCase() === u) {
-          if (await checkPassword(p, s.password)) {
+          const storedPwd = db[`pwd_${s.id}`] || s.password
+          if (await checkPassword(p, storedPwd)) {
             if (!s.active) { setCourseLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
             setId(s.id); setView('course'); setCourseLoginErr(''); return
           }
