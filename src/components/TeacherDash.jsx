@@ -485,7 +485,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
               return (
                 <div key={s.id} style={{ ...S.card, marginBottom: 10 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-                    <Avatar seed={s.avatar || 'Lily'} size={44} />
+                    <Avatar seed={db[`avatar_${s.id}`] || s.avatar || 'Lily'} size={44} />
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                         <p style={{ ...pp(600, 14), color: B.dark }}>{s.name}</p>
@@ -627,7 +627,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                     </div>
                     {students.filter(s => s.active === false).map(s => (
                       <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', background: B.white, borderRadius: 12, marginBottom: 8, border: `1px solid ${B.border}`, flexWrap: 'wrap' }}>
-                        <Avatar seed={s.avatar || 'Lily'} size={36} />
+                        <Avatar seed={db[`avatar_${s.id}`] || s.avatar || 'Lily'} size={36} />
                         <div style={{ flex: 1, minWidth: 120 }}>
                           <p style={{ ...pp(600, 13), color: B.dark }}>{s.name}</p>
                           <p style={{ ...ir(400, 11), color: B.light }}>{s.email} · {s.phone}</p>
@@ -656,7 +656,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                   const lm = lvMeta(s.id), jrn = journeyOf(s.id)
                   return (
                     <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px', borderRadius: 14, border: `1.5px solid ${B.border}`, background: B.white, cursor: 'pointer', marginBottom: 8 }} onClick={() => { setSel(s.id); setDtab('level'); setJWeek(1) }}>
-                      <Avatar seed={s.avatar} size={44} />
+                      <Avatar seed={db[`avatar_${s.id}`] || s.avatar} size={44} />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                           <p style={{ ...pp(600, 14), color: B.dark }}>{s.name}</p>
@@ -685,7 +685,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                 </div>
 
                 <div style={{ ...S.card, display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16, flexWrap: 'wrap' }}>
-                  <Avatar seed={selS.avatar} size={56} />
+                  <Avatar seed={db[`avatar_${selS.id}`] || selS.avatar} size={56} />
                   <div style={{ flex: 1 }}>
                     <h2 style={{ ...pp(800, 18), color: B.dark }}>{selS.name}</h2>
                     <p style={{ ...ir(400, 12), color: B.mid, marginTop: 2 }}>@{selS.username} · {lvMeta(selS.id).level} · {pctOf(selS.id)}%</p>
@@ -701,8 +701,8 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                       {['Lily','Felix','Zoe','Leo','Mia','Finn','Aria','Kai','Nova','Eli','Luna','Ash'].map(seed => (
                         <img key={seed} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
                           width={32} height={32} alt={seed}
-                          onClick={() => upDb({ students: students.map(s => s.id === selS.id ? { ...s, avatar: seed } : s) })}
-                          style={{ borderRadius: '50%', cursor: 'pointer', border: selS.avatar === seed ? `2.5px solid ${B.laranja}` : '2px solid transparent', background: '#f0ebe4' }} />
+                          onClick={() => upDb({ [`avatar_${selS.id}`]: seed })}
+                          style={{ borderRadius: '50%', cursor: 'pointer', border: (db[`avatar_${selS.id}`] || selS.avatar) === seed ? `2.5px solid ${B.laranja}` : '2px solid transparent', background: '#f0ebe4' }} />
                       ))}
                     </div>
                   </div>

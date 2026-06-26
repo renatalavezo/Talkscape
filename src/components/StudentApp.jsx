@@ -7,7 +7,7 @@ import { STUDY_HABITS, HW_HABITS } from '../constants/habits'
 import { todayStr, weekDays, hashPassword } from '../utils'
 import Logo from './Logo'
 import Avatar from './Avatar'
-import { AVATARS } from '../constants/avatars'
+import AvatarBuilder from './AvatarBuilder'
 import CalSection from './CalSection'
 import Icon from './Icon'
 import { JOURNEY_MAP } from '../constants/journeys'
@@ -26,7 +26,8 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
   const [tourStep, setTourStep] = useState(0)
   const [actModal, setActModal] = useState(null) // { taskId, acts, taskText, context }
 
-  const student   = students.find(s => s.id === sid) || { name: '?', avatar: '🎒' }
+  const student   = students.find(s => s.id === sid) || { name: '?', avatar: 'Lily' }
+  const myAvatar  = db[`avatar_${sid}`] || student.avatar || 'Lily'
   const lvl       = db[`lv_${sid}`] || 'A1'
   const lvm       = CEFR_META.find(c => c.level === lvl) || CEFR_META[0]
   const plan      = PLAN[lvl] || []
@@ -213,7 +214,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
             )}
             {/* Hero */}
             <div style={{ background: `linear-gradient(135deg,${B.marrom},${B.laranja} 60%,${B.rosa})`, borderRadius: 20, padding: '22px 20px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-              <Avatar seed={student.avatar || 'Lily'} size={64} />
+              <Avatar seed={myAvatar} size={64} />
               <div style={{ flex: 1, minWidth: 140 }}>
                 <p style={{ ...pp(800, 18), color: '#fff', marginBottom: 4 }}>{lang === 'pt' ? `Olá, ${student.name}!` : `Hi, ${student.name}!`}</p>
                 <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.75)', marginBottom: 12 }}>{lang === 'pt' ? 'Continue sua jornada com Teacher Renata' : 'Continue your journey with Teacher Renata'}</p>
@@ -389,21 +390,11 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
           <div style={{ padding: '20px 14px', maxWidth: 660, margin: '0 auto' }}>
             <h2 style={{ ...pp(700, 17), color: B.dark, marginBottom: 18 }}>{t.yourInfo}</h2>
 
-            {/* Avatar picker */}
+            {/* Avatar builder */}
             <div style={{ ...S.card, marginBottom: 14 }}>
-              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="smile" size={15} color={B.laranja} />{lang === 'pt' ? 'Seu avatar' : 'Your avatar'}</p>
-              <p style={{ ...ir(400, 12), color: B.light, marginBottom: 12 }}>{lang === 'pt' ? 'Escolha um personagem para te representar' : 'Choose a character to represent you'}</p>
-              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
-                <Avatar seed={student.avatar || 'Lily'} size={72} />
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
-                {AVATARS.map(seed => (
-                  <button key={seed} onClick={() => upDb({ students: students.map(s => s.id === sid ? { ...s, avatar: seed } : s) })}
-                    style={{ borderRadius: '50%', cursor: 'pointer', border: student.avatar === seed ? `3px solid ${B.laranja}` : '2px solid transparent', background: '#f0ebe4', padding: 2, transition: 'all 0.15s' }}>
-                    <Avatar seed={seed} size={40} />
-                  </button>
-                ))}
-              </div>
+              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="smile" size={15} color={B.laranja} />{lang === 'pt' ? 'Crie seu avatar' : 'Create your avatar'}</p>
+              <p style={{ ...ir(400, 12), color: B.light, marginBottom: 16 }}>{lang === 'pt' ? 'Personalize cada detalhe do seu personagem' : 'Customize every detail of your character'}</p>
+              <AvatarBuilder value={myAvatar} lang={lang} onSave={cfg => upDb({ [`avatar_${sid}`]: cfg })} />
             </div>
             <div style={{ ...S.card, marginBottom: 14, borderLeft: `4px solid ${B.laranja}` }}>
               <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="key" size={15} color={B.laranja} />{lang === 'pt' ? 'Alterar senha' : 'Change password'}</p>

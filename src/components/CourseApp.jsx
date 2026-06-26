@@ -5,6 +5,7 @@ import { JOURNEY_MAP } from '../constants/journeys'
 import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 import { DEFAULT_ACTIVITIES } from '../constants/defaultActivities'
 import Avatar from './Avatar'
+import AvatarBuilder from './AvatarBuilder'
 import Icon from './Icon'
 import Logo from './Logo'
 import ActivityModal from './ActivityModal'
@@ -22,6 +23,8 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
 
   const student = courseStudents.find(s => s.id === sid)
   if (!student) return null
+
+  const myAvatar = db[`avatar_${sid}`] || student.avatar || 'Lily'
 
   const jids = student.jids || (student.jid ? [student.jid] : [])
   const jid = selJid && jids.includes(selJid) ? selJid : jids[0] || null
@@ -70,7 +73,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
         <Logo h={40} contrast />
         <div style={{ flex: 1 }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Avatar seed={student.avatar || 'Lily'} size={34} />
+          <Avatar seed={myAvatar} size={34} />
           <p style={{ ...pp(600, 13), color: '#fff' }}>{firstName}</p>
           {student.level && (
             <span style={{ background: 'rgba(255,255,255,0.2)', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#fff', fontFamily: 'Poppins,sans-serif' }}>
@@ -416,6 +419,11 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
         {/* Perfil tab */}
         {tab === 'perfil' && (
           <div style={{ padding: 16, maxWidth: 480, margin: '0 auto' }}>
+            <div style={{ ...S.card, marginBottom: 14 }}>
+              <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="smile" size={15} color={B.laranja} />{lang === 'pt' ? 'Crie seu avatar' : 'Create your avatar'}</p>
+              <p style={{ ...ir(400, 12), color: B.light, marginBottom: 16 }}>{lang === 'pt' ? 'Personalize cada detalhe do seu personagem' : 'Customize every detail of your character'}</p>
+              <AvatarBuilder value={myAvatar} lang={lang} onSave={cfg => upDb({ [`avatar_${sid}`]: cfg })} />
+            </div>
             <div style={{ ...S.card, marginBottom: 14, borderLeft: `4px solid ${B.laranja}` }}>
               <p style={{ ...pp(600, 14), color: B.dark, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="key" size={15} color={B.laranja} />{lang === 'pt' ? 'Alterar senha' : 'Change password'}</p>
               <input type="password" style={S.inp} placeholder={lang === 'pt' ? 'Nova senha (mín. 6 caracteres)' : 'New password (min. 6 chars)'}
