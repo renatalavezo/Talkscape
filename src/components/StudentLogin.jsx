@@ -9,12 +9,9 @@ export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, 
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
           <Logo h={52} />
         </div>
-        <h2 style={{ ...pp(700, 18), color: B.dark, marginBottom: 4, textAlign: 'center' }}>
+        <h2 style={{ ...pp(700, 18), color: B.dark, marginBottom: 28, textAlign: 'center' }}>
           {lang === 'pt' ? 'Entrar' : 'Sign in'}
         </h2>
-        <p style={{ ...ir(400, 13), color: B.light, textAlign: 'center', marginBottom: 28 }}>
-          {lang === 'pt' ? 'Aluna particular ou das Jornadas — mesma tela!' : 'Private or Journey student — same screen!'}
-        </p>
 
         <div style={{ marginBottom: 12 }}>
           <label style={S.lbl}>Email</label>

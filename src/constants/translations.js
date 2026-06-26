@@ -2,7 +2,7 @@ export const TR = {
   pt: {
     teacherName: 'Teacher Renata',
     who: 'Quem é você?', teacher: 'Professora', student: 'Aluno(a)',
-    passLabel: 'Senha da professora', passHint: 'Demo: teacher123',
+    passLabel: 'Senha da professora', passHint: 'Acesso restrito',
     enter: 'Entrar', wrongPass: 'Senha incorreta.',
     dashTitle: 'Painel — Teacher Renata', stCount: 'alunos',
     addSt: '+ Novo aluno', stPh: 'Nome do aluno', userPh: 'Usuário (login)', passSt: 'Senha do aluno',
@@ -64,7 +64,7 @@ export const TR = {
   en: {
     teacherName: 'Teacher Renata',
     who: 'Who are you?', teacher: 'Teacher', student: 'Student',
-    passLabel: 'Teacher password', passHint: 'Demo: teacher123',
+    passLabel: 'Teacher password', passHint: 'Restricted access',
     enter: 'Enter', wrongPass: 'Wrong password.',
     dashTitle: 'Dashboard — Teacher Renata', stCount: 'students',
     addSt: '+ New student', stPh: 'Student name', userPh: 'Username (login)', passSt: 'Student password',
