@@ -184,7 +184,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
 
   const sorted = [...students]
     .filter(s => s.name.toLowerCase().includes(q.toLowerCase()))
-    .sort((a, b) => sort === 'name' ? a.name.localeCompare(b.name) : pctOf(b.id) - pctOf(a.id))
+    .sort((a, b) => a.name.localeCompare(b.name))
 
   const journeyOf = sid => db[`jrn_${sid}`] ? JOURNEY_MAP[db[`jrn_${sid}`]] : null
 
@@ -315,7 +315,6 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
           {[
             ['students', <><Icon name="students" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Alunos' : 'Students'}</>],
             ['calendar', <><Icon name="calendar" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Agenda' : 'Calendar'}</>],
-            ['bank',     <><Icon name="star" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Banco' : 'Bank'}</>],
             ['course',   (() => { const n = (courseStudents||[]).reduce((acc,s) => acc + ((db[`cq_${s.id}`]||[]).filter(q=>!q.answer).length), 0); return <><Icon name="star" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Curso' : 'Course'}{n > 0 && <span style={{ background: '#ef4444', borderRadius: '50%', width: 16, height: 16, fontSize: 9, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginLeft: 4 }}>{n}</span>}</> })()],
             ['journeys', <><Icon name="map" size={12} color="#fff" />&nbsp;{lang === 'pt' ? 'Jornadas' : 'Journeys'}</>],
           ].map(([k, lb]) => (
@@ -331,52 +330,6 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
 
       {section === 'calendar'
         ? <CalSection t={t} lang={lang} db={db} upDb={upDb} isTeacher sid={null} />
-        : section === 'bank'
-        ? (
-          <div style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', maxWidth: 820, margin: '0 auto' }}>
-            <div style={{ ...S.card, marginBottom: 20 }}>
-              <p style={{ ...S.lbl, display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="add" size={13} color={B.mid} />{lang === 'pt' ? 'Adicionar ao banco' : 'Add to bank'}</p>
-              <input style={{ ...S.inp, marginBottom: 6, fontSize: 13 }} placeholder="Atividade (English)" value={bankEn} onChange={e => setBankEn(e.target.value)} />
-              <input style={{ ...S.inp, marginBottom: 6, fontSize: 13 }} placeholder="Tradução (Português)" value={bankPt} onChange={e => setBankPt(e.target.value)} />
-              <div style={{ position: 'relative', marginBottom: 6 }}>
-                <Icon name="link" size={13} color={B.light} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)' }} />
-                <input style={{ ...S.inp, fontSize: 13, paddingLeft: 30 }} placeholder="Link (opcional)" value={bankLink} onChange={e => setBankLink(e.target.value)} />
-              </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <select style={{ ...S.inp, flex: 1, fontSize: 13 }} value={bankCat} onChange={e => setBankCat(e.target.value)}>
-                  {Object.entries(CAT).map(([k, v]) => <option key={k} value={k}>{lang === 'pt' ? v.pt : v.en}</option>)}
-                </select>
-                <button style={{ ...S.btn(B.oliva), display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => {
-                  if (!bankEn.trim()) return
-                  upDb({ activityBank: [...(db.activityBank || []), { id: `bk${Date.now()}`, en: bankEn.trim(), pt: bankPt.trim() || bankEn.trim(), cat: bankCat, link: bankLink.trim() || null }] })
-                  setBankEn(''); setBankPt(''); setBankLink('')
-                }}><Icon name="save" size={15} color="#fff" />{lang === 'pt' ? 'Salvar' : 'Save'}</button>
-              </div>
-            </div>
-            {(db.activityBank || []).length === 0 && (
-              <div style={{ textAlign: 'center', padding: '40px 0' }}>
-                <Icon name="star" size={48} color={B.border} />
-                <p style={{ ...ir(400, 14), color: B.light, marginTop: 12 }}>{lang === 'pt' ? 'Banco vazio. Adicione atividades favoritas!' : 'Empty bank. Add your favorite activities!'}</p>
-              </div>
-            )}
-            {(db.activityBank || []).map(item => {
-              const cm = CAT[item.cat] || CAT.grammar
-              return (
-                <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '12px 14px', background: B.white, borderRadius: 12, border: `1.5px solid ${B.border}`, marginBottom: 8 }}>
-                  <span style={S.pill(cm.bg, cm.tx)}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</span>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ ...ir(600, 13), color: B.dark }}>{item.en}</p>
-                    <p style={{ ...ir(400, 11), color: B.light, fontStyle: 'italic' }}>{item.pt}</p>
-                    {item.link && <a href={item.link} target="_blank" rel="noreferrer" style={{ ...ir(400, 11), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}><Icon name="link" size={10} color={B.laranja} />{item.link}</a>}
-                  </div>
-                  <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => upDb({ activityBank: (db.activityBank || []).filter(x => x.id !== item.id) })}>
-                    <Icon name="delete" size={13} color="#DC2626" />
-                  </button>
-                </div>
-              )
-            })}
-          </div>
-        )
         : section === 'journeys'
         ? (
           <div style={{ flex: 1, overflowY: 'auto', padding: '16px 14px', maxWidth: 960, margin: '0 auto' }}>
@@ -692,21 +645,15 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                     ))}
                   </div>
                 )}
-                <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+                <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
                   <div style={{ flex: 1, position: 'relative' }}>
                     <Icon name="search" size={15} color={B.light} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }} />
                     <input style={{ ...S.inp, paddingLeft: 34, fontSize: 13 }} placeholder={t.searchPh} value={q} onChange={e => setQ(e.target.value)} />
                   </div>
-                  <button style={{ ...S.btn(B.oliva), padding: '9px 14px', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => setShowAdd(true)}><Icon name="add" size={15} color="#fff" />{t.addSt}</button>
-                </div>
-                <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
-                  {[['name', t.sortName], ['progress', t.sortProg]].map(([k, lb]) => (
-                    <button key={k} style={{ ...S.chip, flex: 1, background: sort === k ? B.marrom : B.bege, color: sort === k ? '#fff' : B.mid, fontSize: 12 }} onClick={() => setSort(k)}>{lb}</button>
-                  ))}
                 </div>
                 {sorted.length === 0 && <p style={{ ...ir(400, 14), color: B.light, textAlign: 'center', padding: '32px 0' }}>{t.noSt}</p>}
                 {sorted.map(s => {
-                  const pct = pctOf(s.id), lm = lvMeta(s.id), jrn = journeyOf(s.id)
+                  const lm = lvMeta(s.id), jrn = journeyOf(s.id)
                   return (
                     <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px', borderRadius: 14, border: `1.5px solid ${B.border}`, background: B.white, cursor: 'pointer', marginBottom: 8 }} onClick={() => { setSel(s.id); setDtab('level'); setJWeek(1) }}>
                       <Avatar seed={s.avatar} size={44} />
@@ -716,11 +663,9 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                           {jrn && <span style={{ fontSize: 10, background: jrn.color + '22', color: jrn.color, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif', border: `1px solid ${jrn.color}44` }}>{jrn.icon} {lang === 'pt' ? jrn.pt : jrn.en}</span>}
                           {(() => { const sl = SIMPLE_LEVEL[lm.level]; return sl ? <span style={{ fontSize: 10, background: '#e8f4fd', color: '#2563eb', borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{SIMPLE_LABEL[sl]}</span> : null })()}
                         </div>
-                        <p style={{ ...ir(400, 11), color: B.light }}>@{s.username}</p>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
                           <span style={{ fontSize: 10, background: lm.color, color: lm.text, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{lm.level}</span>
-                          <div style={{ flex: 1, height: 4, background: B.bege, borderRadius: 99, overflow: 'hidden' }}><div style={{ height: '100%', width: `${pct}%`, background: B.marrom, borderRadius: 99 }} /></div>
-                          <span style={{ ...pp(700, 12), color: B.marrom }}>{pct}%</span>
+                          <p style={{ ...ir(400, 11), color: B.light }}>@{s.username}</p>
                         </div>
                       </div>
                       <Icon name="next" size={20} color={B.light} />
