@@ -254,34 +254,6 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
               </div>
             </div>
 
-            {/* Can-do statements */}
-            <p style={{ ...pp(700, 16), color: B.dark, marginBottom: 14 }}>{t.canDoTitle}</p>
-            {CEFR_META.map((c, i) => {
-              const lvIdx = CEFR_META.findIndex(x => x.level === lvl)
-              const unlocked = i <= lvIdx, isCur = c.level === lvl
-              return (
-                <div key={c.level} style={{ borderRadius: 14, border: `2px solid ${unlocked ? c.color : B.border}`, background: isCur ? `${c.color}14` : unlocked ? B.white : B.cream, opacity: unlocked ? 1 : 0.45, overflow: 'hidden', marginBottom: 12 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: isCur ? c.color : unlocked ? `${c.color}18` : 'transparent' }}>
-                    <span style={{ fontSize: 22 }}>{c.icon}</span>
-                    <div style={{ flex: 1 }}>
-                      <p style={{ ...pp(700, 13), color: isCur ? c.text : B.dark }}>{c.level} — {c.label[lang]}</p>
-                      {isCur && <p style={{ ...ir(500, 10), color: isCur ? c.text : B.light, opacity: 0.8, marginTop: 2 }}>{t.currentLevel}</p>}
-                    </div>
-                    <Icon name={unlocked ? 'checkCircle' : 'lock'} size={16} color={unlocked ? '#059669' : B.border} />
-                  </div>
-                  {unlocked && (
-                    <div style={{ padding: '12px 16px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: 6 }}>
-                      {c.canDo[lang].map((item, j) => (
-                        <div key={j} style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
-                          <Icon name="check" size={11} color={c.color} style={{ flexShrink: 0, marginTop: 2 }} />
-                          <p style={{ ...ir(400, 12), color: B.dark }}>{item}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
           </div>
         )}
 
@@ -389,6 +361,24 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         {tab === 'info' && (
           <div style={{ padding: '20px 14px', maxWidth: 660, margin: '0 auto' }}>
             <h2 style={{ ...pp(700, 17), color: B.dark, marginBottom: 18 }}>{t.yourInfo}</h2>
+
+            {/* Meu nível */}
+            <div style={{ ...S.card, marginBottom: 14, padding: 0, overflow: 'hidden' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '16px 18px', background: lvm.color }}>
+                <span style={{ fontSize: 30 }}>{lvm.icon}</span>
+                <div style={{ flex: 1 }}>
+                  <p style={{ ...ir(600, 11), color: lvm.text, opacity: 0.85, textTransform: 'uppercase', letterSpacing: 0.6 }}>{lang === 'pt' ? 'Meu nível' : 'My level'}</p>
+                  <p style={{ ...pp(800, 20), color: lvm.text }}>{lvm.level} · {lvm.label[lang]}</p>
+                </div>
+              </div>
+              <div style={{ padding: '14px 18px' }}>
+                <p style={{ ...ir(400, 13), color: B.mid, lineHeight: 1.65 }}>
+                  {lang === 'pt'
+                    ? `Teacher Renata definiu seu nível atual como ${lvm.level}. Conforme você evolui, ele é atualizado para refletir seu progresso no inglês.`
+                    : `Teacher Renata set your current level as ${lvm.level}. As you progress, it gets updated to reflect your English journey.`}
+                </p>
+              </div>
+            </div>
 
             {/* Avatar builder */}
             <div style={{ ...S.card, marginBottom: 14 }}>
