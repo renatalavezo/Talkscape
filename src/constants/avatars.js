@@ -8,7 +8,12 @@ export const AVATARS = [
 // Customization options for the avatar builder (DiceBear "adventurer" style)
 export const AVATAR_OPTIONS = {
   skinColor:       ['f2d3b1','ecad80','ffdbb4','e5a073','9e5622','763900','614335'],
-  hair:            ['short01','short02','short05','short08','short11','short16','short19','long01','long07','long10','long13','long15','long19','long20','long25'],
+  hair:            [
+    'short01','short02','short03','short04','short05','short06','short07','short08','short09','short10',
+    'short11','short12','short13','short14','short15','short16','short17','short18','short19',
+    'long01','long02','long03','long04','long05','long06','long07','long08','long09','long10','long11','long12','long13',
+    'long14','long15','long16','long17','long18','long19','long20','long21','long22','long23','long24','long25','long26',
+  ],
   hairColor:       ['0e0e0e','3a2317','562306','6a4e35','ac6511','cb6820','e5d7a3','b55239','afafaf','dba3be'],
   eyes:            ['variant01','variant04','variant07','variant09','variant12','variant16','variant21','variant26'],
   eyebrows:        ['variant01','variant05','variant08','variant10','variant12','variant15'],
