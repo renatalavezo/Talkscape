@@ -82,9 +82,9 @@ const TESTIMONIALS = [
 ]
 
 const DIFFERENTIALS = [
-  { icon: 'target', title: 'Verdadeiramente personalizado', text: 'Cada aluna percorre um caminho único, construído a partir do seu ritmo, dos seus objetivos e da sua história. Não existe receita pronta aqui — o que funciona para uma pessoa pode não funcionar para outra, e isso é respeitado desde o primeiro encontro.' },
-  { icon: 'feedback', title: 'Inglês como prática social', text: 'Aprender uma língua vai muito além de memorizar gramática. O foco é desenvolver a sua capacidade de se expressar e pensar em inglês de forma genuína, com contexto e propósito — não apenas para passar em testes.' },
-  { icon: 'progress', title: 'Evolução acompanhada de perto', text: 'Com o TalkScape, você visualiza seu progresso semana a semana, de forma concreta e transparente. Chega aquela sensação de estar estudando sem sair do lugar — aqui cada etapa é registrada e celebrada.' },
+  { icon: 'target', title: 'Verdadeiramente personalizado', text: 'Cada aluna percorre um caminho único, construído a partir do seu ritmo, dos seus objetivos e da sua história. Não existe receita pronta aqui. O que funciona para uma pessoa pode não funcionar para outra, e isso é respeitado desde o primeiro encontro.' },
+  { icon: 'feedback', title: 'Inglês como prática social', text: 'Aprender uma língua vai muito além de memorizar gramática. O foco é desenvolver a sua capacidade de se expressar e pensar em inglês de forma genuína, com contexto e propósito, não apenas para passar em testes.' },
+  { icon: 'progress', title: 'Evolução acompanhada de perto', text: 'Com o TalkScape, você visualiza seu progresso semana a semana, de forma concreta e transparente. Chega aquela sensação de estar estudando sem sair do lugar. Aqui cada etapa é registrada e celebrada.' },
 ]
 
 const PlanCard = ({ plan, isDuo = false, onStudent, onCourse }) => (
@@ -206,10 +206,12 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
             {/* AULA PARTICULAR — link para forms */}
             {tipo === 'particular' && (
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 44, marginBottom: 12 }}>👩‍🏫</div>
+                <div style={{ width: 64, height: 64, borderRadius: '50%', background: B.larBg, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+                  <Icon name="graduation" size={32} color={B.laranja} />
+                </div>
                 <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 700, fontSize: 16, color: '#2c1810', marginBottom: 8 }}>Aulas particulares com Teacher Renata</p>
                 <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 13, color: '#8a7060', lineHeight: 1.65, marginBottom: 24 }}>
-                  Preencha o formulário e em breve Teacher Renata entra em contato para marcar sua primeira aula! 💬
+                  Preencha o formulário e em breve Teacher Renata entra em contato para marcar sua primeira aula!
                 </p>
                 <a href={FORMS_LINK} target="_blank" rel="noreferrer"
                   style={{ display: 'block', width: '100%', padding: '14px', background: '#d46427', borderRadius: 12, color: '#fff', fontSize: 15, fontWeight: 700, fontFamily: 'Poppins,sans-serif', textDecoration: 'none', boxSizing: 'border-box', marginBottom: 12 }}>
@@ -298,13 +300,19 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
             <p style={{ ...ir(600, 13), color: B.laranja, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Sobre a professora</p>
             <h2 style={{ ...pp(800, 28), color: B.dark, marginBottom: 16 }}>Oi, eu sou a Renata!</h2>
             <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 16 }}>
-              Professora há 6 anos, construí minha trajetória em diferentes contextos de ensino até perceber que o modelo tradicional raramente coloca a aluna no centro do processo. Foi a partir dessa inquietação que nasceu o TalkScape: um espaço de aprendizado personalizado, sem fórmulas prontas e sem pressão desnecessária.
+              Professora desde antes de saber escrever, meus olhos sempre brilharam pelo ensinar quando nas brincadeiras infantis havia apenas uma lousa com giz e alguns brinquedos me escutando.
+            </p>
+            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 16 }}>
+              Hoje, além de dar aulas, tenho a oportunidade de estudar e pesquisar sobre o inglês. Entender como essa língua é estruturada e, mais importante do que tudo, entender como podemos utilizá-la de forma crítica e reflexiva.
+            </p>
+            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 16 }}>
+              Criei o TalkScape pois não acredito que uma língua deve ser apenas falada, como muitas escolas pregam por aí. Aqui, a língua deve ser compreendida como meio de se expressar, compreender e criar novas conexões.
             </p>
             <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 24 }}>
-              Acredito que aprender inglês é, acima de tudo, uma prática social. Desenvolver uma língua significa aprender a se expressar, a pensar e a se conectar com o mundo através dela. Além das aulas, sou pesquisadora, estudo Letras na USP e sou mãe do Toffee e do Gato.
+              Ah, e por fim, tenho dois estagiários: a Toffee e o Gato. Eles estão ansiosos para te conhecer :)
             </p>
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              {['6 anos de experiência', 'Letras USP', 'Pesquisadora', 'Ensino personalizado'].map((tag, i) => (
+              {['Professora', 'Pesquisadora de inglês', 'Ensino crítico e reflexivo', 'Toffee & Gato'].map((tag, i) => (
                 <span key={i} style={{ background: B.larBg, color: B.larD, borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 600, fontFamily: 'Poppins,sans-serif' }}>{tag}</span>
               ))}
             </div>
@@ -333,14 +341,27 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
       <section style={{ background: `linear-gradient(135deg,${B.marrom}11,${B.laranja}11)`, border: `1.5px solid ${B.laranja}22`, padding: '72px 24px' }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{ background: B.laranja, color: '#fff', borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>✨ Novo</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: B.laranja, color: '#fff', borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}><Icon name="general" size={13} color="#fff" />Novo</span>
             <h2 style={{ ...pp(700, 28), color: B.dark, marginTop: 16, marginBottom: 8 }}>Jornada Digital</h2>
-            <p style={{ ...ir(400, 15), color: B.mid, maxWidth: 520, margin: '0 auto 16px' }}>12 semanas de inglês estruturado com suporte real da Renata — sem precisar de aula ao vivo.</p>
-            <div style={{ background: B.cream, borderRadius: 14, padding: '16px 20px', maxWidth: 480, margin: '0 auto', textAlign: 'left' }}>
-              <p style={{ ...pp(700, 13), color: B.dark, marginBottom: 6 }}>🗺️ O que é uma Jornada?</p>
-              <p style={{ ...ir(400, 13), color: B.mid, lineHeight: 1.65 }}>
-                Uma Jornada é um programa de estudo autônomo de 12 semanas, com atividades semanais de listening, speaking, gramática e vocabulário — tudo organizado dentro da plataforma TalkScape. Você estuda no seu ritmo, com o suporte da Renata sempre que precisar.
+            <p style={{ ...ir(400, 15), color: B.mid, maxWidth: 520, margin: '0 auto 28px', lineHeight: 1.6 }}>12 semanas de inglês estruturado com suporte real da Renata, sem precisar de aula ao vivo.</p>
+            <div style={{ background: B.white, borderRadius: 18, padding: '28px 26px', maxWidth: 520, margin: '0 auto', textAlign: 'left', border: `1.5px solid ${B.laranja}33`, boxShadow: `0 8px 30px ${B.laranja}12` }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: B.larBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Icon name="map" size={22} color={B.laranja} />
+                </div>
+                <p style={{ ...pp(700, 17), color: B.dark }}>O que é uma Jornada?</p>
+              </div>
+              <p style={{ ...ir(400, 14), color: B.mid, lineHeight: 1.75, marginBottom: 18 }}>
+                Um programa de estudo autônomo de 12 semanas, com atividades semanais organizadas dentro da plataforma TalkScape. Você estuda no seu ritmo, com o suporte da Renata sempre que precisar.
               </p>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                {[['listening', 'Listening'], ['speaking_j', 'Speaking'], ['grammar', 'Gramática'], ['vocab', 'Vocabulário']].map(([ic, lb], i) => (
+                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 9, background: B.cream, borderRadius: 10, padding: '10px 14px' }}>
+                    <Icon name={ic} size={16} color={B.laranja} />
+                    <p style={{ ...pp(600, 13), color: B.dark }}>{lb}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -378,7 +399,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
       </section>
       <section style={{ background: B.white, padding: '72px 24px' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <h2 style={{ ...pp(700, 28), color: B.dark, textAlign: 'center', marginBottom: 8 }}>Aulas particulares com Teacher Renata</h2>
+          <h2 style={{ ...pp(700, 28), color: B.dark, textAlign: 'center', marginBottom: 8 }}>Aulas particulares individuais</h2>
           <p style={{ ...ir(400, 15), color: B.mid, textAlign: 'center', marginBottom: 48 }}>Aulas individuais personalizadas para o seu ritmo e objetivo. Quanto mais tempo, mais você economiza.</p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
             {PLANS.map((plan, i) => <PlanCard key={i} plan={plan} onStudent={onStudent} onCourse={onCourse} />)}
@@ -390,7 +411,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
       <section style={{ padding: '72px 24px' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{ background: B.olivaBg, color: B.olivaD, borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>👯‍♀️ Para duplas</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: B.olivaBg, color: B.olivaD, borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}><Icon name="students" size={13} color={B.olivaD} />Para duplas</span>
             <h2 style={{ ...pp(700, 28), color: B.dark, marginTop: 16, marginBottom: 8 }}>Estudem juntas, economizem juntas</h2>
             <p style={{ ...ir(400, 15), color: B.mid }}>Todos os benefícios dos planos individuais com preço especial por aluna.</p>
           </div>
@@ -441,8 +462,9 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
                   ))}
                 </div>
               </div>
-              <a href={`${INSTAGRAM}?turma=general-english-iniciantes`} target="_blank" rel="noreferrer"
-                style={{ display: 'block', textAlign: 'center', padding: '14px', background: B.oliva, color: '#fff', borderRadius: 12, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif' }}>
+              <a href="https://wa.me/5511986704076?text=Olá%20Renata!%20Quero%20entrar%20na%20lista%20de%20espera%20da%20turma%20General%20English%20Iniciantes." target="_blank" rel="noreferrer"
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, textAlign: 'center', padding: '14px', background: B.oliva, color: '#fff', borderRadius: 12, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                 Quero entrar na lista de espera
               </a>
               <p style={{ ...ir(400, 11), color: B.mid, textAlign: 'center', marginTop: 8 }}>A turma abre quando completar 3 inscrições</p>
