@@ -70,7 +70,7 @@ const DUO_PLANS = [
   {
     name: 'Além do Horizonte', icon: '🏞️', color: B.marrom, highlight: false,
     hours: '3h/semana',
-    prices: [{ label: 'Valor cheio', price: 'R$ 675/aluna' }, { label: '6 meses', price: 'R$ 620/aluna' }, { label: '12 meses', price: 'R$ 590/aluna' }],
+    prices: [{ label: 'Valor cheio', price: 'R$ 675/aluna' }, { label: '3 meses', price: 'R$ 640/aluna' }, { label: '6 meses', price: 'R$ 620/aluna' }, { label: '12 meses', price: 'R$ 590/aluna' }],
     benefits: ['Todos os benefícios da Jornada a Dois', 'Relatório individual bimestral', 'Acesso prioritário à agenda'],
   },
 ]
@@ -299,23 +299,18 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           <div style={{ flex: 1, minWidth: 240 }}>
             <p style={{ ...ir(600, 13), color: B.laranja, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>Sobre a professora</p>
             <h2 style={{ ...pp(800, 28), color: B.dark, marginBottom: 16 }}>Oi, eu sou a Renata!</h2>
-            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 16 }}>
-              Professora desde antes de saber escrever, meus olhos sempre brilharam pelo ensinar quando nas brincadeiras infantis havia apenas uma lousa com giz e alguns brinquedos me escutando.
+            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.7, marginBottom: 12 }}>
+              <strong style={{ color: B.dark, fontWeight: 700 }}>Professora desde antes de saber escrever</strong>, meus olhos sempre brilharam pelo ensinar quando nas brincadeiras infantis havia apenas uma lousa com giz e alguns brinquedos me escutando.
             </p>
-            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 16 }}>
-              Hoje, além de dar aulas, tenho a oportunidade de estudar e pesquisar sobre o inglês. Entender como essa língua é estruturada e, mais importante do que tudo, entender como podemos utilizá-la de forma crítica e reflexiva.
+            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.7, marginBottom: 12 }}>
+              Hoje, além de dar aulas, tenho a oportunidade de estudar e pesquisar sobre o inglês. Entender como essa língua é estruturada e, mais importante do que tudo, entender como podemos <strong style={{ color: B.dark, fontWeight: 700 }}>utilizá-la de forma crítica e reflexiva</strong>.
             </p>
-            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 16 }}>
-              Criei o TalkScape pois não acredito que uma língua deve ser apenas falada, como muitas escolas pregam por aí. Aqui, a língua deve ser compreendida como meio de se expressar, compreender e criar novas conexões.
+            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.7, marginBottom: 12 }}>
+              Criei o TalkScape pois não acredito que uma língua deve ser apenas falada, como muitas escolas pregam por aí. Aqui, a língua deve ser compreendida como <strong style={{ color: B.dark, fontWeight: 700 }}>meio de se expressar, compreender e criar novas conexões</strong>.
             </p>
-            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.8, marginBottom: 24 }}>
-              Ah, e por fim, tenho dois estagiários: a Toffee e o Gato. Eles estão ansiosos para te conhecer :)
+            <p style={{ ...ir(400, 15), color: B.mid, lineHeight: 1.7 }}>
+              Ah, e por fim, tenho dois estagiários: a <strong style={{ color: B.dark, fontWeight: 700 }}>Toffee</strong> e o <strong style={{ color: B.dark, fontWeight: 700 }}>Gato</strong>. Eles estão ansiosos para te conhecer :)
             </p>
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              {['Professora', 'Pesquisadora de inglês', 'Ensino crítico e reflexivo', 'Toffee & Gato'].map((tag, i) => (
-                <span key={i} style={{ background: B.larBg, color: B.larD, borderRadius: 20, padding: '5px 14px', fontSize: 12, fontWeight: 600, fontFamily: 'Poppins,sans-serif' }}>{tag}</span>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -342,8 +337,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: B.laranja, color: '#fff', borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}><Icon name="general" size={13} color="#fff" />Novo</span>
-            <h2 style={{ ...pp(700, 28), color: B.dark, marginTop: 16, marginBottom: 8 }}>Jornada Digital</h2>
-            <p style={{ ...ir(400, 15), color: B.mid, maxWidth: 520, margin: '0 auto 28px', lineHeight: 1.6 }}>12 semanas de inglês estruturado com suporte real da Renata, sem precisar de aula ao vivo.</p>
+            <h2 style={{ ...pp(700, 28), color: B.dark, marginTop: 16, marginBottom: 28 }}>Jornada Digital</h2>
             <div style={{ background: B.white, borderRadius: 18, padding: '28px 26px', maxWidth: 520, margin: '0 auto', textAlign: 'left', border: `1.5px solid ${B.laranja}33`, boxShadow: `0 8px 30px ${B.laranja}12` }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
                 <div style={{ width: 44, height: 44, borderRadius: 12, background: B.larBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
