@@ -103,7 +103,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         <Logo h={32} contrast />
         <div style={{ flexShrink: 0, maxWidth: 100 }}>
           <p style={{ ...pp(600, 11), color: '#fff', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{student.name}</p>
-          <span style={{ fontSize: 9, background: lvm.color, color: lvm.text, borderRadius: 20, padding: '1px 6px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{lvl} {lvm.icon}</span>
+          <span style={{ fontSize: 9, background: lvm.color, color: lvm.text, borderRadius: 20, padding: '1px 6px', fontWeight: 700, fontFamily: 'Poppins,sans-serif', display: 'inline-flex', alignItems: 'center', gap: 3 }}>{lvl} <Icon name={lvm.icon} size={10} color={lvm.text} /></span>
         </div>
         <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center', minWidth: 0 }}>
           <div style={{ width: '100%', maxWidth: 110, height: 5, background: 'rgba(255,255,255,0.18)', borderRadius: 99, overflow: 'hidden' }}>
@@ -125,11 +125,11 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
       {!isPreview && !db[`seenTour_${sid}`] && (() => {
         const pt = lang === 'pt'
         const steps = [
-          { icon: '👋', title: pt ? `Bem-vinda, ${student.name}!` : `Welcome, ${student.name}!`, desc: pt ? 'Este é o seu espaço de estudos no TalkScape. Deixa eu te mostrar como tudo funciona em 5 passos rápidos!' : "This is your TalkScape study space. Let me show you how everything works in 5 quick steps!" },
-          { icon: '🗺️', title: pt ? 'Jornada' : 'Journey', desc: pt ? 'Aqui ficam suas atividades semanais. Cada semana tem tarefas de listening, speaking, grammar e mais. Marque as feitas e acompanhe seu progresso!' : 'Here are your weekly activities. Each week has tasks for listening, speaking, grammar and more. Check them off and track your progress!' },
-          { icon: '📚', title: pt ? 'Lição' : 'Homework', desc: pt ? 'Teacher Renata envia tarefas extras por aqui. Quando aparecer algo novo, você recebe na aba Lição.' : 'Teacher Renata sends extra tasks here. When something new arrives, it shows up in the Homework tab.' },
-          { icon: '🔥', title: pt ? 'Hábitos' : 'Habits', desc: pt ? 'Registre seus hábitos de estudo diários aqui. Manter uma sequência de dias seguidos faz toda a diferença!' : 'Log your daily study habits here. Keeping a daily streak makes all the difference!' },
-          { icon: '🏠', title: pt ? 'Início' : 'Home', desc: pt ? 'No Início você vê seu progresso geral, nota média e gráfico por semana. É sua visão geral de tudo!' : 'On Home you see your overall progress, average score and weekly chart. It\'s your big picture view!' },
+          { icon: 'smile', title: pt ? `Bem-vinda, ${student.name}!` : `Welcome, ${student.name}!`, desc: pt ? 'Este é o seu espaço de estudos no TalkScape. Deixa eu te mostrar como tudo funciona em 5 passos rápidos!' : "This is your TalkScape study space. Let me show you how everything works in 5 quick steps!" },
+          { icon: 'map', title: pt ? 'Jornada' : 'Journey', desc: pt ? 'Aqui ficam suas atividades semanais. Cada semana tem tarefas de listening, speaking, grammar e mais. Marque as feitas e acompanhe seu progresso!' : 'Here are your weekly activities. Each week has tasks for listening, speaking, grammar and more. Check them off and track your progress!' },
+          { icon: 'homework', title: pt ? 'Lição' : 'Homework', desc: pt ? 'Teacher Renata envia tarefas extras por aqui. Quando aparecer algo novo, você recebe na aba Lição.' : 'Teacher Renata sends extra tasks here. When something new arrives, it shows up in the Homework tab.' },
+          { icon: 'flame', title: pt ? 'Hábitos' : 'Habits', desc: pt ? 'Registre seus hábitos de estudo diários aqui. Manter uma sequência de dias seguidos faz toda a diferença!' : 'Log your daily study habits here. Keeping a daily streak makes all the difference!' },
+          { icon: 'dashboard', title: pt ? 'Início' : 'Home', desc: pt ? 'No Início você vê seu progresso geral, nota média e gráfico por semana. É sua visão geral de tudo!' : 'On Home you see your overall progress, average score and weekly chart. It\'s your big picture view!' },
         ]
         const step = steps[tourStep]
         const isLast = tourStep === steps.length - 1
@@ -137,7 +137,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         return (
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200, padding: 20 }}>
             <div style={{ background: '#fff', borderRadius: 22, padding: '32px 28px', maxWidth: 360, width: '100%', boxShadow: '0 24px 60px rgba(44,24,16,0.35)', textAlign: 'center' }}>
-              <div style={{ fontSize: 52, marginBottom: 12 }}>{step.icon}</div>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}><Icon name={step.icon} size={52} color={B.laranja} /></div>
               <p style={{ ...pp(800, 18), color: B.dark, marginBottom: 10 }}>{step.title}</p>
               <p style={{ ...ir(400, 14), color: B.mid, lineHeight: 1.65, marginBottom: 28 }}>{step.desc}</p>
               {/* progress dots */}
@@ -153,9 +153,10 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                     {pt ? '← Voltar' : '← Back'}
                   </button>
                 )}
-                <button style={{ flex: 2, padding: '11px', borderRadius: 12, border: 'none', background: B.laranja, color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}
+                <button style={{ flex: 2, padding: '11px', borderRadius: 12, border: 'none', background: B.laranja, color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
                   onClick={() => isLast ? dismiss() : setTourStep(s => s + 1)}>
-                  {isLast ? (pt ? 'Começar! 🚀' : 'Let\'s go! 🚀') : (pt ? 'Próximo →' : 'Next →')}
+                  {isLast && <Icon name="send" size={14} color="#fff" />}
+                  {isLast ? (pt ? 'Começar!' : "Let's go!") : (pt ? 'Próximo →' : 'Next →')}
                 </button>
               </div>
               <button style={{ background: 'none', border: 'none', color: B.light, fontSize: 12, cursor: 'pointer', marginTop: 14, fontFamily: 'inherit' }}
@@ -339,7 +340,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                   const isDone = !!todayH[h.id]
                   return (
                     <div key={h.id} style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '11px 15px', borderBottom: i < habits.length - 1 ? `1px solid ${B.cream}` : 'none', cursor: 'pointer', background: isDone ? B.cream : B.white }} onClick={() => toggleHab(h.id)}>
-                      <span style={{ fontSize: 18 }}>{h.icon}</span>
+                      <Icon name={h.icon} size={18} color={isDone ? B.light : color} />
                       <div style={{ flex: 1 }}>
                         <p style={{ ...ir(600, 12), color: isDone ? B.light : B.dark, textDecoration: isDone ? 'line-through' : 'none' }}>{h.en}</p>
                         <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{h.pt}</p>
@@ -365,7 +366,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
             {/* Meu nível */}
             <div style={{ ...S.card, marginBottom: 14, padding: 0, overflow: 'hidden' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '16px 18px', background: lvm.color }}>
-                <span style={{ fontSize: 30 }}>{lvm.icon}</span>
+                <Icon name={lvm.icon} size={30} color={lvm.text} />
                 <div style={{ flex: 1 }}>
                   <p style={{ ...ir(600, 11), color: lvm.text, opacity: 0.85, textTransform: 'uppercase', letterSpacing: 0.6 }}>{lang === 'pt' ? 'Meu nível' : 'My level'}</p>
                   <p style={{ ...pp(800, 20), color: lvm.text }}>{lvm.level} · {lvm.label[lang]}</p>
@@ -430,13 +431,14 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
         {tab === 'journey' && journey && (
           <div style={{ padding: '4px 0 16px' }}>
             <div style={{ background: journey.color, borderRadius: 14, padding: '14px 18px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
-              <span style={{ fontSize: 26 }}>{journey.icon}</span>
+              <Icon name={journey.icon} size={26} color="#fff" />
               <div style={{ flex: 1 }}>
                 <p style={{ ...pp(700, 15), color: '#fff' }}>{lang === 'pt' ? journey.pt : journey.en}</p>
                 <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.8)' }}>{lang === 'pt' ? journey.desc.pt : journey.desc.en}</p>
               </div>
-              <span style={{ background: 'rgba(255,255,255,0.25)', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#fff', fontFamily: 'Poppins,sans-serif' }}>
-                {{ beginner:'🌱 Iniciante', intermediate:'🌿 Intermediário', advanced:'🌳 Avançado' }[simpleLevel]}
+              <span style={{ background: 'rgba(255,255,255,0.25)', borderRadius: 20, padding: '3px 10px', fontSize: 11, fontWeight: 700, color: '#fff', fontFamily: 'Poppins,sans-serif', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                <Icon name={{ beginner: 'sprout', intermediate: 'leaf', advanced: 'treeDeciduous' }[simpleLevel]} size={11} color="#fff" />
+                {{ beginner: 'Iniciante', intermediate: 'Intermediário', advanced: 'Avançado' }[simpleLevel]}
               </span>
             </div>
 
@@ -482,7 +484,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                           <p style={{ ...ir(600, 13), color: done ? B.light : B.dark, textDecoration: done ? 'line-through' : 'none' }}>{displayText}</p>
                           {hint && !done && <p style={{ ...ir(400, 10.5), color: simpleLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 3, fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 4 }}><Icon name={simpleLevel === 'advanced' ? 'trendingUp' : 'lightbulb'} size={10} color={simpleLevel === 'advanced' ? B.oliva : B.laranja} />{hint}</p>}
                           {task.link && !done && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => e.stopPropagation()} style={{ ...ir(400, 11), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={B.laranja} />{lang === 'pt' ? 'Acessar recurso' : 'Open resource'}</a>}
-                          {r && (() => { const v = !!visited[r.url]; return <a href={r.url} target="_blank" rel="noreferrer" onClick={e => { e.stopPropagation(); markVisited(r.url) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: v ? '#eef2eb' : B.bege, borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: v ? B.oliva : B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${v ? B.oliva + '55' : B.border}`, marginTop: 5 }}>{v ? '✓' : TYPE_ICON[r.type]} {r.label}</a> })()}
+                          {r && (() => { const v = !!visited[r.url]; return <a href={r.url} target="_blank" rel="noreferrer" onClick={e => { e.stopPropagation(); markVisited(r.url) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: v ? '#eef2eb' : B.bege, borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: v ? B.oliva : B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${v ? B.oliva + '55' : B.border}`, marginTop: 5 }}>{v ? <Icon name="check" size={11} color={B.oliva} /> : <Icon name={TYPE_ICON[r.type]} size={11} color={B.dark} />} {r.label}</a> })()}
                           {taskActs.length > 0 && (
                             <button onClick={e => { e.stopPropagation(); setActModal({ taskId: task.id, acts: taskActs, taskText: displayText, context: taskCtx }) }}
                               style={{ display: 'inline-flex', alignItems: 'center', gap: 5, marginTop: 6, padding: '5px 11px', borderRadius: 20, border: `1.5px solid ${actScore !== undefined ? B.oliva : B.laranja}`, background: actScore !== undefined ? '#eef2eb' : B.laranja + '15', cursor: 'pointer', fontSize: 11, fontWeight: 700, fontFamily: 'Poppins,sans-serif', color: actScore !== undefined ? B.oliva : B.laranja }}>

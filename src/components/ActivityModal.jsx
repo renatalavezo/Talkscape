@@ -92,8 +92,8 @@ function ActivityItem({ act, lang, onNext, isLast, onResult }) {
       </p>
 
       {act.instruction && (
-        <p style={{ fontSize: 12, fontFamily: 'Inter,sans-serif', color: B.mid, fontStyle: 'italic', marginBottom: 8, lineHeight: 1.5 }}>
-          💡 {act.instruction}
+        <p style={{ fontSize: 12, fontFamily: 'Inter,sans-serif', color: B.mid, fontStyle: 'italic', marginBottom: 8, lineHeight: 1.5, display: 'flex', alignItems: 'flex-start', gap: 5 }}>
+          <Icon name="lightbulb" size={12} color={B.mid} style={{ marginTop: 2, flexShrink: 0 }} />{act.instruction}
         </p>
       )}
 
@@ -267,8 +267,8 @@ export default function ActivityModal({ acts, lang, taskText, context, onClose, 
             <p style={{ fontSize: 11, fontFamily: 'Inter,sans-serif', color: B.light, marginTop: 2, lineHeight: 1.4 }}>{taskText}</p>
           </div>
           <button onClick={onClose}
-            style={{ background: B.bege, border: 'none', borderRadius: 20, padding: '6px 14px', cursor: 'pointer', fontSize: 13, color: B.mid, fontFamily: 'Inter,sans-serif', flexShrink: 0 }}>
-            ✕
+            style={{ background: B.bege, border: 'none', borderRadius: 20, padding: '6px 14px', cursor: 'pointer', fontSize: 13, color: B.mid, fontFamily: 'Inter,sans-serif', flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+            <Icon name="close" size={14} color={B.mid} />
           </button>
         </div>
 

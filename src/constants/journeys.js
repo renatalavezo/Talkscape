@@ -1,6 +1,6 @@
 export const JOURNEYS = [
   {
-    id: 'core', icon: '🏁', color: '#4A90E2',
+    id: 'core', icon: 'flag', color: '#4A90E2',
     en: 'Core English', pt: 'Inglês Essencial',
     desc: { en: 'Build the foundation for everyday English', pt: 'Construa a base para o inglês cotidiano' },
     weeks: [
@@ -150,7 +150,7 @@ export const JOURNEYS = [
   ]},
 ]},
   {
-    id: 'business', icon: '💼', color: '#5C6F4F',
+    id: 'business', icon: 'business', color: '#5C6F4F',
     en: 'Business English', pt: 'Inglês para Negócios',
     desc: { en: 'Professional communication for the workplace', pt: 'Comunicação profissional para o trabalho' },
     weeks: [
@@ -281,7 +281,7 @@ export const JOURNEYS = [
     ]
   },
   {
-    id: 'travel', icon: '✈️', color: '#E67A2E',
+    id: 'travel', icon: 'travel', color: '#E67A2E',
     en: 'English for Traveling', pt: 'Inglês para Viagens',
     desc: { en: 'Travel confidently anywhere in the world', pt: 'Viaje com confiança a qualquer lugar' },
     weeks: [
@@ -452,7 +452,7 @@ export const JOURNEYS = [
     ]
   },
   {
-    id: 'conversation', icon: '💬', color: '#C97080',
+    id: 'conversation', icon: 'conversation', color: '#C97080',
     en: 'Conversation Focus', pt: 'Foco em Conversação',
     desc: { en: 'Build real fluency through guided conversation', pt: 'Desenvolva fluência real através de conversação guiada' },
     weeks: [
@@ -587,7 +587,7 @@ export const JOURNEYS = [
     ]
   },
   {
-    id: 'grammar', icon: '🔧', color: '#8A3F2C',
+    id: 'grammar', icon: 'grammar_kit', color: '#8A3F2C',
     en: 'Grammar Repair Kit', pt: 'Gramática na Prática',
     desc: { en: 'Fix grammar gaps and build rock-solid foundations', pt: 'Corrija lacunas gramaticais e construa bases sólidas' },
     weeks: [
@@ -718,7 +718,7 @@ export const JOURNEYS = [
     ]
   },
   {
-    id: 'academic', icon: '📝', color: '#2D5016',
+    id: 'academic', icon: 'academic', color: '#2D5016',
     en: 'Academic & Professional Writing', pt: 'Escrita Acadêmica',
     desc: { en: 'Master formal writing for academic and professional contexts', pt: 'Domine a escrita formal e acadêmica' },
     weeks: [
@@ -857,7 +857,7 @@ export const JOURNEYS = [
     ]
   },
   {
-    id: 'popculture', icon: '🎬', color: '#E67A2E',
+    id: 'popculture', icon: 'popculture', color: '#E67A2E',
     en: 'Pop Culture English', pt: 'Inglês pela Cultura Pop',
     desc: { en: 'Learn English through movies, music, memes and social media', pt: 'Aprenda inglês por filmes, música, memes e redes sociais' },
     weeks: [
@@ -1020,7 +1020,7 @@ export const JOURNEYS = [
     ]
   },
   {
-    id: 'speaking', icon: '🎙️', color: '#5C6F4F',
+    id: 'speaking', icon: 'speaking_j', color: '#5C6F4F',
     en: 'Confident Speaking', pt: 'Fala com Confiança',
     desc: { en: 'Overcome fear and speak with confidence and clarity', pt: 'Supere o medo e fale com confiança' },
     weeks: [
@@ -1151,7 +1151,7 @@ export const JOURNEYS = [
     ]
   },
   {
-    id: 'exam', icon: '🎓', color: '#2D5016',
+    id: 'exam', icon: 'exam', color: '#2D5016',
     en: 'Exam Prep', pt: 'Preparação para Exames',
     desc: { en: 'Prepare for IELTS, TOEFL, Cambridge and other exams', pt: 'Prepare-se para IELTS, TOEFL, Cambridge e outros' },
     weeks: [

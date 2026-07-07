@@ -35,19 +35,19 @@ const WAButton = ({ style }) => (
 
 const PLANS = [
   {
-    name: 'Essencial', icon: '📌', color: B.oliva, highlight: false,
+    name: 'Essencial', icon: 'pin', color: B.oliva, highlight: false,
     hours: '1h/semana',
     prices: [{ label: 'Valor cheio', price: 'R$ 400' }, { label: '3 meses', price: 'R$ 380' }, { label: '6 meses', price: 'R$ 350' }, { label: '12 meses', price: 'R$ 320' }],
     benefits: ['Acesso ao Grupo da Comunidade', 'Checklist mensal de estudo', 'Correção de até 1 texto mensal', 'Feedback class a cada 3 meses'],
   },
   {
-    name: 'Jornada', icon: '✈️', color: B.laranja, highlight: true,
+    name: 'Jornada', icon: 'travel', color: B.laranja, highlight: true,
     hours: '2h/semana',
     prices: [{ label: 'Valor cheio', price: 'R$ 640' }, { label: '3 meses', price: 'R$ 610' }, { label: '6 meses', price: 'R$ 580' }, { label: '12 meses', price: 'R$ 540' }],
     benefits: ['Todos os benefícios do Essencial', 'Prioridade para reposições', 'Correção ilimitada de textos', 'Biblioteca exclusiva', 'Desconto de 10% em aulas avulsas'],
   },
   {
-    name: 'Horizonte', icon: '🏞️', color: B.marrom, highlight: false,
+    name: 'Horizonte', icon: 'mountain', color: B.marrom, highlight: false,
     hours: '3h/semana',
     prices: [{ label: 'Valor cheio', price: 'R$ 900' }, { label: '3 meses', price: 'R$ 860' }, { label: '6 meses', price: 'R$ 830' }, { label: '12 meses', price: 'R$ 790' }],
     benefits: ['Todos os benefícios do Jornada', 'Relatório de progresso mensal', 'Acesso prioritário na agenda'],
@@ -56,19 +56,19 @@ const PLANS = [
 
 const DUO_PLANS = [
   {
-    name: 'Parceria Essencial', icon: '🤝', color: B.oliva, highlight: false,
+    name: 'Parceria Essencial', icon: 'handshake', color: B.oliva, highlight: false,
     hours: '1h/semana',
     prices: [{ label: 'Valor cheio', price: 'R$ 300/aluna' }, { label: '3 meses', price: 'R$ 285/aluna' }, { label: '6 meses', price: 'R$ 265/aluna' }, { label: '12 meses', price: 'R$ 240/aluna' }],
     benefits: ['Acesso ao Grupo da Comunidade', 'Checklist mensal para a dupla', 'Correção de até 1 texto mensal', 'Acompanhamento da dupla juntas'],
   },
   {
-    name: 'Jornada a Dois', icon: '✈️', color: B.laranja, highlight: true,
+    name: 'Jornada a Dois', icon: 'travel', color: B.laranja, highlight: true,
     hours: '2h/semana',
     prices: [{ label: 'Valor cheio', price: 'R$ 480/aluna' }, { label: '3 meses', price: 'R$ 455/aluna' }, { label: '6 meses', price: 'R$ 435/aluna' }, { label: '12 meses', price: 'R$ 405/aluna' }],
     benefits: ['Todos os benefícios da Parceria Essencial', 'Atividades extras semanais', 'Biblioteca exclusiva', 'Fast classes individuais de 15min'],
   },
   {
-    name: 'Além do Horizonte', icon: '🏞️', color: B.marrom, highlight: false,
+    name: 'Além do Horizonte', icon: 'mountain', color: B.marrom, highlight: false,
     hours: '3h/semana',
     prices: [{ label: 'Valor cheio', price: 'R$ 675/aluna' }, { label: '3 meses', price: 'R$ 640/aluna' }, { label: '6 meses', price: 'R$ 620/aluna' }, { label: '12 meses', price: 'R$ 590/aluna' }],
     benefits: ['Todos os benefícios da Jornada a Dois', 'Relatório individual bimestral', 'Acesso prioritário à agenda'],
@@ -90,12 +90,12 @@ const DIFFERENTIALS = [
 const PlanCard = ({ plan, isDuo = false, onStudent, onCourse }) => (
   <div style={{ borderRadius: 20, border: `2px solid ${plan.highlight ? plan.color : B.border}`, background: plan.highlight ? plan.color + '08' : B.white, padding: '28px 24px', position: 'relative', boxShadow: plan.highlight ? `0 12px 40px ${plan.color}22` : 'none' }}>
     {plan.highlight && (
-      <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', background: plan.color, color: '#fff', borderRadius: 20, padding: '4px 16px', fontSize: 11, fontWeight: 700, fontFamily: 'Poppins,sans-serif', whiteSpace: 'nowrap' }}>
-        ⭐ Mais popular
+      <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', background: plan.color, color: '#fff', borderRadius: 20, padding: '4px 16px', fontSize: 11, fontWeight: 700, fontFamily: 'Poppins,sans-serif', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+        <Icon name="star" size={12} color="#fff" /> Mais popular
       </div>
     )}
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
-      <span style={{ fontSize: 24 }}>{plan.icon}</span>
+      <Icon name={plan.icon} size={24} color={plan.color} />
       <p style={{ ...pp(700, 17), color: plan.color }}>{plan.name}</p>
       <span style={{ ...ir(400, 12), color: B.mid, marginLeft: 'auto' }}>{plan.hours}</span>
     </div>
@@ -166,12 +166,12 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
       {done && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(44,24,16,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <div style={{ background: '#fff', borderRadius: 24, padding: 36, width: '100%', maxWidth: 380, textAlign: 'center', boxShadow: '0 24px 60px rgba(44,24,16,0.35)' }}>
-            <div style={{ fontSize: 52, marginBottom: 16 }}>🎉</div>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}><Icon name="checkCircle" size={52} color={B.oliva} /></div>
             <p style={{ fontFamily: 'Poppins,sans-serif', fontWeight: 800, fontSize: 20, color: '#2c1810', marginBottom: 10 }}>Cadastro recebido!</p>
             <p style={{ fontFamily: 'Inter,sans-serif', fontSize: 14, color: '#8a7060', lineHeight: 1.6, marginBottom: 24 }}>
               {tipo === 'particular'
-                ? 'Teacher Renata vai entrar em contato para liberar seu acesso. Fique de olho no WhatsApp! 💬'
-                : 'Assim que confirmarmos seu pagamento, liberamos seu acesso. Fique de olho no WhatsApp! 💬'}
+                ? 'Teacher Renata vai entrar em contato para liberar seu acesso. Fique de olho no WhatsApp!'
+                : 'Assim que confirmarmos seu pagamento, liberamos seu acesso. Fique de olho no WhatsApp!'}
             </p>
             <a href="https://wa.me/5511986704076" target="_blank" rel="noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '11px 22px', background: '#25D366', color: '#fff', borderRadius: 50, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', boxShadow: '0 4px 14px rgba(37,211,102,0.35)', marginBottom: 14 }}>
@@ -322,7 +322,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
           {JOURNEYS.map(j => (
             <div key={j.id} style={{ background: j.color + '18', border: `1.5px solid ${j.color}44`, borderRadius: 14, padding: '12px 18px', display: 'flex', alignItems: 'center', gap: 10, maxWidth: 280 }}>
-              <span style={{ fontSize: 22, flexShrink: 0 }}>{j.icon}</span>
+              <Icon name={j.icon} size={22} color={j.color} style={{ flexShrink: 0 }} />
               <div>
                 <p style={{ ...pp(600, 13), color: B.dark }}>{j.pt}</p>
                 <p style={{ ...ir(400, 11), color: B.mid }}>{j.desc.pt}</p>
@@ -419,7 +419,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
       <section style={{ background: B.white, padding: '72px 24px' }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: 48 }}>
-            <span style={{ background: B.larBg, color: B.larD, borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>🌱 Novidade</span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: B.larBg, color: B.larD, borderRadius: 20, padding: '5px 16px', fontSize: 12, fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}><Icon name="sprout" size={13} color={B.larD} /> Novidade</span>
             <h2 style={{ ...pp(700, 28), color: B.dark, marginTop: 16, marginBottom: 8 }}>Turmas abertas</h2>
             <p style={{ ...ir(400, 15), color: B.mid, maxWidth: 520, margin: '0 auto' }}>Aprenda em grupo com alunas no mesmo nível e momento que você. Vagas limitadas para garantir atenção individualizada.</p>
           </div>
@@ -427,7 +427,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
           {/* Turma card */}
           <div style={{ maxWidth: 560, margin: '0 auto', borderRadius: 20, border: `2px solid ${B.oliva}`, background: B.olivaBg, overflow: 'hidden', boxShadow: `0 12px 40px ${B.oliva}22` }}>
             <div style={{ background: B.oliva, padding: '20px 24px', display: 'flex', alignItems: 'center', gap: 14 }}>
-              <span style={{ fontSize: 32 }}>🌱</span>
+              <Icon name="sprout" size={32} color="#fff" />
               <div>
                 <p style={{ ...pp(700, 18), color: '#fff' }}>General English — Iniciantes</p>
                 <p style={{ ...ir(400, 13), color: 'rgba(255,255,255,0.8)' }}>Nível A1/A2 · 12 semanas · 1x por semana</p>

@@ -8,11 +8,12 @@ import {
   Lightbulb, Target, Sparkles, NotebookPen, LayoutDashboard,
   Zap, ScrollText, BookMarked, FileText, Music, Repeat,
   ArrowLeft, Heart, MessageCircle, Layers, Lock, Unlock,
-  Key, Palette, Pin, Paperclip, Leaf, Seedling, TreePine,
+  Key, Palette, Pin, Paperclip, Leaf, TreePine,
   ChevronUp, ChevronDown, Image, Award, Clock, Send,
   CheckCircle2, Circle, TrendingUp, User, Smile, ThumbsUp,
   AlertTriangle, HelpCircle, Download, Upload, RefreshCw,
-  BookCheck, Pen, List, Grid3x3, Activity
+  BookCheck, Pen, List, Grid3x3, Activity,
+  Sprout, TreeDeciduous, Mountain, Scale, Flag, Video, Handshake
 } from 'lucide-react'
 
 const icons = {
@@ -106,6 +107,16 @@ const icons = {
   pen:           Pen,
   list:          List,
   grid:          Grid3x3,
+  eye:           Eye,
+  sprout:        Sprout,
+  treeDeciduous: TreeDeciduous,
+  treePine:      TreePine,
+  mountain:      Mountain,
+  scale:         Scale,
+  flag:          Flag,
+  video:         Video,
+  handshake:     Handshake,
+  pin:           Pin,
 }
 
 export default function Icon({ name, size = 16, color = 'currentColor', style = {} }) {

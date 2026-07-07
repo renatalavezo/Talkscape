@@ -2,7 +2,7 @@ import { B } from './colors'
 
 export const CEFR_META = [
   {
-    level: 'A1', icon: '🌱', label: { en: 'Beginner', pt: 'Iniciante' },
+    level: 'A1', icon: 'sprout', label: { en: 'Beginner', pt: 'Iniciante' },
     color: B.rosa, text: '#fff',
     canDo: {
       en: [
@@ -24,7 +24,7 @@ export const CEFR_META = [
     },
   },
   {
-    level: 'A2', icon: '🌿', label: { en: 'Elementary', pt: 'Elementar' },
+    level: 'A2', icon: 'leaf', label: { en: 'Elementary', pt: 'Elementar' },
     color: B.laranja, text: '#fff',
     canDo: {
       en: [
@@ -46,7 +46,7 @@ export const CEFR_META = [
     },
   },
   {
-    level: 'B1', icon: '🌳', label: { en: 'Intermediate', pt: 'Intermediário' },
+    level: 'B1', icon: 'treeDeciduous', label: { en: 'Intermediate', pt: 'Intermediário' },
     color: B.oliva, text: '#fff',
     canDo: {
       en: [
@@ -68,7 +68,7 @@ export const CEFR_META = [
     },
   },
   {
-    level: 'B2', icon: '🌲', label: { en: 'Upper-Intermediate', pt: 'Interm. Avançado' },
+    level: 'B2', icon: 'treePine', label: { en: 'Upper-Intermediate', pt: 'Interm. Avançado' },
     color: B.marrom, text: '#fff',
     canDo: {
       en: [
@@ -90,7 +90,7 @@ export const CEFR_META = [
     },
   },
   {
-    level: 'C1', icon: '🏔️', label: { en: 'Advanced', pt: 'Avançado' },
+    level: 'C1', icon: 'mountain', label: { en: 'Advanced', pt: 'Avançado' },
     color: B.dark, text: B.rosa,
     canDo: {
       en: [

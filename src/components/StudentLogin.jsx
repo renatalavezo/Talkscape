@@ -1,6 +1,7 @@
 import { B } from '../constants/colors'
 import { ir, pp, S } from '../constants/styles'
 import Logo from './Logo'
+import Icon from './Icon'
 
 export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, busy, onLogin, onBack, onRegister }) {
   return (
@@ -26,7 +27,7 @@ export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, 
 
         {err && (
           <div style={{ background: '#FEE2E2', borderRadius: 10, padding: '10px 14px', marginBottom: 16, display: 'flex', gap: 8 }}>
-            <span>⚠️</span>
+            <Icon name="warning" size={14} color="#DC2626" />
             <p style={{ ...ir(600, 12), color: '#DC2626' }}>{err}</p>
           </div>
         )}

@@ -164,7 +164,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                 {jids.map(id => JOURNEY_MAP[id] && (
                   <button key={id} onClick={() => { setSelJid(id); setSelWeek(null) }}
                     style={{ flex: 1, padding: '8px 10px', borderRadius: 12, border: `2px solid ${selJid === id ? JOURNEY_MAP[id].color : B.border}`, background: selJid === id ? JOURNEY_MAP[id].color + '15' : '#fff', color: selJid === id ? JOURNEY_MAP[id].color : B.mid, fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, transition: 'all 0.15s' }}>
-                    {JOURNEY_MAP[id].icon} {JOURNEY_MAP[id].pt}
+                    <Icon name={JOURNEY_MAP[id].icon} size={13} color={selJid === id ? JOURNEY_MAP[id].color : B.mid} /> {JOURNEY_MAP[id].pt}
                   </button>
                 ))}
               </div>
@@ -206,7 +206,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                     <div style={{ background: '#fff', borderRadius: 16, padding: 16, boxShadow: '0 4px 16px rgba(44,24,16,0.08)', border: `1px solid #f0e8e0` }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, paddingBottom: 12, borderBottom: `1.5px solid #f5ede6` }}>
                         <div style={{ width: 36, height: 36, borderRadius: 10, background: journey.color + '20', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <span style={{ fontSize: 18 }}>{journey.icon}</span>
+                          <Icon name={journey.icon} size={18} color={journey.color} />
                         </div>
                         <div style={{ flex: 1 }}>
                           <p style={{ ...pp(700, 13), color: B.dark }}>{lang === 'pt' ? `Semana ${selWeek}` : `Week ${selWeek}`}: {w?.theme[lang] || w?.theme.en}</p>
@@ -233,7 +233,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                                 </p>
                                 {hint && <p style={{ ...ir(400, 10.5), color: student.level === 'advanced' ? B.oliva : B.laranja, marginTop: 3, fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 4 }}><Icon name={student.level === 'advanced' ? 'trendingUp' : 'lightbulb'} size={10} color={student.level === 'advanced' ? B.oliva : B.laranja} />{hint}</p>}
                                 {task.link && <a href={task.link} target="_blank" rel="noreferrer" onClick={e => { e.stopPropagation(); markVisited(task.link) }} style={{ ...ir(400, 11), color: visited[task.link] ? B.oliva : B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 3 }}><Icon name="link" size={10} color={visited[task.link] ? B.oliva : B.laranja} />{visited[task.link] ? (lang === 'pt' ? 'Recurso acessado' : 'Resource opened') : (lang === 'pt' ? 'Acessar recurso' : 'Open resource')}</a>}
-                                {r && (() => { const v = !!visited[r.url]; return <a href={r.url} target="_blank" rel="noreferrer" onClick={e => { e.stopPropagation(); markVisited(r.url) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: v ? '#eef2eb' : '#f5f0eb', borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: v ? B.oliva : B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${v ? B.oliva + '55' : '#e8ddd4'}`, marginTop: 5 }}>{v ? <Icon name="check" size={11} color={B.oliva} /> : TYPE_ICON[r.type]} {r.label}</a> })()}
+                                {r && (() => { const v = !!visited[r.url]; return <a href={r.url} target="_blank" rel="noreferrer" onClick={e => { e.stopPropagation(); markVisited(r.url) }} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: v ? '#eef2eb' : '#f5f0eb', borderRadius: 20, padding: '4px 10px', fontSize: 11, fontWeight: 600, color: v ? B.oliva : B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${v ? B.oliva + '55' : '#e8ddd4'}`, marginTop: 5 }}>{v ? <Icon name="check" size={11} color={B.oliva} /> : <Icon name={TYPE_ICON[r.type]} size={11} color={B.dark} />} {r.label}</a> })()}
                                 {(() => {
                                   const defaults = DEFAULT_ACTIVITIES[task.id]
                                   const taskActs = db[`acts_${jid}_w${selWeek}_${task.id}`] || (defaults?.acts || defaults || [])
@@ -258,7 +258,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                   )
                 })() : (
                   <div style={{ textAlign: 'center', padding: '32px 0' }}>
-                    <span style={{ fontSize: 36 }}>{journey.icon}</span>
+                    <Icon name={journey.icon} size={36} color={journey.color} />
                     <p style={{ ...ir(400, 13), color: B.light, marginTop: 10 }}>
                       {lang === 'pt' ? 'Toque em uma semana para ver as atividades' : 'Tap a week to see the activities'}
                     </p>

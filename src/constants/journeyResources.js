@@ -353,7 +353,7 @@ export const JOURNEY_RESOURCES = {
   },
 }
 
-export const TYPE_ICON = { video:'📹', podcast:'🎧', reading:'📖', exercise:'✏️', vocab:'📚' }
+export const TYPE_ICON = { video:'video', podcast:'listening', reading:'reading', exercise:'pen', vocab:'bookOpen' }
 
 // Preferred resource type(s) for each activity category
 const CAT_TO_TYPES = {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { B } from '../constants/colors'
 import { ir, pp, S } from '../constants/styles'
+import Icon from './Icon'
 
 const TYPE_COLORS = { class: B.oliva, test: B.marrom, hw: B.laranja, holiday: B.rosa, other: B.light }
 
@@ -108,7 +109,7 @@ export default function CalSection({ t, lang, db, upDb, isTeacher, sid }) {
                   <p style={{ ...ir(400, 11), color: B.light }}>{t.evTypes[ev.type] || ev.type}</p>
                 </div>
                 {isTeacher && (
-                  <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '3px 7px', fontSize: 10, color: '#DC2626', cursor: 'pointer' }} onClick={() => delEv(ev.id)}>✕</button>
+                  <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '3px 7px', fontSize: 10, color: '#DC2626', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => delEv(ev.id)}><Icon name="delete" size={11} color="#DC2626" /></button>
                 )}
               </div>
             ))
@@ -132,7 +133,7 @@ export default function CalSection({ t, lang, db, upDb, isTeacher, sid }) {
               </div>
               <span style={{ ...ir(600, 10), background: TYPE_COLORS[ev.type] || B.mid, color: '#fff', borderRadius: 20, padding: '1px 7px' }}>{t.evTypes[ev.type] || ev.type}</span>
               {isTeacher && (
-                <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '3px 7px', fontSize: 10, color: '#DC2626', cursor: 'pointer' }} onClick={() => delEv(ev.id)}>✕</button>
+                <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '3px 7px', fontSize: 10, color: '#DC2626', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => delEv(ev.id)}><Icon name="delete" size={11} color="#DC2626" /></button>
               )}
             </div>
           ))

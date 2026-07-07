@@ -12,7 +12,8 @@ import Logo from './Logo'
 import ActivityEditor from './ActivityEditor'
 
 const SIMPLE_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
-const SIMPLE_LABEL = { beginner:'🌱 Iniciante', intermediate:'🌿 Intermediário', advanced:'🌳 Avançado' }
+const SIMPLE_LABEL = { beginner:'Iniciante', intermediate:'Intermediário', advanced:'Avançado' }
+const SIMPLE_ICON  = { beginner:'sprout', intermediate:'leaf', advanced:'treeDeciduous' }
 import CalSection from './CalSection'
 import { hashPassword } from '../utils'
 
@@ -290,7 +291,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
             <input style={{ ...S.inp, marginBottom: 8 }} placeholder="Senha de acesso" value={courseNewPass} onChange={e => setCourseNewPass(e.target.value)} />
             <select style={{ ...S.inp, marginBottom: 16 }} value={courseNewJid} onChange={e => setCourseNewJid(e.target.value)}>
               <option value="">Escolher jornada...</option>
-              {JOURNEYS.map(j => <option key={j.id} value={j.id}>{j.icon} {j.pt}</option>)}
+              {JOURNEYS.map(j => <option key={j.id} value={j.id}>{j.pt}</option>)}
             </select>
             {courseAddErr && <p style={{ ...ir(600, 12), color: B.marrom, marginBottom: 10 }}>{courseAddErr}</p>}
             <button style={{ ...S.btn(B.laranja), width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={async () => {
@@ -338,8 +339,8 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {JOURNEYS.map(j => (
                   <button key={j.id} onClick={() => { setSelJBase(j.id); setSelJBaseWeek(1) }}
-                    style={{ ...S.chip, background: selJBase === j.id ? j.color : B.bege, color: selJBase === j.id ? '#fff' : B.mid, fontSize: 12, padding: '8px 14px', border: `1.5px solid ${selJBase === j.id ? j.color : B.border}` }}>
-                    {j.icon} {lang === 'pt' ? j.pt : j.en}
+                    style={{ ...S.chip, background: selJBase === j.id ? j.color : B.bege, color: selJBase === j.id ? '#fff' : B.mid, fontSize: 12, padding: '8px 14px', border: `1.5px solid ${selJBase === j.id ? j.color : B.border}`, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                    <Icon name={j.icon} size={13} color={selJBase === j.id ? '#fff' : B.mid} /> {lang === 'pt' ? j.pt : j.en}
                   </button>
                 ))}
               </div>
@@ -352,7 +353,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
               return (
                 <div>
                   <div style={{ background: j.color, borderRadius: 14, padding: '14px 18px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <span style={{ fontSize: 26 }}>{j.icon}</span>
+                    <Icon name={j.icon} size={26} color="#fff" />
                     <div>
                       <p style={{ ...pp(700, 15), color: '#fff' }}>{lang === 'pt' ? j.pt : j.en}</p>
                       <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.8)' }}>{lang === 'pt' ? j.desc.pt : j.desc.en}</p>
@@ -369,8 +370,8 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         const hasOverride = !!db[`jBase_${selJBase}_w${w.week}`]
                         return (
                           <button key={w.week} onClick={() => { setSelJBaseWeek(w.week); setJBaseEditTask(null) }}
-                            style={{ ...S.chip, background: selJBaseWeek === w.week ? j.color : B.bege, color: selJBaseWeek === w.week ? '#fff' : B.mid, fontSize: 11, padding: '7px 12px', whiteSpace: 'nowrap' }}>
-                            {lang === 'pt' ? 'Sem' : 'Wk'} {w.week}{hasOverride ? ' ✏️' : ''}
+                            style={{ ...S.chip, background: selJBaseWeek === w.week ? j.color : B.bege, color: selJBaseWeek === w.week ? '#fff' : B.mid, fontSize: 11, padding: '7px 12px', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                            {lang === 'pt' ? 'Sem' : 'Wk'} {w.week}{hasOverride && <Icon name="edit" size={10} color={selJBaseWeek === w.week ? '#fff' : B.mid} />}
                           </button>
                         )
                       })}
@@ -380,7 +381,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 8 }}>
                       <div>
                         <p style={{ ...pp(700, 14), color: B.dark }}>{lang === 'pt' ? `Semana ${selJBaseWeek}` : `Week ${selJBaseWeek}`}: {allW.find(w => w.week === selJBaseWeek)?.theme[lang]}</p>
-                        <p style={{ ...ir(400, 11), color: B.light }}>{tasks.length} tasks · {isOverridden ? (lang === 'pt' ? 'editada ✏️' : 'edited ✏️') : (lang === 'pt' ? 'padrão do código' : 'default from code')}</p>
+                        <p style={{ ...ir(400, 11), color: B.light, display: 'flex', alignItems: 'center', gap: 4 }}>{tasks.length} tasks · {isOverridden ? <>{lang === 'pt' ? 'editada' : 'edited'} <Icon name="edit" size={10} color={B.light} /></> : (lang === 'pt' ? 'padrão do código' : 'default from code')}</p>
                       </div>
                       {isOverridden && (
                         <button style={{ ...S.chip, background: '#FEE2E2', color: '#DC2626', fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}
@@ -423,7 +424,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                   <p style={{ ...ir(600, 12), color: B.dark }}>{task.en}</p>
                                   <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{task.pt}</p>
                                   {task.link && <a href={task.link} target="_blank" rel="noreferrer" style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
-                                  {r && <a href={r.url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f5f0eb', borderRadius: 20, padding: '3px 9px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 4 }}>{TYPE_ICON[r.type]} {r.label}</a>}
+                                  {r && <a href={r.url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f5f0eb', borderRadius: 20, padding: '3px 9px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 4 }}><Icon name={TYPE_ICON[r.type]} size={10} color={B.dark} /> {r.label}</a>}
                                 </div>
                                 <button style={{ background: B.bege, border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => setJBaseEditTask({ ...task })}><Icon name="edit" size={13} color={B.mid} /></button>
                                 <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => {
@@ -475,7 +476,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
             </div>
             {(courseStudents || []).length === 0 && (
               <div style={{ textAlign: 'center', padding: '48px 0' }}>
-                <span style={{ fontSize: 48 }}>🎓</span>
+                <Icon name="graduation" size={48} color={B.border} />
                 <p style={{ ...ir(400, 14), color: B.light, marginTop: 12 }}>Nenhuma aluna no curso ainda.</p>
               </div>
             )}
@@ -491,12 +492,12 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         <p style={{ ...pp(600, 14), color: B.dark }}>{s.name}</p>
                         <span style={{ fontSize: 10, background: s.active ? B.oliva + '22' : '#FEE2E2', color: s.active ? B.oliva : '#DC2626', borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{s.active ? 'Ativo' : 'Aguardando'}</span>
                         {unanswered > 0 && <span style={{ fontSize: 10, background: B.laranja + '22', color: B.laranja, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{unanswered} dúvida{unanswered > 1 ? 's' : ''}</span>}
-                        {s.level && <span style={{ fontSize: 10, background: '#e8f4fd', color: '#2563eb', borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{{ beginner:'🌱 Iniciante', intermediate:'🌿 Intermediário', advanced:'🌳 Avançado' }[s.level]}</span>}
+                        {s.level && <span style={{ fontSize: 10, background: '#e8f4fd', color: '#2563eb', borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif', display: 'inline-flex', alignItems: 'center', gap: 3 }}><Icon name={SIMPLE_ICON[s.level]} size={10} color="#2563eb" />{SIMPLE_LABEL[s.level]}</span>}
                       </div>
                       <p style={{ ...ir(400, 11), color: B.light }}>{s.email}</p>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 4 }}>
                         {(s.jids || (s.jid ? [s.jid] : [])).map(jid => JOURNEY_MAP[jid] && (
-                          <span key={jid} style={{ fontSize: 10, background: JOURNEY_MAP[jid].color + '22', color: JOURNEY_MAP[jid].color, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{JOURNEY_MAP[jid].icon} {JOURNEY_MAP[jid].pt}</span>
+                          <span key={jid} style={{ fontSize: 10, background: JOURNEY_MAP[jid].color + '22', color: JOURNEY_MAP[jid].color, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif', display: 'inline-flex', alignItems: 'center', gap: 3 }}><Icon name={JOURNEY_MAP[jid].icon} size={10} color={JOURNEY_MAP[jid].color} /> {JOURNEY_MAP[jid].pt}</span>
                         ))}
                       </div>
                     </div>
@@ -519,10 +520,10 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                           <p style={{ ...pp(600, 12), color: B.dark }}>Jornadas da aluna</p>
                           <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
                             <p style={{ ...ir(400, 11), color: B.light, marginRight: 4 }}>Nível:</p>
-                            {[['beginner','🌱'],['intermediate','🌿'],['advanced','🌳']].map(([k, ic]) => (
+                            {['beginner','intermediate','advanced'].map(k => (
                               <button key={k} onClick={() => upDb({ courseStudents: (courseStudents||[]).map(x => x.id === s.id ? {...x, level: x.level === k ? null : k} : x) })}
-                                style={{ padding: '4px 8px', borderRadius: 8, border: `1.5px solid ${s.level === k ? '#2563eb' : B.border}`, background: s.level === k ? '#e8f4fd' : B.white, color: s.level === k ? '#2563eb' : B.light, fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif' }}>
-                                {ic}
+                                style={{ padding: '4px 8px', borderRadius: 8, border: `1.5px solid ${s.level === k ? '#2563eb' : B.border}`, background: s.level === k ? '#e8f4fd' : B.white, color: s.level === k ? '#2563eb' : B.light, fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'Poppins,sans-serif', display: 'flex', alignItems: 'center' }}>
+                                <Icon name={SIMPLE_ICON[k]} size={13} color={s.level === k ? '#2563eb' : B.light} />
                               </button>
                             ))}
                           </div>
@@ -531,7 +532,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
                           {jids.map(jid => JOURNEY_MAP[jid] && (
                             <div key={jid} style={{ display: 'flex', alignItems: 'center', gap: 6, background: JOURNEY_MAP[jid].color + '18', border: `1.5px solid ${JOURNEY_MAP[jid].color}44`, borderRadius: 10, padding: '6px 10px' }}>
-                              <span style={{ fontSize: 14 }}>{JOURNEY_MAP[jid].icon}</span>
+                              <Icon name={JOURNEY_MAP[jid].icon} size={14} color={JOURNEY_MAP[jid].color} />
                               <p style={{ ...pp(600, 12), color: B.dark }}>{JOURNEY_MAP[jid].pt}</p>
                               <button style={{ background: 'none', border: 'none', cursor: 'pointer', color: B.light, fontSize: 14, padding: '0 2px', lineHeight: 1 }} onClick={() => upJids(jids.filter(x => x !== jid))}>×</button>
                             </div>
@@ -541,7 +542,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                           <div style={{ display: 'flex', gap: 8 }}>
                             <select style={{ ...S.inp, flex: 1, marginBottom: 0 }} value={addJrnId} onChange={e => setAddJrnId(e.target.value)}>
                               <option value="">Adicionar jornada...</option>
-                              {available.map(j => <option key={j.id} value={j.id}>{j.icon} {j.pt}</option>)}
+                              {available.map(j => <option key={j.id} value={j.id}>{j.pt}</option>)}
                             </select>
                             <button style={{ ...S.btn(B.oliva), padding: '0 16px', display: 'flex', alignItems: 'center', gap: 5 }} onClick={() => { if (addJrnId) { upJids([...jids, addJrnId]); setAddJrnId('') } }}>
                               <Icon name="add" size={14} color="#fff" />
@@ -596,7 +597,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         <div style={{ flex: 1, minWidth: 160 }}>
                           <p style={{ ...pp(600, 13), color: B.dark }}>{c.nome}</p>
                           <p style={{ ...ir(400, 11), color: B.light }}>{c.email} · @{c.usuario}</p>
-                          {c.senha && <p style={{ ...ir(600, 11), color: B.oliva, marginTop: 2 }}>🔑 {c.senha}</p>}
+                          {c.senha && <p style={{ ...ir(600, 11), color: B.oliva, marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}><Icon name="key" size={11} color={B.oliva} />{c.senha}</p>}
                         </div>
                         <div style={{ display: 'flex', gap: 6 }}>
                           <button style={{ ...S.btn(B.oliva), fontSize: 12, padding: '7px 12px', display: 'flex', alignItems: 'center', gap: 5 }}
@@ -660,8 +661,8 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                           <p style={{ ...pp(600, 14), color: B.dark }}>{s.name}</p>
-                          {jrn && <span style={{ fontSize: 10, background: jrn.color + '22', color: jrn.color, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif', border: `1px solid ${jrn.color}44` }}>{jrn.icon} {lang === 'pt' ? jrn.pt : jrn.en}</span>}
-                          {(() => { const sl = SIMPLE_LEVEL[lm.level]; return sl ? <span style={{ fontSize: 10, background: '#e8f4fd', color: '#2563eb', borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{SIMPLE_LABEL[sl]}</span> : null })()}
+                          {jrn && <span style={{ fontSize: 10, background: jrn.color + '22', color: jrn.color, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif', border: `1px solid ${jrn.color}44`, display: 'inline-flex', alignItems: 'center', gap: 3 }}><Icon name={jrn.icon} size={10} color={jrn.color} /> {lang === 'pt' ? jrn.pt : jrn.en}</span>}
+                          {(() => { const sl = SIMPLE_LEVEL[lm.level]; return sl ? <span style={{ fontSize: 10, background: '#e8f4fd', color: '#2563eb', borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif', display: 'inline-flex', alignItems: 'center', gap: 3 }}><Icon name={SIMPLE_ICON[sl]} size={10} color="#2563eb" />{SIMPLE_LABEL[sl]}</span> : null })()}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
                           <span style={{ fontSize: 10, background: lm.color, color: lm.text, borderRadius: 20, padding: '2px 8px', fontWeight: 700, fontFamily: 'Poppins,sans-serif' }}>{lm.level}</span>
@@ -691,7 +692,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                     <p style={{ ...ir(400, 12), color: B.mid, marginTop: 2 }}>@{selS.username} · {lvMeta(selS.id).level} · {pctOf(selS.id)}%</p>
                     {journeyOf(selS.id) && (
                       <span style={{ marginTop: 6, display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 11, background: journeyOf(selS.id).color + '22', color: journeyOf(selS.id).color, borderRadius: 20, padding: '3px 10px', fontWeight: 700, fontFamily: 'Poppins,sans-serif', border: `1px solid ${journeyOf(selS.id).color}44` }}>
-                        {journeyOf(selS.id).icon} {lang === 'pt' ? journeyOf(selS.id).pt : journeyOf(selS.id).en}
+                        <Icon name={journeyOf(selS.id).icon} size={12} color={journeyOf(selS.id).color} /> {lang === 'pt' ? journeyOf(selS.id).pt : journeyOf(selS.id).en}
                       </span>
                     )}
                   </div>
@@ -721,13 +722,13 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
                         {CEFR_META.map(c => {
                           const active = (db[`lv_${selS.id}`] || 'A1') === c.level
-                          return <button key={c.level} style={{ ...S.chip, background: active ? c.color : B.bege, color: active ? c.text : B.mid, fontSize: 13, padding: '8px 16px', fontWeight: 700 }} onClick={() => upDb({ [`lv_${selS.id}`]: c.level })}>{c.icon} {c.level}</button>
+                          return <button key={c.level} style={{ ...S.chip, background: active ? c.color : B.bege, color: active ? c.text : B.mid, fontSize: 13, padding: '8px 16px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5 }} onClick={() => upDb({ [`lv_${selS.id}`]: c.level })}><Icon name={c.icon} size={14} color={active ? c.text : B.mid} />{c.level}</button>
                         })}
                       </div>
                       {(() => { const sl = SIMPLE_LEVEL[db[`lv_${selS.id}`] || 'A1']; return (
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#e8f4fd', borderRadius: 10, padding: '8px 12px' }}>
                           <span style={{ ...ir(400, 12), color: '#2563eb' }}>Nível nas Jornadas:</span>
-                          <span style={{ ...pp(700, 13), color: '#2563eb' }}>{SIMPLE_LABEL[sl]}</span>
+                          <span style={{ ...pp(700, 13), color: '#2563eb', display: 'inline-flex', alignItems: 'center', gap: 4 }}><Icon name={SIMPLE_ICON[sl]} size={13} color="#2563eb" />{SIMPLE_LABEL[sl]}</span>
                           <span style={{ ...ir(400, 11), color: '#64a0d4' }}>(as tasks das jornadas se adaptam automaticamente)</span>
                         </div>
                       )})()}
@@ -766,8 +767,8 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                           {JOURNEYS.map(j => (
                             <button key={j.id} onClick={() => { upDb({ [`jrn_${selS.id}`]: j.id }); setJWeek(1) }}
-                              style={{ ...S.chip, background: currentJid === j.id ? j.color : B.bege, color: currentJid === j.id ? '#fff' : B.mid, fontSize: 12, padding: '8px 14px', border: `1.5px solid ${currentJid === j.id ? j.color : B.border}` }}>
-                              {j.icon} {lang === 'pt' ? j.pt : j.en}
+                              style={{ ...S.chip, background: currentJid === j.id ? j.color : B.bege, color: currentJid === j.id ? '#fff' : B.mid, fontSize: 12, padding: '8px 14px', border: `1.5px solid ${currentJid === j.id ? j.color : B.border}`, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                              <Icon name={j.icon} size={13} color={currentJid === j.id ? '#fff' : B.mid} /> {lang === 'pt' ? j.pt : j.en}
                             </button>
                           ))}
                           {currentJid && <button onClick={() => upDb({ [`jrn_${selS.id}`]: null })} style={{ ...S.chip, background: '#FEE2E2', color: '#DC2626', fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}><Icon name="close" size={11} color="#DC2626" />{lang === 'pt' ? 'Remover' : 'Remove'}</button>}
@@ -776,7 +777,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                       {currentJ && (
                         <>
                           <div style={{ background: currentJ.color, borderRadius: 14, padding: '14px 18px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12 }}>
-                            <span style={{ fontSize: 26 }}>{currentJ.icon}</span>
+                            <Icon name={currentJ.icon} size={26} color="#fff" />
                             <div>
                               <p style={{ ...pp(700, 15), color: '#fff' }}>{lang === 'pt' ? currentJ.pt : currentJ.en}</p>
                               <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.8)' }}>{lang === 'pt' ? currentJ.desc.pt : currentJ.desc.en}</p>
@@ -839,14 +840,14 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                             <div style={{ flex: 1 }}>
                                               <p style={{ ...ir(600, 12), color: B.dark }}>{task.en}</p>
                                               <p style={{ ...ir(400, 10), color: B.light, fontStyle: 'italic' }}>{task.pt}</p>
-                                              {hint && <p style={{ ...ir(400, 10), color: stLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 2, fontStyle: 'italic' }}>{stLevel === 'advanced' ? '🔺' : '🔹'} {hint}</p>}
+                                              {hint && <p style={{ ...ir(400, 10), color: stLevel === 'advanced' ? B.oliva : B.laranja, marginTop: 2, fontStyle: 'italic', display: 'flex', alignItems: 'center', gap: 4 }}><Icon name={stLevel === 'advanced' ? 'trendingUp' : 'lightbulb'} size={10} color={stLevel === 'advanced' ? B.oliva : B.laranja} />{hint}</p>}
                                               {task.link && <a href={task.link} target="_blank" rel="noreferrer" style={{ ...ir(400, 10), color: B.laranja, display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 }}><Icon name="link" size={10} color={B.laranja} />{task.link}</a>}
-                                              {r && <a href={r.url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f5f0eb', borderRadius: 20, padding: '3px 9px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 4 }}>{TYPE_ICON[r.type]} {r.label}</a>}
+                                              {r && <a href={r.url} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, background: '#f5f0eb', borderRadius: 20, padding: '3px 9px', fontSize: 10, fontWeight: 600, color: B.dark, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', border: `1px solid ${B.border}`, marginTop: 4 }}><Icon name={TYPE_ICON[r.type]} size={10} color={B.dark} /> {r.label}</a>}
                                             </div>
                                             <button title={lang === 'pt' ? 'Atividades' : 'Activities'}
                                               style={{ background: actExpandTask === task.id ? B.laranja + '22' : B.bege, border: `1px solid ${actExpandTask === task.id ? B.laranja : B.border}`, borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center', fontSize: 13 }}
                                               onClick={() => setActExpandTask(actExpandTask === task.id ? null : task.id)}>
-                                              🎯
+                                              <Icon name="target" size={13} color={actExpandTask === task.id ? B.laranja : B.mid} />
                                             </button>
                                             <button style={{ background: B.bege, border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => setJEditTask({ ...task })}><Icon name="edit" size={13} color={B.mid} /></button>
                                             <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => delJTask(selS.id, currentJid, jWeek, task.id)}><Icon name="delete" size={13} color="#DC2626" /></button>

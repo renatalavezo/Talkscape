@@ -4,6 +4,7 @@ import { ir, pp, S } from '../constants/styles'
 import { AVATARS } from '../constants/avatars'
 import { hashPassword } from '../utils'
 import Logo from './Logo'
+import Icon from './Icon'
 
 export default function Register({ lang, onBack, students, upDb }) {
   const [name,  setName]  = useState('')
@@ -47,14 +48,14 @@ export default function Register({ lang, onBack, students, upDb }) {
   if (done) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})`, padding: 20 }}>
       <div style={{ background: B.white, borderRadius: 24, padding: '44px 32px', maxWidth: 400, width: '100%', textAlign: 'center', boxShadow: '0 40px 80px rgba(44,24,16,0.3)' }}>
-        <div style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}><Icon name="checkCircle" size={56} color={B.oliva} /></div>
         <p style={{ ...pp(800, 20), color: B.dark, marginBottom: 10 }}>
           {pt ? 'Cadastro recebido!' : 'Registration received!'}
         </p>
         <p style={{ ...ir(400, 14), color: B.mid, lineHeight: 1.6, marginBottom: 28 }}>
           {pt
-            ? 'Teacher Renata vai entrar em contato para liberar seu acesso. Fique de olho no WhatsApp! 💬'
-            : 'Teacher Renata will reach out to set up your access. Keep an eye on WhatsApp! 💬'}
+            ? 'Teacher Renata vai entrar em contato para liberar seu acesso. Fique de olho no WhatsApp!'
+            : 'Teacher Renata will reach out to set up your access. Keep an eye on WhatsApp!'}
         </p>
         <a href="https://wa.me/5511986704076" target="_blank" rel="noreferrer"
           style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '11px 22px', background: '#25D366', color: '#fff', borderRadius: 12, fontSize: 14, fontWeight: 700, textDecoration: 'none', fontFamily: 'Poppins,sans-serif', marginBottom: 16 }}>
@@ -104,7 +105,7 @@ export default function Register({ lang, onBack, students, upDb }) {
 
         {err && (
           <div style={{ background: '#FEE2E2', borderRadius: 10, padding: '10px 14px', marginBottom: 14, display: 'flex', gap: 8 }}>
-            <span>⚠️</span>
+            <Icon name="warning" size={14} color="#DC2626" />
             <p style={{ ...ir(600, 12), color: '#DC2626' }}>{err}</p>
           </div>
         )}

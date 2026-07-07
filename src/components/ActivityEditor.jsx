@@ -4,12 +4,12 @@ import { ir, pp, S } from '../constants/styles'
 import Icon from './Icon'
 
 const TYPES = [
-  { id: 'mc',        en: 'Multiple Choice',   pt: 'Múltipla Escolha',  icon: '🔤' },
-  { id: 'fill',      en: 'Fill in the Blank', pt: 'Complete a Frase',  icon: '✏️' },
-  { id: 'tf',        en: 'True / False',      pt: 'Verdadeiro / Falso', icon: '⚖️' },
-  { id: 'translate', en: 'Translation',       pt: 'Tradução',          icon: '🔁' },
-  { id: 'match',     en: 'Match',             pt: 'Relacione',         icon: '🔗' },
-  { id: 'text',      en: 'Written Answer',    pt: 'Resposta Escrita',  icon: '📝' },
+  { id: 'mc',        en: 'Multiple Choice',   pt: 'Múltipla Escolha',  icon: 'list' },
+  { id: 'fill',      en: 'Fill in the Blank', pt: 'Complete a Frase',  icon: 'pen' },
+  { id: 'tf',        en: 'True / False',      pt: 'Verdadeiro / Falso', icon: 'scale' },
+  { id: 'translate', en: 'Translation',       pt: 'Tradução',          icon: 'repeat' },
+  { id: 'match',     en: 'Match',             pt: 'Relacione',         icon: 'link' },
+  { id: 'text',      en: 'Written Answer',    pt: 'Resposta Escrita',  icon: 'writing' },
 ]
 
 function blank() {
@@ -104,7 +104,7 @@ function ActForm({ draft, setDraft, lang }) {
                 onChange={e => setPair(i, 'right', e.target.value)} placeholder={lang === 'pt' ? 'Direita' : 'Right'} />
               {draft.pairs.length > 2 && (
                 <button onClick={() => setDraft(d => ({ ...d, pairs: d.pairs.filter((_, j) => j !== i) }))}
-                  style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '5px 7px', cursor: 'pointer', color: '#DC2626', fontSize: 12 }}>✕</button>
+                  style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '5px 7px', cursor: 'pointer', color: '#DC2626', fontSize: 12, display: 'flex', alignItems: 'center' }}><Icon name="delete" size={12} color="#DC2626" /></button>
               )}
             </div>
           ))}
@@ -190,7 +190,7 @@ export default function ActivityEditor({ acts = [], lang, onChange }) {
   return (
     <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px dashed ${B.border}` }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-        <p style={{ ...pp(600, 11), color: B.marrom }}>🎯 {lang === 'pt' ? `Atividades (${acts.length})` : `Activities (${acts.length})`}</p>
+        <p style={{ ...pp(600, 11), color: B.marrom, display: 'flex', alignItems: 'center', gap: 5 }}><Icon name="target" size={12} color={B.marrom} />{lang === 'pt' ? `Atividades (${acts.length})` : `Activities (${acts.length})`}</p>
       </div>
 
       {acts.length > 0 && (
@@ -199,7 +199,7 @@ export default function ActivityEditor({ acts = [], lang, onChange }) {
             const info = TYPES.find(t => t.id === act.type)
             return (
               <div key={act.id || i} style={{ display: 'flex', alignItems: 'center', gap: 6, background: B.cream, borderRadius: 8, padding: '7px 10px', border: `1px solid ${B.border}` }}>
-                <span style={{ fontSize: 14 }}>{info?.icon}</span>
+                <Icon name={info?.icon} size={14} color={B.mid} />
                 <p style={{ ...ir(600, 11), color: B.dark, flex: 1 }}>{act.prompt}</p>
                 <button onClick={() => move(i, -1)} disabled={i === 0}
                   style={{ background: 'none', border: 'none', cursor: i === 0 ? 'default' : 'pointer', color: B.light, fontSize: 13, padding: '2px 4px', opacity: i === 0 ? 0.3 : 1 }}>↑</button>
@@ -226,7 +226,7 @@ export default function ActivityEditor({ acts = [], lang, onChange }) {
             {TYPES.map(type => (
               <button key={type.id} onClick={() => startAdd(type.id)}
                 style={{ padding: '5px 10px', borderRadius: 20, border: `1.5px solid ${B.border}`, background: '#fff', cursor: 'pointer', fontSize: 11, fontFamily: 'Poppins,sans-serif', fontWeight: 600, color: B.mid, display: 'flex', alignItems: 'center', gap: 4 }}>
-                {type.icon} {lang === 'pt' ? type.pt : type.en}
+                <Icon name={type.icon} size={12} color={B.mid} /> {lang === 'pt' ? type.pt : type.en}
               </button>
             ))}
           </div>
@@ -235,8 +235,8 @@ export default function ActivityEditor({ acts = [], lang, onChange }) {
 
       {adding && (
         <div style={{ background: B.cream, borderRadius: 10, padding: 14, border: `1.5px solid ${B.laranja}44` }}>
-          <p style={{ ...pp(700, 12), color: B.marrom, marginBottom: 10 }}>
-            {TYPES.find(t => t.id === selType)?.icon} {lang === 'pt' ? TYPES.find(t => t.id === selType)?.pt : TYPES.find(t => t.id === selType)?.en}
+          <p style={{ ...pp(700, 12), color: B.marrom, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Icon name={TYPES.find(t => t.id === selType)?.icon} size={14} color={B.marrom} /> {lang === 'pt' ? TYPES.find(t => t.id === selType)?.pt : TYPES.find(t => t.id === selType)?.en}
           </p>
           <ActForm draft={draft} setDraft={setDraft} lang={lang} />
           <div style={{ display: 'flex', gap: 7, marginTop: 12 }}>
