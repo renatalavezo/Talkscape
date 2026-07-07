@@ -41,7 +41,8 @@ export const S = {
   navBtn: {
     padding: '7px 12px', background: 'transparent', border: 'none', borderRadius: 7,
     cursor: 'pointer', fontSize: 11, fontWeight: 600,
-    fontFamily: "'Poppins',sans-serif", whiteSpace: 'nowrap',
+    fontFamily: "'Poppins','Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif",
+    whiteSpace: 'nowrap',
   },
   lbl: {
     fontFamily: 'Poppins,sans-serif', fontWeight: 600, fontSize: 11, lineHeight: 1.5,

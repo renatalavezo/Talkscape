@@ -1,0 +1,7 @@
+{
+  "_comment": "O app usa autenticacao propria (no codigo), nao Firebase Auth. Por isso as regras do servidor ficam liberadas. A protecao de dados acontece no cliente: senhas viram hash SHA-256, cada aluna recebe apenas a fatia do banco com os dados dela (studentDbSlice), e a lista de alunas e passada sem o campo password (safeStudents). Para travar tudo no servidor seria preciso migrar para Firebase Authentication.",
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}

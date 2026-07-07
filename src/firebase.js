@@ -1,7 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app'
 import { getDatabase, ref, get, set } from 'firebase/database'
 
-// ── Firebase configuration ─────────────────────────────────────────
 const firebaseConfig = {
   apiKey:            'AIzaSyB95bx2d_rf6IRxGP3XM3byz-tTGDJ3xWE',
   authDomain:        'talkscape-by-renata.firebaseapp.com',
