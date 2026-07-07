@@ -318,7 +318,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
       {/* JORNADAS */}
       <section style={{ padding: '72px 24px', maxWidth: 960, margin: '0 auto' }}>
         <h2 style={{ ...pp(700, 28), color: B.dark, textAlign: 'center', marginBottom: 8 }}>Jornadas de aprendizado</h2>
-        <p style={{ ...ir(400, 15), color: B.mid, textAlign: 'center', marginBottom: 48 }}>Cada aluna escolhe o caminho que faz sentido pra ela.</p>
+        <p style={{ ...ir(400, 15), color: B.mid, textAlign: 'center', marginBottom: 48 }}>Escolha o caminho que faz sentido pra você.</p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
           {JOURNEYS.map(j => (
             <div key={j.id} style={{ background: j.color + '18', border: `1.5px solid ${j.color}44`, borderRadius: 14, padding: '12px 18px', display: 'flex', alignItems: 'center', gap: 10, maxWidth: 280 }}>
