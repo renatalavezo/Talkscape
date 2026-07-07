@@ -34,6 +34,7 @@ const C = {
 
 const serif = (weight, size, extra = {}) => ({ fontFamily: "'Newsreader',serif", fontWeight: weight, fontSize: size, ...extra })
 const sans = (weight, size, extra = {}) => ({ fontFamily: "'Hanken Grotesk',sans-serif", fontWeight: weight, fontSize: size, ...extra })
+const navLink = { color: 'inherit', textDecoration: 'none' }
 
 // darken a hex color by a fixed channel amount (used for the diagonal-stripe banners)
 function shade(hex, amt) {
@@ -205,8 +206,9 @@ const PlanCard = ({ plan }) => (
   </div>
 )
 
-export default function LandingPage({ onBack, onStudent, onCourse }) {
+export default function LandingPage({ onStudent, onCourse, onTeacher }) {
   const [showModal, setShowModal] = useState(false)
+  const [showTeacherLink, setShowTeacherLink] = useState(false)
   const [tipo, setTipo] = useState('particular')
   const [nome, setNome] = useState('')
   const [email, setEmail] = useState('')
@@ -330,7 +332,7 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
         <div style={{ maxWidth: 1180, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 40px' }}>
           <Logo h={54} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 24, fontSize: 15, fontWeight: 600, color: '#4A423A', flexWrap: 'wrap' }}>
-            <a href="#porque">Por quê</a><a href="#metodo">Método</a><a href="#jornadas">Jornadas</a><a href="#planos">Planos</a><a href="#renata">A Renata</a>
+            <a href="#porque" style={navLink}>Por quê</a><a href="#metodo" style={navLink}>Método</a><a href="#jornadas" style={navLink}>Jornadas</a><a href="#planos" style={navLink}>Planos</a><a href="#renata" style={navLink}>A Renata</a>
             <button onClick={onStudent} style={{ border: `1.5px solid ${C.green}`, background: 'none', color: C.green, padding: '10px 20px', borderRadius: 100, fontWeight: 600, fontSize: 15, cursor: 'pointer', fontFamily: 'inherit' }}>Já sou aluna</button>
             <button onClick={() => openModal('particular')} style={{ background: C.terracotta, border: 'none', color: '#fff', padding: '10px 22px', borderRadius: 100, fontWeight: 700, fontSize: 15, cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif" }}>Quero começar</button>
           </div>
@@ -619,10 +621,21 @@ export default function LandingPage({ onBack, onStudent, onCourse }) {
         <div style={{ maxWidth: 1180, margin: '0 auto', padding: '48px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 24 }}>
           <Logo h={44} contrast />
           <div style={{ display: 'flex', gap: 28, fontSize: 15, fontWeight: 500, flexWrap: 'wrap' }}>
-            <a href="#metodo">Método</a><a href="#jornadas">Jornadas</a><a href="#planos">Planos</a><a href="#renata">A Renata</a>
-            <a href={INSTAGRAM} target="_blank" rel="noreferrer">Instagram</a>
+            <a href="#metodo" style={navLink}>Método</a><a href="#jornadas" style={navLink}>Jornadas</a><a href="#planos" style={navLink}>Planos</a><a href="#renata" style={navLink}>A Renata</a>
+            <a href={INSTAGRAM} target="_blank" rel="noreferrer" style={navLink}>Instagram</a>
           </div>
           <div style={{ fontSize: 14, opacity: .6 }}>© 2026 TalkScape by Renata</div>
+        </div>
+        <div style={{ maxWidth: 1180, margin: '0 auto', padding: '0 40px 20px', display: 'flex', justifyContent: 'flex-end' }}>
+          {!showTeacherLink ? (
+            <button onClick={() => setShowTeacherLink(true)} style={{ background: 'none', border: 'none', color: 'rgba(216,207,194,0.35)', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit' }}>
+              acesso restrito
+            </button>
+          ) : (
+            <button onClick={onTeacher} style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, padding: '7px 16px', color: 'rgba(216,207,194,0.7)', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit' }}>
+              Entrar como professora
+            </button>
+          )}
         </div>
       </div>
     </div>
