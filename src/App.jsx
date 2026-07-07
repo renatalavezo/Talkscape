@@ -24,6 +24,7 @@ export default function App() {
   const [loginErr, setLoginErr] = useState('')
   const [loading, setLoading]   = useState(true)
   const [ready, setReady]       = useState(false)
+  const [connErr, setConnErr]   = useState(false)
 
   const saveTimer  = useRef(null)
   const isRemote   = useRef(false)
@@ -35,11 +36,16 @@ export default function App() {
       const fresh = snap.exists() ? snap.val() : {}
       isRemote.current = true
       setDb(fresh)
+      setConnErr(false)
       if (!ready) {
         setLang(fresh.lang || 'pt')
         setLoading(false)
         setReady(true)
       }
+    }, err => {
+      console.error('Firebase connection error', err)
+      setConnErr(true)
+      setLoading(false)
     })
     return () => unsub()
   }, [])
@@ -70,12 +76,17 @@ export default function App() {
     setId(s.id); setView('student'); setLoginErr('')
   }
 
-  if (loading) return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})` }}>
+  if (loading || (connErr && !ready)) return (
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})`, padding: 24, textAlign: 'center' }}>
       <Logo h={60} contrast />
       <div style={{ marginTop: 28, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-        <div style={{ width: 36, height: 36, border: '4px solid rgba(255,255,255,0.3)', borderTop: '4px solid #fff', borderRadius: '50%', animation: 'spin 0.9s linear infinite' }} />
-        <p style={{ ...ir(500, 14), color: 'rgba(255,255,255,0.8)' }}>{t.loading}</p>
+        {connErr
+          ? <p style={{ ...ir(500, 14), color: '#fff', maxWidth: 320 }}>{t.connError}</p>
+          : <>
+              <div style={{ width: 36, height: 36, border: '4px solid rgba(255,255,255,0.3)', borderTop: '4px solid #fff', borderRadius: '50%', animation: 'spin 0.9s linear infinite' }} />
+              <p style={{ ...ir(500, 14), color: 'rgba(255,255,255,0.8)' }}>{t.loading}</p>
+            </>
+        }
       </div>
     </div>
   )
