@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { B, CAT, GRADE } from '../constants/colors'
+import { B, CAT } from '../constants/colors'
 import { ir, pp, S } from '../constants/styles'
 import { CEFR_META } from '../constants/cefr'
 import { PLAN } from '../constants/plan'
@@ -194,69 +194,209 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
       <div style={{ flex: 1, overflowY: 'auto' }}>
 
         {/* Dashboard tab */}
-        {tab === 'dashboard' && (
-          <div style={{ padding: '20px 14px', maxWidth: 860, margin: '0 auto' }}>
+        {tab === 'dashboard' && (() => {
+          const D = {
+            accent: '#A83D22', accentLight: '#C25A34', accentSoft: '#E29A50',
+            dark: '#5A2C22', darkSoft: '#8A4028',
+            cream: '#FBF4EC', border: '#EFE3D6',
+            peach: '#F6E2D4', peachBorder: '#EACBB4',
+            green: '#3F6B4E', greenBg: '#E3EDE1',
+            muted: '#8A6F5E', today: '#F0A35A',
+          }
+          const nf = (w, s, lh = 1.1) => ({ fontFamily: "'Newsreader',serif", fontWeight: w, fontSize: s, lineHeight: lh })
+          const jf = (w, s, lh = 1.4) => ({ fontFamily: "'Plus Jakarta Sans',sans-serif", fontWeight: w, fontSize: s, lineHeight: lh })
+
+          const jCurrentWeek = journey
+            ? (jAllWeeks.find(w => { const wt = jGetTasks(w.week); return wt.length ? wt.some(tk => !jChecked[tk.id]) : false }) || jAllWeeks[jAllWeeks.length - 1])
+            : null
+          const jCurrentTasks = jCurrentWeek ? jGetTasks(jCurrentWeek.week) : []
+          const jCurrentPct = jCurrentTasks.length ? Math.round(jCurrentTasks.filter(tk => jChecked[tk.id]).length / jCurrentTasks.length * 100) : 0
+
+          const pendingHW = hw.filter(h => !h.done).slice(0, 3)
+          const avgScore = Object.values(scores).length ? Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length) : null
+          const chartWeeks = allWeekDefs.slice(-4)
+
+          return (
+          <div style={{ padding: '20px 14px', maxWidth: 1080, margin: '0 auto' }}>
             {/* Welcome / first step */}
             {!isPreview && !db[`seenWelcome_${sid}`] && (
-              <div style={{ background: B.larBg, border: `1.5px solid ${B.laranja}55`, borderRadius: 16, padding: '16px 18px', marginBottom: 16, position: 'relative' }}>
+              <div style={{ background: D.peach, border: `1.5px solid ${D.peachBorder}`, borderRadius: 16, padding: '16px 18px', marginBottom: 20, position: 'relative' }}>
                 <button style={{ position: 'absolute', top: 10, right: 10, background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }} onClick={() => upDb({ [`seenWelcome_${sid}`]: true })}>
-                  <Icon name="close" size={16} color={B.light} />
+                  <Icon name="close" size={16} color={D.muted} />
                 </button>
-                <p style={{ ...pp(700, 15), color: B.dark, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="smile" size={18} color={B.laranja} />{lang === 'pt' ? `Bem-vinda, ${student.name}!` : `Welcome, ${student.name}!`}</p>
-                <p style={{ ...ir(400, 13), color: B.mid, lineHeight: 1.6, marginBottom: 12 }}>
+                <p style={{ ...jf(700, 15), color: D.dark, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 7 }}><Icon name="smile" size={18} color={D.accent} />{lang === 'pt' ? `Bem-vinda, ${student.name}!` : `Welcome, ${student.name}!`}</p>
+                <p style={{ ...jf(400, 13), color: D.muted, lineHeight: 1.6, marginBottom: 12 }}>
                   {lang === 'pt'
-                    ? 'Aqui você acompanha seu progresso. Para começar a estudar, vá até a aba Plano e abra a Semana 1.'
-                    : 'This is where you track your progress. To start studying, go to the Plan tab and open Week 1.'}
+                    ? 'Aqui você acompanha seu progresso. Para começar a estudar, vá até a aba Jornada.'
+                    : 'This is where you track your progress. To start studying, go to the Journey tab.'}
                 </p>
-                <button style={{ ...S.btn(B.laranja), fontSize: 13, padding: '9px 16px', display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={() => { setTab('journey'); upDb({ [`seenWelcome_${sid}`]: true }) }}>
-                  <Icon name="plan" size={14} color="#fff" />{lang === 'pt' ? 'Ir para o Plano' : 'Go to the Plan'}
+                <button style={{ padding: '9px 16px', background: D.accent, color: '#fff', border: 'none', borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={() => { setTab('journey'); upDb({ [`seenWelcome_${sid}`]: true }) }}>
+                  <Icon name="map" size={14} color="#fff" />{lang === 'pt' ? 'Ir para a Jornada' : 'Go to the Journey'}
                 </button>
               </div>
             )}
-            {/* Hero */}
-            <div style={{ background: `linear-gradient(135deg,${B.marrom},${B.laranja} 60%,${B.rosa})`, borderRadius: 20, padding: '22px 20px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-              <Avatar seed={myAvatar} size={64} />
-              <div style={{ flex: 1, minWidth: 140 }}>
-                <p style={{ ...pp(800, 18), color: '#fff', marginBottom: 4 }}>{lang === 'pt' ? `Olá, ${student.name}!` : `Hi, ${student.name}!`}</p>
-                <p style={{ ...ir(400, 12), color: 'rgba(255,255,255,0.75)', marginBottom: 12 }}>{lang === 'pt' ? 'Continue sua jornada com Teacher Renata' : 'Continue your journey with Teacher Renata'}</p>
-                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  {[
-                    { v: `${pct}%`, l: t.overallLabel },
-                    { v: `${done2}/${total2}`, l: t.tasksDone },
-                    { v: Object.values(scores).length ? Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length) + '%' : '—', l: t.avgLabel },
-                  ].map((s, i) => (
-                    <div key={i} style={{ background: 'rgba(255,255,255,0.18)', borderRadius: 10, padding: '9px 12px', textAlign: 'center', minWidth: 66 }}>
-                      <p style={{ ...pp(800, 16), color: '#fff' }}>{s.v}</p>
-                      <p style={{ ...ir(400, 10), color: 'rgba(255,255,255,0.7)' }}>{s.l}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
 
-            {/* Progress chart */}
-            <div style={{ ...S.card, marginBottom: 20 }}>
-              <p style={{ ...S.lbl, display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="progress" size={14} color={B.mid} />{t.progressChart}</p>
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 110, padding: '4px 0 0' }}>
-                {allWeekDefs.map((w, i) => {
-                  const p = wPct(w.week), sc = scores[`week${w.week}`]
-                  return (
-                    <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
-                      <p style={{ ...ir(600, 9), color: p > 0 ? B.marrom : B.light }}>{p}%</p>
-                      <div style={{ width: '100%', height: 90, display: 'flex', alignItems: 'flex-end' }}>
-                        <div style={{ width: '100%', height: `${Math.max(p / 100 * 90, 3)}px`, background: p === 100 ? `linear-gradient(to top,${B.oliva},${B.olivaD})` : `linear-gradient(to top,${B.laranja},${B.rosa})`, borderRadius: '5px 5px 0 0', transition: 'height 0.6s ease', position: 'relative' }}>
-                          {sc > 0 && <div style={{ position: 'absolute', top: -18, left: '50%', transform: 'translateX(-50%)', background: GRADE(sc).c, color: '#fff', borderRadius: 10, padding: '1px 5px', fontSize: 9, fontWeight: 700, fontFamily: 'Poppins,sans-serif', whiteSpace: 'nowrap' }}>{sc}%</div>}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20 }}>
+
+              {/* LEFT column */}
+              <div style={{ flex: '2 1 480px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+                {/* Continue where you left off */}
+                <div style={{ position: 'relative', borderRadius: 24, padding: '30px 28px', background: `linear-gradient(120deg,${D.accent} 0%,${D.accentLight} 55%,${D.accentSoft} 100%)`, color: '#fff', overflow: 'hidden' }}>
+                  <div style={{ position: 'absolute', right: -50, top: -50, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
+                  <div style={{ position: 'relative' }}>
+                    <p style={{ ...jf(800, 12), letterSpacing: 0.6, textTransform: 'uppercase', opacity: 0.95 }}>{lang === 'pt' ? 'Continue de onde parou' : 'Continue where you left off'}</p>
+                    {journey && jCurrentWeek ? (
+                      <>
+                        <p style={{ ...nf(500, 28), margin: '10px 0 6px' }}>{lang === 'pt' ? journey.pt : journey.en}</p>
+                        <p style={{ ...jf(500, 14), opacity: 0.95 }}>
+                          {lang === 'pt' ? `Semana ${jCurrentWeek.week}` : `Week ${jCurrentWeek.week}`} · {jCurrentWeek.theme?.[lang] || jCurrentWeek.theme?.en}
+                        </p>
+                        <div style={{ marginTop: 16, height: 9, background: 'rgba(0,0,0,0.18)', borderRadius: 99, overflow: 'hidden', maxWidth: 380 }}>
+                          <div style={{ width: `${jCurrentPct}%`, height: '100%', background: '#fff', borderRadius: 99, transition: 'width 0.6s' }} />
                         </div>
-                      </div>
-                      <p style={{ ...ir(500, 9), color: B.light }}>{t.week.slice(0, 3)} {w.week}</p>
+                        <button style={{ marginTop: 20, background: '#fff', color: D.accent, fontWeight: 800, fontSize: 14, padding: '12px 22px', borderRadius: 12, border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                          onClick={() => { setJSelWeek(jCurrentWeek.week); setTab('journey') }}>
+                          <Icon name="send" size={13} color={D.accent} />{lang === 'pt' ? 'Retomar lição' : 'Resume lesson'}
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <p style={{ ...nf(500, 24), margin: '10px 0 6px' }}>{lang === 'pt' ? 'Nenhuma jornada atribuída ainda' : 'No journey assigned yet'}</p>
+                        <p style={{ ...jf(500, 14), opacity: 0.95 }}>{lang === 'pt' ? 'Teacher Renata vai configurar sua jornada em breve!' : 'Teacher Renata will set up your journey soon!'}</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Today's tasks */}
+                <div style={{ background: '#fff', border: `1px solid ${D.border}`, borderRadius: 24, padding: 24 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                    <p style={{ ...jf(800, 16), color: D.dark }}>{lang === 'pt' ? 'Suas tarefas de hoje' : "Today's tasks"}</p>
+                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: D.accent, fontWeight: 700, fontFamily: "'Plus Jakarta Sans',sans-serif" }} onClick={() => setTab('hw')}>{lang === 'pt' ? 'Ver todas →' : 'See all →'}</button>
+                  </div>
+                  {pendingHW.length === 0 ? (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px', borderRadius: 14, background: D.cream, opacity: 0.8 }}>
+                      <Icon name="checkCircle" size={22} color={D.green} />
+                      <p style={{ ...jf(600, 14), color: D.muted }}>{lang === 'pt' ? 'Nenhuma lição pendente por agora!' : 'No pending homework right now!'}</p>
                     </div>
-                  )
-                })}
+                  ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                      {pendingHW.map(h => {
+                        const cm = CAT[h.cat] || CAT.grammar
+                        return (
+                          <div key={h.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px', border: `1px solid ${D.border}`, borderRadius: 14 }}>
+                            <div style={{ width: 42, height: 42, borderRadius: 12, background: D.peach, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                              <Icon name="homework" size={19} color={D.accent} />
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <p style={{ ...jf(700, 14), color: '#3D2A22' }}>{lang === 'pt' ? h.pt : h.en}</p>
+                              <p style={{ ...jf(500, 12), color: D.muted, display: 'inline-flex', alignItems: 'center', gap: 4 }}><span style={S.dot(cm.dot)} />{lang === 'pt' ? cm.pt : cm.en}</p>
+                            </div>
+                            <button style={{ background: D.accent, color: '#fff', fontWeight: 700, fontSize: 12, padding: '9px 16px', borderRadius: 10, border: 'none', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", flexShrink: 0 }} onClick={() => setTab('hw')}>
+                              {lang === 'pt' ? 'Começar' : 'Start'}
+                            </button>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {/* Weekly progress chart */}
+                <div style={{ background: '#fff', border: `1px solid ${D.border}`, borderRadius: 24, padding: 24 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                    <p style={{ ...jf(800, 16), color: D.dark }}>{t.progressChart}</p>
+                    <span style={{ ...jf(600, 12), color: D.muted }}>{lang === 'pt' ? `Últimas ${chartWeeks.length} semanas` : `Last ${chartWeeks.length} weeks`}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'flex-end', gap: 16, height: 130 }}>
+                    {chartWeeks.map((w, i) => {
+                      const p = wPct(w.week), isLast = i === chartWeeks.length - 1
+                      return (
+                        <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, height: '100%', justifyContent: 'flex-end' }}>
+                          <div style={{ fontSize: 12, fontWeight: 800, color: isLast ? '#fff' : D.accent, background: isLast ? D.accent : 'transparent', padding: isLast ? '2px 8px' : 0, borderRadius: 6 }}>{p}%</div>
+                          <div style={{ width: '100%', height: `${Math.max(p, 4)}%`, background: isLast ? `linear-gradient(${D.accentLight},${D.accent})` : '#EAC3A9', borderRadius: '10px 10px 4px 4px', transition: 'height 0.6s' }} />
+                          <div style={{ fontSize: 12, color: D.muted, fontWeight: isLast ? 800 : 400 }}>{t.week.slice(0, 3)} {w.week}</div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* RIGHT column */}
+              <div style={{ flex: '1 1 280px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+                {/* Greeting + ring */}
+                <div style={{ background: `linear-gradient(160deg,#fff,${D.peach}55)`, border: `1px solid ${D.border}`, borderRadius: 24, padding: 26, textAlign: 'center' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 18 }}>
+                    <Avatar seed={myAvatar} size={40} />
+                    <div style={{ textAlign: 'left' }}>
+                      <p style={{ ...nf(500, 18), color: D.dark }}>{lang === 'pt' ? `Olá, ${student.name}!` : `Hi, ${student.name}!`}</p>
+                      <p style={{ ...jf(500, 11), color: D.muted, marginTop: 2, display: 'inline-flex', alignItems: 'center', gap: 3 }}><Icon name="smile" size={11} color={D.muted} />{lang === 'pt' ? 'Bom te ver de volta' : 'Good to see you back'}</p>
+                    </div>
+                  </div>
+                  <div style={{ position: 'relative', width: 150, height: 150, margin: '0 auto' }}>
+                    <div style={{ width: 150, height: 150, borderRadius: '50%', background: `conic-gradient(${D.accent} 0%, ${D.accentLight} ${pct}%, ${D.peach} ${pct}% 100%)` }} />
+                    <div style={{ position: 'absolute', inset: 13, background: '#fff', borderRadius: '50%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                      <p style={{ ...jf(800, 34), color: D.dark, lineHeight: 1 }}>{pct}%</p>
+                      <p style={{ ...jf(600, 11), color: D.muted, marginTop: 4 }}>{lang === 'pt' ? 'do plano concluído' : 'of the plan done'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Streak */}
+                <div style={{ background: `linear-gradient(135deg,${D.dark},${D.darkSoft})`, borderRadius: 24, padding: 22, color: '#fff' }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                    <p style={{ ...jf(800, 34), lineHeight: 1 }}>{streak}</p>
+                    <p style={{ ...jf(700, 14), opacity: 0.9, display: 'inline-flex', alignItems: 'center', gap: 4 }}><Icon name="habits" size={14} color="#fff" />{t.streakLabel}</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: 6, marginTop: 16 }}>
+                    {days.map((d, i) => {
+                      const isT = d === today, done = dayDone(d)
+                      return (
+                        <div key={d} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                          <span style={{ fontSize: 9, opacity: 0.7 }}>{t.dayNames[i][0]}</span>
+                          <div style={{ width: '100%', height: 26, borderRadius: 7, background: isT ? D.today : done ? '#fff' : 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isT ? D.dark : D.darkSoft, fontSize: 10, fontWeight: 800 }}>
+                            {done ? <Icon name="check" size={11} color={D.darkSoft} /> : isT ? (lang === 'pt' ? 'hoje' : 'today') : ''}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* Mini stats */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <div style={{ background: '#fff', border: `1px solid ${D.border}`, borderRadius: 16, padding: 16 }}>
+                    <p style={{ ...jf(800, 24), color: D.dark }}>{done2}<span style={{ fontSize: 14, color: D.muted }}>/{total2}</span></p>
+                    <p style={{ ...jf(500, 12), color: D.muted, marginTop: 2 }}>{t.tasksDone}</p>
+                  </div>
+                  <div style={{ background: '#fff', border: `1px solid ${D.border}`, borderRadius: 16, padding: 16 }}>
+                    <p style={{ ...jf(800, 24), color: D.dark }}>{avgScore !== null ? `${avgScore}%` : '—'}</p>
+                    <p style={{ ...jf(500, 12), color: D.muted, marginTop: 2 }}>{t.avgLabel}</p>
+                  </div>
+                </div>
+
+                {/* Current level */}
+                <div style={{ background: D.peach, border: `1px solid ${D.peachBorder}`, borderRadius: 24, padding: 22 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
+                    <div style={{ width: 42, height: 42, borderRadius: 12, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon name={lvm.icon} size={20} color={D.accent} />
+                    </div>
+                    <p style={{ ...jf(800, 15), color: D.dark }}>{lang === 'pt' ? 'Seu nível' : 'Your level'}</p>
+                  </div>
+                  <p style={{ ...jf(500, 13), color: '#6E5346', lineHeight: 1.5 }}>
+                    {lvl} · {lvm.label[lang]}
+                  </p>
+                </div>
+
               </div>
             </div>
-
           </div>
-        )}
+          )
+        })()}
 
         {/* Plan tab */}
 
