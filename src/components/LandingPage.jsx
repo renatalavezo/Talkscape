@@ -72,13 +72,6 @@ const WAButton = ({ style, href = WHATSAPP, children = 'Falar no WhatsApp' }) =>
 
 // ---- static content data (mirrors the mockup copy) ----
 
-const STATS = [
-  { value: '100%', label: 'online e ao vivo' },
-  { value: '1 : 1', label: 'aulas individuais' },
-  { value: '3–4', label: 'alunas por turma' },
-  { value: '9', label: 'jornadas na plataforma' },
-]
-
 const DIFFERENTIALS = [
   { icon: 'target', title: 'Verdadeiramente personalizado', text: 'Cada aluna percorre um caminho único, a partir do seu ritmo, dos seus objetivos e da sua história. Não existe receita pronta aqui — o que funciona pra uma pessoa pode não funcionar pra outra, e isso é respeitado desde o primeiro encontro.' },
   { icon: 'messagesSquare', title: 'Inglês como prática social', text: 'Aprender uma língua vai muito além de memorizar gramática. O foco é desenvolver a sua capacidade de se expressar e pensar em inglês de forma genuína, com contexto e propósito — não apenas pra passar em testes.' },
@@ -364,18 +357,6 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
             <div style={{ width: 42, height: 42, borderRadius: '50%', background: C.green, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>R</div>
             <div><div style={{ fontWeight: 700, fontSize: 15 }}>Aqui é o seu espaço</div><div style={{ fontSize: 13, color: '#6E655C' }}>no seu ritmo, sem pressão</div></div>
           </div>
-        </div>
-      </div>
-
-      {/* STATS BAR */}
-      <div style={{ background: C.green, color: '#F3ECDD' }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)' }}>
-          {STATS.map((s, i) => (
-            <div key={i} style={{ padding: '34px 40px', borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,.12)' : 'none' }}>
-              <div style={serif(400, 42, { lineHeight: 1 })}>{s.value}</div>
-              <div style={{ fontSize: 15, opacity: .85, marginTop: 6 }}>{s.label}</div>
-            </div>
-          ))}
         </div>
       </div>
 
