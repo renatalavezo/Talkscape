@@ -5,6 +5,7 @@ import { dbLoad, dbSave } from '../firebase'
 import { hashPassword } from '../utils'
 import { AVATARS } from '../constants/avatars'
 import { JOURNEYS } from '../constants/journeys'
+import heroStudentImg from '../assets/hero-student.jpg'
 
 // ---- local palette for the new landing-page design (scoped to this file only) ----
 const C = {
@@ -28,7 +29,6 @@ const C = {
   white: '#fff',
   footer: '#2B2621',
   footerMuted: '#D8CFC2',
-  heroStripeA: '#EBD9BE', heroStripeB: '#E4CFAE',
   aboutStripeA: '#E4CFAE', aboutStripeB: '#DCC49F',
 }
 
@@ -350,8 +350,9 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
           </div>
         </div>
         <div style={{ position: 'relative' }}>
-          <div style={{ aspectRatio: '4/5', borderRadius: '180px 180px 24px 24px', background: `repeating-linear-gradient(48deg,${C.heroStripeA},${C.heroStripeA} 14px,${C.heroStripeB} 14px,${C.heroStripeB} 28px)`, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: 26, border: `1px solid ${C.border3}` }}>
-            <span style={{ fontFamily: "'Hanken Grotesk',monospace", fontSize: 13, color: '#8A6B4A', background: C.cream, padding: '6px 12px', borderRadius: 100 }}>foto — aluna em aula</span>
+          <div style={{ position: 'relative', aspectRatio: '4/5', borderRadius: '180px 180px 24px 24px', overflow: 'hidden', border: `1px solid ${C.border3}` }}>
+            <img src={heroStudentImg} alt="Aluna estudando inglês online" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%', filter: 'saturate(0.85) sepia(0.18) hue-rotate(-8deg) brightness(1.03)' }} />
+            <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(165deg, ${C.green}55 0%, transparent 45%, ${C.terracotta}3d 100%)`, mixBlendMode: 'multiply' }} />
           </div>
           <div style={{ position: 'absolute', bottom: 26, left: -28, background: '#fff', borderRadius: 16, padding: '16px 20px', boxShadow: '0 20px 40px -20px rgba(43,38,33,.4)', display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 42, height: 42, borderRadius: '50%', background: C.green, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>R</div>
