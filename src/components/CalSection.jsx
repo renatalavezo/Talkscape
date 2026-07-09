@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { B } from '../constants/colors'
-import { ir, pp, S } from '../constants/styles'
+import { D, serifD, sansD } from '../constants/dashColors'
 import Icon from './Icon'
 
-const TYPE_COLORS = { class: B.oliva, test: B.marrom, hw: B.laranja, holiday: B.rosa, other: B.light }
+const TYPE_COLORS = { class: D.terra, test: D.clay, hw: D.honey, holiday: D.sky, other: D.muted }
+const TYPE_SOFT   = { class: D.terraSoft, test: D.claySoft, hw: D.honeySoft, holiday: D.skySoft, other: D.surfaceWarm }
 
 export default function CalSection({ t, lang, db, upDb, isTeacher, sid }) {
   const now = new Date()
@@ -33,111 +33,121 @@ export default function CalSection({ t, lang, db, upDb, isTeacher, sid }) {
   const prevM = () => { let m = mo - 1, y = yr; if (m < 0) { m = 11; y-- } setMo(m); setYr(y); setSelDay(null) }
   const nextM = () => { let m = mo + 1, y = yr; if (m > 11) { m = 0; y++ } setMo(m); setYr(y); setSelDay(null) }
 
+  const iconBtn = { width: 34, height: 34, borderRadius: 10, border: `1px solid ${D.line}`, background: D.surfaceWarm, cursor: 'pointer', fontSize: 15, color: D.muted, display: 'flex', alignItems: 'center', justifyContent: 'center' }
+
   return (
-    <div style={{ padding: '20px 14px', maxWidth: 780, margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18, flexWrap: 'wrap', gap: 10 }}>
-        <h2 style={{ ...pp(700, 17), color: B.dark }}>{t.calTitle}</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-          <button style={{ ...S.chip, background: B.bege, color: B.mid, fontSize: 16 }} onClick={prevM}>‹</button>
-          <span style={{ ...pp(600, 13), color: B.dark, minWidth: 140, textAlign: 'center' }}>{t.monthNames[mo]} {yr}</span>
-          <button style={{ ...S.chip, background: B.bege, color: B.mid, fontSize: 16 }} onClick={nextM}>›</button>
-          {isTeacher && (
-            <button style={{ ...S.btn(B.marrom), fontSize: 12, padding: '8px 13px' }} onClick={() => setShowAdd(v => !v)}>{t.addEvent}</button>
-          )}
+    <div style={{ padding: '20px 16px', maxWidth: 980, margin: '0 auto', fontFamily: "'Hanken Grotesk',sans-serif", color: D.ink }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
+        <div>
+          <h2 style={{ margin: 0, ...serifD(500, 28) }}>{t.calTitle}</h2>
+          <div style={{ fontSize: 14.5, color: D.muted, marginTop: 4 }}>{lang === 'pt' ? 'aulas, provas e eventos' : 'classes, tests and events'}</div>
         </div>
+        {isTeacher && (
+          <button style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: D.terra, color: '#fff', border: 'none', ...sansD(700, 14), padding: '12px 18px', borderRadius: 12, cursor: 'pointer', boxShadow: D.shadow }} onClick={() => setShowAdd(v => !v)}>
+            <Icon name="add" size={15} color="#fff" />{t.addEvent}
+          </button>
+        )}
       </div>
 
       {isTeacher && showAdd && (
-        <div style={{ ...S.card, marginBottom: 14 }}>
-          <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
-            <input style={{ ...S.inp, flex: 2, fontSize: 12 }} placeholder={t.evTitlePh} value={evT} onChange={e => setEvT(e.target.value)} />
-            <input type="date" style={{ ...S.inp, flex: 1, fontSize: 12 }} value={evD} onChange={e => setEvD(e.target.value)} />
-            <select style={{ ...S.inp, flex: 1, fontSize: 12 }} value={evTy} onChange={e => setEvTy(e.target.value)}>
+        <div style={{ background: D.surface, borderRadius: 16, border: `1px solid ${D.line}`, padding: 18, marginBottom: 16, boxShadow: D.shadow }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <input style={{ flex: 2, padding: '10px 12px', border: `1px solid ${D.line}`, borderRadius: 10, fontFamily: 'inherit', fontSize: 13, background: D.surfaceWarm, color: D.ink }} placeholder={t.evTitlePh} value={evT} onChange={e => setEvT(e.target.value)} />
+            <input type="date" style={{ flex: 1, padding: '10px 12px', border: `1px solid ${D.line}`, borderRadius: 10, fontFamily: 'inherit', fontSize: 13, background: D.surfaceWarm, color: D.ink }} value={evD} onChange={e => setEvD(e.target.value)} />
+            <select style={{ flex: 1, padding: '10px 12px', border: `1px solid ${D.line}`, borderRadius: 10, fontFamily: 'inherit', fontSize: 13, background: D.surfaceWarm, color: D.ink }} value={evTy} onChange={e => setEvTy(e.target.value)}>
               {Object.entries(t.evTypes).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
-            <button style={{ ...S.btn(B.oliva), fontSize: 12 }} onClick={addEv}>{t.save}</button>
-            <button style={{ ...S.btn(B.light), fontSize: 12 }} onClick={() => setShowAdd(false)}>{t.cancel}</button>
+            <button style={{ background: D.moss, color: '#fff', border: 'none', borderRadius: 10, padding: '10px 16px', fontFamily: 'inherit', fontWeight: 700, fontSize: 13, cursor: 'pointer' }} onClick={addEv}>{t.save}</button>
+            <button style={{ background: D.surfaceWarm, color: D.muted, border: `1px solid ${D.line}`, borderRadius: 10, padding: '10px 16px', fontFamily: 'inherit', fontWeight: 700, fontSize: 13, cursor: 'pointer' }} onClick={() => setShowAdd(false)}>{t.cancel}</button>
           </div>
         </div>
       )}
 
-      {/* Calendar grid */}
-      <div style={{ background: B.white, borderRadius: 14, border: `1.5px solid ${B.border}`, overflow: 'hidden', marginBottom: 14 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', background: B.marrom }}>
-          {t.dayNames.map(d => (
-            <div key={d} style={{ padding: '9px 3px', textAlign: 'center', ...ir(700, 11), color: '#fff' }}>{d}</div>
-          ))}
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)' }}>
-          {Array.from({ length: fd }, (_, i) => (
-            <div key={`e${i}`} style={{ minHeight: 60, background: B.cream, borderRight: `1px solid ${B.bege}`, borderBottom: `1px solid ${B.bege}` }} />
-          ))}
-          {Array.from({ length: dim }, (_, i) => {
-            const d = i + 1, evs = dayEvs(d)
-            const isT = today.getFullYear() === yr && today.getMonth() === mo && today.getDate() === d
-            const isSel = selDay === d
-            return (
-              <div
-                key={d}
-                style={{ minHeight: 60, padding: '5px 4px 3px', borderRight: `1px solid ${B.bege}`, borderBottom: `1px solid ${B.bege}`, background: isSel ? B.bege : isT ? B.marrBg : B.white, cursor: 'pointer' }}
-                onClick={() => setSelDay(isSel ? null : d)}
-              >
-                <div style={{ width: 20, height: 20, borderRadius: 10, background: isT ? B.marrom : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 2 }}>
-                  <span style={{ ...ir(isT ? 700 : 400, 11), color: isT ? '#fff' : B.mid }}>{d}</span>
-                </div>
-                {evs.slice(0, 2).map(ev => (
-                  <div key={ev.id} style={{ ...ir(600, 8), color: '#fff', background: TYPE_COLORS[ev.type] || B.mid, borderRadius: 3, padding: '1px 4px', marginBottom: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{ev.title}</div>
-                ))}
-                {evs.length > 2 && <div style={{ ...ir(400, 8), color: B.light }}>+{evs.length - 2}</div>}
-              </div>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* Day detail */}
-      {selDay && (
-        <div style={{ ...S.card, marginBottom: 12 }}>
-          <p style={{ ...pp(600, 13), color: B.dark, marginBottom: 9 }}>{selDay} {t.monthNames[mo]}</p>
-          {dayEvs(selDay).length === 0
-            ? <p style={{ ...ir(400, 13), color: B.light }}>{t.noEvents}</p>
-            : dayEvs(selDay).map(ev => (
-              <div key={ev.id} style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '8px 11px', background: B.cream, borderRadius: 9, marginBottom: 5 }}>
-                <div style={{ width: 8, height: 8, borderRadius: 4, background: TYPE_COLORS[ev.type] || B.mid, flexShrink: 0 }} />
-                <div style={{ flex: 1 }}>
-                  <p style={{ ...ir(600, 12), color: B.dark }}>{ev.title}</p>
-                  <p style={{ ...ir(400, 11), color: B.light }}>{t.evTypes[ev.type] || ev.type}</p>
-                </div>
-                {isTeacher && (
-                  <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '3px 7px', fontSize: 10, color: '#DC2626', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => delEv(ev.id)}><Icon name="delete" size={11} color="#DC2626" /></button>
-                )}
-              </div>
-            ))
-          }
-        </div>
-      )}
-
-      {/* Month list */}
-      <div style={S.card}>
-        <p style={{ ...pp(600, 11), color: B.mid, textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 9 }}>
-          {lang === 'pt' ? 'Eventos do mês' : 'This month'}
-        </p>
-        {moEvs.length === 0
-          ? <p style={{ ...ir(400, 13), color: B.light }}>{t.noEvents}</p>
-          : moEvs.sort((a, b) => a.date.localeCompare(b.date)).map(ev => (
-            <div key={ev.id} style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '7px 0', borderBottom: `1px solid ${B.cream}` }}>
-              <div style={{ width: 7, height: 7, borderRadius: 4, background: TYPE_COLORS[ev.type] || B.mid, flexShrink: 0 }} />
-              <div style={{ flex: 1 }}>
-                <span style={{ ...ir(600, 12), color: B.dark }}>{ev.title}</span>
-                <span style={{ ...ir(400, 11), color: B.light, marginLeft: 7 }}>{ev.date.slice(8)} {t.monthNames[mo]}</span>
-              </div>
-              <span style={{ ...ir(600, 10), background: TYPE_COLORS[ev.type] || B.mid, color: '#fff', borderRadius: 20, padding: '1px 7px' }}>{t.evTypes[ev.type] || ev.type}</span>
-              {isTeacher && (
-                <button style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: '3px 7px', fontSize: 10, color: '#DC2626', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => delEv(ev.id)}><Icon name="delete" size={11} color="#DC2626" /></button>
-              )}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 20 }}>
+        {/* Calendar grid */}
+        <div style={{ background: D.surface, borderRadius: 20, padding: 24, boxShadow: D.shadow, border: `1px solid ${D.line}` }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+            <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{t.monthNames[mo]} {yr}</h3>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button style={iconBtn} onClick={prevM}>‹</button>
+              <button style={iconBtn} onClick={nextM}>›</button>
             </div>
-          ))
-        }
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 4, marginBottom: 6 }}>
+            {t.dayNames.map(d => (
+              <div key={d} style={{ textAlign: 'center', fontSize: 11.5, fontWeight: 700, color: D.muted, padding: '6px 0' }}>{d}</div>
+            ))}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 4 }}>
+            {Array.from({ length: fd }, (_, i) => <div key={`e${i}`} style={{ aspectRatio: '1.1' }} />)}
+            {Array.from({ length: dim }, (_, i) => {
+              const d = i + 1, evs = dayEvs(d)
+              const isT = today.getFullYear() === yr && today.getMonth() === mo && today.getDate() === d
+              const isSel = selDay === d
+              return (
+                <div
+                  key={d}
+                  style={{ aspectRatio: '1.1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start', gap: 2, padding: '6px 3px', borderRadius: 11, cursor: 'pointer', border: `1px solid ${isSel ? D.terra : isT ? D.terra : D.line}`, background: isT ? D.terra : isSel ? D.terraSoft : D.surfaceWarm, color: isT ? '#fff' : D.ink }}
+                  onClick={() => setSelDay(isSel ? null : d)}
+                >
+                  <span style={{ fontSize: 13, fontWeight: isT ? 700 : 500 }}>{d}</span>
+                  {evs.length > 0 && <div style={{ width: 5, height: 5, borderRadius: '50%', background: isT ? '#fff' : (TYPE_COLORS[evs[0].type] || D.muted) }} />}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Day detail */}
+          {selDay && (
+            <div style={{ background: D.surface, borderRadius: 16, padding: 18, boxShadow: D.shadow, border: `1px solid ${D.line}` }}>
+              <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>{selDay} {t.monthNames[mo]}</p>
+              {dayEvs(selDay).length === 0
+                ? <p style={{ fontSize: 13, color: D.muted }}>{t.noEvents}</p>
+                : dayEvs(selDay).map(ev => (
+                  <div key={ev.id} style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '8px 11px', background: TYPE_SOFT[ev.type] || D.surfaceWarm, borderRadius: 10, marginBottom: 6 }}>
+                    <div style={{ width: 8, height: 8, borderRadius: 4, background: TYPE_COLORS[ev.type] || D.muted, flexShrink: 0 }} />
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: 12.5, fontWeight: 600 }}>{ev.title}</p>
+                      <p style={{ fontSize: 11, color: D.muted }}>{t.evTypes[ev.type] || ev.type}</p>
+                    </div>
+                    {isTeacher && (
+                      <button style={{ background: D.claySoft, border: 'none', borderRadius: 7, padding: '4px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => delEv(ev.id)}><Icon name="delete" size={12} color={D.clay} /></button>
+                    )}
+                  </div>
+                ))
+              }
+            </div>
+          )}
+
+          {/* Month list */}
+          <div style={{ background: D.surface, borderRadius: 20, padding: 24, boxShadow: D.shadow, border: `1px solid ${D.line}` }}>
+            <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: 0.6, color: D.muted, textTransform: 'uppercase', marginBottom: 14 }}>
+              {lang === 'pt' ? 'Eventos do mês' : 'This month'}
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {moEvs.length === 0
+                ? <p style={{ fontSize: 13, color: D.muted }}>{t.noEvents}</p>
+                : moEvs.sort((a, b) => a.date.localeCompare(b.date)).map(ev => (
+                  <div key={ev.id} style={{ display: 'flex', gap: 14, padding: 14, borderRadius: 14, background: D.surfaceWarm, border: `1px solid ${D.line}`, alignItems: 'center' }}>
+                    <div style={{ width: 46, textAlign: 'center', borderRadius: 11, background: TYPE_SOFT[ev.type] || D.surfaceWarm, color: TYPE_COLORS[ev.type] || D.muted, padding: '7px 0', flexShrink: 0 }}>
+                      <div style={{ fontSize: 10, fontWeight: 700, opacity: 0.8 }}>{t.monthNames[mo].slice(0, 3).toUpperCase()}</div>
+                      <div style={{ ...serifD(500, 18), lineHeight: 1 }}>{ev.date.slice(8)}</div>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 14, fontWeight: 600 }}>{ev.title}</div>
+                      <div style={{ fontSize: 12, color: D.muted, marginTop: 2 }}>{t.evTypes[ev.type] || ev.type}</div>
+                    </div>
+                    {isTeacher && (
+                      <button style={{ background: D.claySoft, border: 'none', borderRadius: 7, padding: '5px 9px', cursor: 'pointer', display: 'flex', alignItems: 'center', flexShrink: 0 }} onClick={() => delEv(ev.id)}><Icon name="delete" size={12} color={D.clay} /></button>
+                    )}
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
