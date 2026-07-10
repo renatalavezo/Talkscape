@@ -12,6 +12,7 @@ import Logo from './Logo'
 import ActivityEditor from './ActivityEditor'
 import CalSection from './CalSection'
 import { hashPassword } from '../utils'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 const SIMPLE_LEVEL = { A1:'beginner', A2:'beginner', B1:'intermediate', B2:'intermediate', C1:'advanced', C2:'advanced' }
 const SIMPLE_LABEL = { beginner:'Iniciante', intermediate:'Intermediário', advanced:'Avançado' }
@@ -57,6 +58,7 @@ const ST_META = {
 }
 
 export default function TeacherDash({ t, lang, setLang, students, courseStudents, cadastrosPendentes, db, upDb, onPreview, onPreviewCourse, onLogout }) {
+  const isMobile = useIsMobile()
   const [sel, setSel]               = useState(null)
   const [dtab, setDtab]             = useState('level')
   const [section, setSection]       = useState('students')
@@ -422,34 +424,54 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
 
       {/* ============ TOP BAR ============ */}
       <header style={{ position: 'sticky', top: 0, zIndex: 20, background: 'rgba(251,242,233,0.86)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: `1px solid ${D.line}` }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '10px 20px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-          <Logo h={36} />
-          <nav style={{ display: 'flex', gap: 2, flex: 1, minWidth: 250, flexWrap: 'wrap' }}>
-            {NAV.map(([k, label]) => {
-              const active = section === k
-              return (
-                <button key={k} onClick={() => setSection(k)}
-                  style={{ fontFamily: F, fontSize: 14, fontWeight: active ? 700 : 600, padding: '9px 15px', borderRadius: 10, border: 'none', cursor: 'pointer', background: active ? D.moss : 'transparent', color: active ? '#fff' : D.muted, display: 'inline-flex', alignItems: 'center', gap: 6, transition: 'all .15s' }}>
-                  {label}
-                  {k === 'course' && unansweredTotal > 0 && (
-                    <span style={{ background: D.clay, color: '#fff', borderRadius: '50%', width: 17, height: 17, fontSize: 10, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{unansweredTotal}</span>
-                  )}
-                </button>
-              )
-            })}
-          </nav>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: isMobile ? '10px 14px' : '10px 20px', display: 'flex', alignItems: 'center', gap: isMobile ? '10px 12px' : 14, flexWrap: 'wrap' }}>
+          <Logo h={isMobile ? 32 : 36} />
+          {!isMobile && (
+            <nav style={{ display: 'flex', gap: 2, flex: 1, minWidth: 250, flexWrap: 'wrap' }}>
+              {NAV.map(([k, label]) => {
+                const active = section === k
+                return (
+                  <button key={k} onClick={() => setSection(k)}
+                    style={{ fontFamily: F, fontSize: 14, fontWeight: active ? 700 : 600, padding: '9px 15px', borderRadius: 10, border: 'none', cursor: 'pointer', background: active ? D.moss : 'transparent', color: active ? '#fff' : D.muted, display: 'inline-flex', alignItems: 'center', gap: 6, transition: 'all .15s' }}>
+                    {label}
+                    {k === 'course' && unansweredTotal > 0 && (
+                      <span style={{ background: D.clay, color: '#fff', borderRadius: '50%', width: 17, height: 17, fontSize: 10, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{unansweredTotal}</span>
+                    )}
+                  </button>
+                )
+              })}
+            </nav>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 10, marginLeft: 'auto', flexWrap: 'wrap' }}>
             <button style={{ background: 'transparent', border: `1px solid ${D.line}`, color: D.muted, fontFamily: F, fontSize: 12.5, fontWeight: 600, padding: '7px 12px', borderRadius: 9, cursor: 'pointer' }} onClick={() => setLang(lang === 'pt' ? 'en' : 'pt')}>{t.switchLang}</button>
             <button title={lang === 'pt' ? 'Configurações' : 'Settings'} style={{ width: 34, height: 34, borderRadius: 9, border: `1px solid ${D.line}`, background: 'transparent', color: D.muted, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onClick={() => setShowSettings(true)}><Icon name="settings" size={16} color={D.muted} /></button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingLeft: 12, borderLeft: `1px solid ${D.line}` }}>
-              <div style={{ textAlign: 'right', lineHeight: 1.15 }}>
-                <div style={{ ...sansD(600, 13.5), color: D.ink }}>Renata Lavezo</div>
-                <div style={{ fontSize: 11.5, color: D.muted }}>{lang === 'pt' ? 'Professora' : 'Teacher'}</div>
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingLeft: isMobile ? 0 : 12, borderLeft: isMobile ? 'none' : `1px solid ${D.line}` }}>
+              {!isMobile && (
+                <div style={{ textAlign: 'right', lineHeight: 1.15 }}>
+                  <div style={{ ...sansD(600, 13.5), color: D.ink }}>Renata Lavezo</div>
+                  <div style={{ fontSize: 11.5, color: D.muted }}>{lang === 'pt' ? 'Professora' : 'Teacher'}</div>
+                </div>
+              )}
               <div style={{ width: 36, height: 36, borderRadius: '50%', background: `linear-gradient(150deg, ${D.sage}, ${D.mossDeep})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14, boxShadow: D.shadow, flexShrink: 0 }}>R</div>
             </div>
-            <button style={{ ...SD.soft(D.clay, D.claySoft), padding: '8px 12px', fontSize: 12.5, fontWeight: 700 }} onClick={onLogout}><Icon name="logout" size={13} color={D.clay} />{t.logout}</button>
+            <button style={{ ...SD.soft(D.clay, D.claySoft), padding: '8px 12px', fontSize: 12.5, fontWeight: 700 }} onClick={onLogout}><Icon name="logout" size={13} color={D.clay} />{!isMobile && t.logout}</button>
           </div>
+          {isMobile && (
+            <nav style={{ display: 'flex', gap: 2, width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: 2 }}>
+              {NAV.map(([k, label]) => {
+                const active = section === k
+                return (
+                  <button key={k} onClick={() => setSection(k)}
+                    style={{ fontFamily: F, fontSize: 13.5, fontWeight: active ? 700 : 600, padding: '8px 13px', borderRadius: 10, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, background: active ? D.moss : 'transparent', color: active ? '#fff' : D.muted, display: 'inline-flex', alignItems: 'center', gap: 6, transition: 'all .15s' }}>
+                    {label}
+                    {k === 'course' && unansweredTotal > 0 && (
+                      <span style={{ background: D.clay, color: '#fff', borderRadius: '50%', width: 17, height: 17, fontSize: 10, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{unansweredTotal}</span>
+                    )}
+                  </button>
+                )
+              })}
+            </nav>
+          )}
         </div>
       </header>
 
@@ -458,7 +480,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
 
       {/* ============ CURSO ============ */}
       {section === 'course' && (
-        <main className="fu" style={{ maxWidth: 1100, margin: '0 auto', padding: '30px 20px 80px' }}>
+        <main className="fu" style={{ maxWidth: 1100, margin: '0 auto', padding: isMobile ? '22px 14px 70px' : '30px 20px 80px' }}>
           <div style={{ marginBottom: 26 }}>
             <h2 style={{ ...serifD(500, 28), color: D.ink }}>{lang === 'pt' ? 'Curso “Jornadas”' : '“Jornadas” Course'}</h2>
             <div style={{ fontSize: 14.5, color: D.muted, marginTop: 4 }}>{lang === 'pt' ? 'plano de ensino online — alunas por jornada e matrículas' : 'online course — students per journey and enrollments'}</div>
@@ -787,7 +809,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
 
       {/* ============ FINANCEIRO ============ */}
       {section === 'financeiro' && (
-        <main className="fu" style={{ maxWidth: 1100, margin: '0 auto', padding: '30px 20px 80px' }}>
+        <main className="fu" style={{ maxWidth: 1100, margin: '0 auto', padding: isMobile ? '22px 14px 70px' : '30px 20px 80px' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>
             <div>
               <h2 style={{ ...serifD(500, 28), color: D.ink }}>{lang === 'pt' ? 'Financeiro' : 'Finances'}</h2>
@@ -955,7 +977,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
 
       {/* ============ ALUNOS ============ */}
       {section === 'students' && (
-        <main style={{ maxWidth: 1100, margin: '0 auto', padding: '30px 20px 80px', width: '100%' }}>
+        <main style={{ maxWidth: 1100, margin: '0 auto', padding: isMobile ? '22px 14px 70px' : '30px 20px 80px', width: '100%' }}>
           {!sel && (
             <div className="fu">
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 24 }}>

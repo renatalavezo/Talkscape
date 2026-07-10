@@ -5,6 +5,7 @@ import { CEFR_META } from '../constants/cefr'
 import { PLAN } from '../constants/plan'
 import { STUDY_HABITS, HW_HABITS } from '../constants/habits'
 import { todayStr, weekDays, hashPassword } from '../utils'
+import { useIsMobile } from '../hooks/useIsMobile'
 import Logo from './Logo'
 import Avatar from './Avatar'
 import AvatarBuilder from './AvatarBuilder'
@@ -34,6 +35,7 @@ const CAT_COLOR = {
 const STREAK_DOT = [D.honey, D.orange, D.terra, D.clay, D.moss, D.sage, D.sky]
 
 export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, isPreview, onBack }) {
+  const isMobile = useIsMobile()
   const [tab, setTab]           = useState('dashboard')
   const [jSelWeek, setJSelWeek] = useState(1)
   const [newPwd, setNewPwd]     = useState('')
@@ -149,36 +151,40 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
 
       {/* ================= TOP BAR ================= */}
       <header style={{ position: 'sticky', top: 0, zIndex: 20, background: 'rgba(249,241,233,.88)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: `1px solid ${D.line}` }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '10px 20px', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px 18px' }}>
-          <Logo h={38} />
+        <div style={{ maxWidth: 1100, margin: '0 auto', padding: isMobile ? '10px 14px' : '10px 20px', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: isMobile ? '10px 12px' : '8px 18px' }}>
+          <Logo h={isMobile ? 32 : 38} />
 
-          {/* nav */}
-          <nav style={{ display: 'flex', gap: 2, flex: '1 1 240px', minWidth: 0, overflowX: 'auto' }}>
-            {TABS.map(([k, lb]) => (
-              <button key={k} onClick={() => goTab(k)}
-                style={{ fontFamily: 'inherit', fontSize: 14, fontWeight: tab === k ? 700 : 600, padding: '9px 15px', borderRadius: 10, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all .15s', background: tab === k ? D.terra : 'transparent', color: tab === k ? '#fff' : D.muted, flexShrink: 0 }}>
-                {lb}
-              </button>
-            ))}
-          </nav>
+          {/* nav — full row below on mobile, inline on desktop */}
+          {!isMobile && (
+            <nav style={{ display: 'flex', gap: 2, flex: '1 1 240px', minWidth: 0, overflowX: 'auto' }}>
+              {TABS.map(([k, lb]) => (
+                <button key={k} onClick={() => goTab(k)}
+                  style={{ fontFamily: 'inherit', fontSize: 14, fontWeight: tab === k ? 700 : 600, padding: '9px 15px', borderRadius: 10, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all .15s', background: tab === k ? D.terra : 'transparent', color: tab === k ? '#fff' : D.muted, flexShrink: 0 }}>
+                  {lb}
+                </button>
+              ))}
+            </nav>
+          )}
 
           {/* right */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 'auto' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 12, marginLeft: 'auto' }}>
             <button onClick={() => setLang(pt ? 'en' : 'pt')}
               style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'transparent', border: `1px solid ${D.line}`, color: D.muted, fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, padding: '7px 12px', borderRadius: 9, cursor: 'pointer' }}>
               <Icon name="globe" size={12} color={D.muted} />{t.switchLang}
             </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingLeft: 12, borderLeft: `1px solid ${D.line}` }}>
-              <div style={{ textAlign: 'right', lineHeight: 1.15, minWidth: 0 }}>
-                <div style={{ fontWeight: 600, fontSize: 13.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 140 }}>{student.name}</div>
-                <div style={{ fontSize: 11.5, color: D.muted }}>{lvl} · {lvm.label[lang]}</div>
-              </div>
-              <Avatar seed={myAvatar} size={38} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingLeft: isMobile ? 0 : 12, borderLeft: isMobile ? 'none' : `1px solid ${D.line}` }}>
+              {!isMobile && (
+                <div style={{ textAlign: 'right', lineHeight: 1.15, minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, fontSize: 13.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 140 }}>{student.name}</div>
+                  <div style={{ fontSize: 11.5, color: D.muted }}>{lvl} · {lvm.label[lang]}</div>
+                </div>
+              )}
+              <Avatar seed={myAvatar} size={isMobile ? 34 : 38} />
             </div>
             {isPreview ? (
               <button onClick={onBack} title={pt ? 'Voltar' : 'Back'}
                 style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'transparent', border: `1px solid ${D.line}`, color: D.muted, fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, padding: '7px 11px', borderRadius: 9, cursor: 'pointer' }}>
-                <Icon name="back" size={13} color={D.muted} />{pt ? 'Voltar' : 'Back'}
+                <Icon name="back" size={13} color={D.muted} />{!isMobile && (pt ? 'Voltar' : 'Back')}
               </button>
             ) : (
               <button onClick={() => setShowLogout(true)} title={pt ? 'Sair' : 'Log out'}
@@ -187,6 +193,18 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
               </button>
             )}
           </div>
+
+          {/* nav row (mobile only) — full-width scrollable */}
+          {isMobile && (
+            <nav style={{ display: 'flex', gap: 2, width: '100%', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: 2 }}>
+              {TABS.map(([k, lb]) => (
+                <button key={k} onClick={() => goTab(k)}
+                  style={{ fontFamily: 'inherit', fontSize: 13.5, fontWeight: tab === k ? 700 : 600, padding: '8px 13px', borderRadius: 10, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', transition: 'all .15s', background: tab === k ? D.terra : 'transparent', color: tab === k ? '#fff' : D.muted, flexShrink: 0 }}>
+                  {lb}
+                </button>
+              ))}
+            </nav>
+          )}
         </div>
       </header>
 

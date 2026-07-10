@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useIsMobile } from '../hooks/useIsMobile'
 import Logo from './Logo'
 import Icon from './Icon'
 import { dbLoad, dbSave } from '../firebase'
@@ -200,6 +201,7 @@ const PlanCard = ({ plan }) => (
 )
 
 export default function LandingPage({ onStudent, onCourse, onTeacher }) {
+  const isMobile = useIsMobile(820)
   const [showModal, setShowModal] = useState(false)
   const [showTeacherLink, setShowTeacherLink] = useState(false)
   const [tipo, setTipo] = useState('particular')
@@ -322,47 +324,49 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
 
       {/* NAV */}
       <div style={{ position: 'sticky', top: 0, zIndex: 100, background: 'rgba(251,245,234,.92)', backdropFilter: 'blur(10px)', borderBottom: `1px solid ${C.border}` }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 40px' }}>
-          <Logo h={54} />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 24, fontSize: 15, fontWeight: 600, color: '#4A423A', flexWrap: 'wrap' }}>
-            <a href="#porque" style={navLink}>Por quê</a><a href="#metodo" style={navLink}>Método</a><a href="#jornadas" style={navLink}>Jornadas</a><a href="#planos" style={navLink}>Planos</a><a href="#renata" style={navLink}>A Renata</a>
-            <button onClick={onStudent} style={{ border: `1.5px solid ${C.green}`, background: 'none', color: C.green, padding: '10px 20px', borderRadius: 100, fontWeight: 600, fontSize: 15, cursor: 'pointer', fontFamily: 'inherit' }}>Já sou aluna</button>
-            <button onClick={() => openModal('particular')} style={{ background: C.terracotta, border: 'none', color: '#fff', padding: '10px 22px', borderRadius: 100, fontWeight: 700, fontSize: 15, cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif" }}>Quero começar</button>
+        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: isMobile ? '10px 16px' : '12px 40px' }}>
+          <Logo h={isMobile ? 40 : 54} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 24, fontSize: 15, fontWeight: 600, color: '#4A423A', flexWrap: 'wrap' }}>
+            {!isMobile && <>
+              <a href="#porque" style={navLink}>Por quê</a><a href="#metodo" style={navLink}>Método</a><a href="#jornadas" style={navLink}>Jornadas</a><a href="#planos" style={navLink}>Planos</a><a href="#renata" style={navLink}>A Renata</a>
+            </>}
+            <button onClick={onStudent} style={{ border: `1.5px solid ${C.green}`, background: 'none', color: C.green, padding: isMobile ? '8px 14px' : '10px 20px', borderRadius: 100, fontWeight: 600, fontSize: isMobile ? 13 : 15, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}>Já sou aluna</button>
+            <button onClick={() => openModal('particular')} style={{ background: C.terracotta, border: 'none', color: '#fff', padding: isMobile ? '8px 14px' : '10px 22px', borderRadius: 100, fontWeight: 700, fontSize: isMobile ? 13 : 15, cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif", whiteSpace: 'nowrap' }}>Quero começar</button>
           </div>
         </div>
       </div>
 
       {/* HERO */}
-      <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: '1.05fr .95fr', gap: 56, alignItems: 'center', padding: '64px 40px 80px' }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr .95fr', gap: isMobile ? 36 : 56, alignItems: 'center', padding: isMobile ? '40px 20px 48px' : '64px 40px 80px' }}>
         <div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: C.tan, color: C.tanText, fontWeight: 700, fontSize: 14, padding: '8px 16px', borderRadius: 100, letterSpacing: '.02em' }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: C.pink }} /> INGLÊS ONLINE, DO SEU JEITO
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: C.tan, color: C.tanText, fontWeight: 700, fontSize: isMobile ? 12.5 : 14, padding: '8px 16px', borderRadius: 100, letterSpacing: '.02em' }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: C.pink, flexShrink: 0 }} /> INGLÊS ONLINE, DO SEU JEITO
           </div>
-          <h1 style={serif(500, 66, { lineHeight: 1.04, letterSpacing: '-.015em', margin: '22px 0 0' })}>
+          <h1 style={serif(500, isMobile ? 42 : 66, { lineHeight: 1.05, letterSpacing: '-.015em', margin: '20px 0 0' })}>
             Fale inglês de <span style={{ fontStyle: 'italic', color: C.terracotta }}>verdade</span>, desde a primeira aula.
           </h1>
-          <p style={{ fontSize: 20, lineHeight: 1.55, color: C.mid, maxWidth: 500, margin: '24px 0 0' }}>
+          <p style={{ fontSize: isMobile ? 17 : 20, lineHeight: 1.55, color: C.mid, maxWidth: 500, margin: '20px 0 0' }}>
             Aprenda conversando: aulas ao vivo <strong>individuais, em dupla ou em turma</strong>. Além de jornadas de estudo na plataforma pra você avançar no seu ritmo.
           </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 34, flexWrap: 'wrap' }}>
-            <a href="#planos" style={{ background: C.terracotta, color: '#fff', fontWeight: 700, fontSize: 18, padding: '17px 32px', borderRadius: 100, textDecoration: 'none' }}>Ver planos e preços</a>
-            <a href="#metodo" style={{ color: C.green, fontWeight: 700, fontSize: 18, padding: '17px 8px', borderBottom: `2px solid ${C.green}`, textDecoration: 'none' }}>Como funciona →</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 30, flexWrap: 'wrap' }}>
+            <a href="#planos" style={{ background: C.terracotta, color: '#fff', fontWeight: 700, fontSize: isMobile ? 16 : 18, padding: isMobile ? '14px 26px' : '17px 32px', borderRadius: 100, textDecoration: 'none' }}>Ver planos e preços</a>
+            <a href="#metodo" style={{ color: C.green, fontWeight: 700, fontSize: isMobile ? 16 : 18, padding: '14px 8px', borderBottom: `2px solid ${C.green}`, textDecoration: 'none' }}>Como funciona →</a>
           </div>
         </div>
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative', maxWidth: isMobile ? 340 : 'none', width: '100%', margin: isMobile ? '0 auto' : 0 }}>
           <div style={{ position: 'relative', aspectRatio: '4/5', borderRadius: '180px 180px 24px 24px', overflow: 'hidden', border: `1px solid ${C.border3}` }}>
             <img src={heroStudentImg} alt="Aluna estudando inglês online" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%', filter: 'saturate(0.85) sepia(0.18) hue-rotate(-8deg) brightness(1.03)' }} />
             <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(165deg, ${C.green}55 0%, transparent 45%, ${C.terracotta}3d 100%)`, mixBlendMode: 'multiply' }} />
           </div>
-          <div style={{ position: 'absolute', bottom: 26, left: -28, background: '#fff', borderRadius: 16, padding: '16px 20px', boxShadow: '0 20px 40px -20px rgba(43,38,33,.4)', display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 42, height: 42, borderRadius: '50%', background: C.green, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>R</div>
+          <div style={{ position: 'absolute', bottom: isMobile ? 16 : 26, left: isMobile ? 12 : -28, background: '#fff', borderRadius: 16, padding: '14px 18px', boxShadow: '0 20px 40px -20px rgba(43,38,33,.4)', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 42, height: 42, borderRadius: '50%', background: C.green, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, flexShrink: 0 }}>R</div>
             <div><div style={{ fontWeight: 700, fontSize: 15 }}>Aqui é o seu espaço</div><div style={{ fontSize: 13, color: '#6E655C' }}>no seu ritmo, sem pressão</div></div>
           </div>
         </div>
       </div>
 
       {/* POR QUE */}
-      <div id="porque" style={{ maxWidth: 1180, margin: '0 auto', padding: '70px 40px' }}>
+      <div id="porque" style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '48px 20px' : '70px 40px' }}>
         <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 52px' }}>
           <SectionEyebrow>POR QUE O TALKSCAPE</SectionEyebrow>
           <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>Não é mais uma escola de inglês. É o seu espaço.</h2>
@@ -382,7 +386,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
       </div>
 
       {/* METODO */}
-      <div id="metodo" style={{ maxWidth: 1180, margin: '0 auto', padding: '60px 40px 80px' }}>
+      <div id="metodo" style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '40px 20px 52px' : '60px 40px 80px' }}>
         <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 52px' }}>
           <SectionEyebrow>COMO FUNCIONA</SectionEyebrow>
           <h2 style={serif(500, 44, { margin: '12px 0 0', lineHeight: 1.1 })}>Inglês que respeita quem você é</h2>
@@ -399,7 +403,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
       </div>
 
       {/* FORMATOS DE AULA */}
-      <div id="formatos" style={{ maxWidth: 1180, margin: '0 auto', padding: '0 40px 80px' }}>
+      <div id="formatos" style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '0 20px 52px' : '0 40px 80px' }}>
         <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 46px' }}>
           <SectionEyebrow>AULAS AO VIVO COM A RENATA</SectionEyebrow>
           <h2 style={serif(500, 44, { margin: '12px 0 12px', lineHeight: 1.1 })}>Aulas do seu jeito</h2>
@@ -423,7 +427,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
 
       {/* JORNADA DIGITAL */}
       <div id="digital" style={{ background: C.green, color: '#F3ECDD' }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto', padding: '80px 40px' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px,1fr))', gap: 40, alignItems: 'stretch' }}>
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: C.terracotta, color: '#fff', fontWeight: 700, fontSize: 13, padding: '6px 14px', borderRadius: 100, letterSpacing: '.03em' }}>
@@ -464,7 +468,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
       </div>
 
       {/* JORNADAS DE APRENDIZADO */}
-      <div id="jornadas" style={{ maxWidth: 1180, margin: '0 auto', padding: '80px 40px' }}>
+      <div id="jornadas" style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 30, flexWrap: 'wrap', gap: 16 }}>
           <div style={{ maxWidth: 640 }}>
             <SectionEyebrow>JORNADAS DE APRENDIZADO</SectionEyebrow>
@@ -487,7 +491,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
 
       {/* PLANOS INDIVIDUAIS + PLANOS DUPLA */}
       <div id="planos" style={{ background: C.creamAlt }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto', padding: '80px 40px 50px' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px 40px' : '80px 40px 50px' }}>
           <div style={{ textAlign: 'center', maxWidth: 660, margin: '0 auto 46px' }}>
             <SectionEyebrow>AULAS PARTICULARES INDIVIDUAIS</SectionEyebrow>
             <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>Aulas individuais</h2>
@@ -511,7 +515,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
       </div>
 
       {/* TURMAS ABERTAS */}
-      <div id="turmas" style={{ maxWidth: 1180, margin: '0 auto', padding: '80px 40px' }}>
+      <div id="turmas" style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
         <div style={{ textAlign: 'center', maxWidth: 660, margin: '0 auto 40px' }}>
           <SectionEyebrow>TURMAS ABERTAS</SectionEyebrow>
           <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>Aprenda em grupo</h2>
@@ -552,7 +556,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
 
       {/* SOBRE A RENATA */}
       <div id="renata" style={{ background: C.creamAlt }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 56, alignItems: 'center', padding: '80px 40px' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 56, alignItems: 'center', padding: isMobile ? '52px 20px' : '80px 40px' }}>
           <div style={{ aspectRatio: '4/5', borderRadius: 24, overflow: 'hidden', border: `1px solid ${C.border3}`, background: `repeating-linear-gradient(48deg,${C.aboutStripeA},${C.aboutStripeA} 14px,${C.aboutStripeB} 14px,${C.aboutStripeB} 28px)` }}>
             <img src="https://i.imgur.com/VJhFQyr.jpeg" alt="Renata" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top' }} />
           </div>
@@ -568,7 +572,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
       </div>
 
       {/* DEPOIMENTOS */}
-      <div style={{ maxWidth: 1180, margin: '0 auto', padding: '80px 40px' }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
         <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 44px' }}>
           <SectionEyebrow>DEPOIMENTOS</SectionEyebrow>
           <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>O que as alunas dizem</h2>
@@ -588,7 +592,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
       </div>
 
       {/* CTA FINAL */}
-      <div style={{ maxWidth: 1180, margin: '0 auto', padding: '0 40px 80px' }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '0 20px 52px' : '0 40px 80px' }}>
         <div style={{ background: C.terracotta, borderRadius: 24, padding: '70px 56px', textAlign: 'center', color: '#fff' }}>
           <h2 style={serif(500, 50, { margin: '0 0 16px', lineHeight: 1.06 })}>Vem construir o seu espaço<br />de aprender inglês</h2>
           <p style={{ fontSize: 20, opacity: .92, margin: '0 auto 30px', maxWidth: 520 }}>Me conta seus objetivos e a gente encontra o formato ideal pra você — individual, em dupla, em turma ou na plataforma.</p>
