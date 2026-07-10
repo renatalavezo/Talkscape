@@ -87,12 +87,6 @@ const HOW_IT_WORKS = [
   { n: '04', title: 'Progresso à vista', text: 'Você acompanha sua evolução semana a semana, de forma concreta e transparente.' },
 ]
 
-const FORMATS = [
-  { n: '1', title: 'Individual', text: 'Aula 100% sua: ritmo, foco e horário no seu tempo. A evolução mais rápida.', meta: '1 aluna · aulas particulares', cta: 'Ver preços →', anchor: '#planos', highlight: false },
-  { n: '2', title: 'Em dupla', text: 'Você e mais alguém. Ótimo pra praticar diálogo — e cada uma paga um valor especial.', meta: '2 alunas · aulas particulares', cta: 'Ver preços →', anchor: '#planos-dupla', highlight: true, badge: 'MAIS ESCOLHIDO' },
-  { n: '4', title: 'Em turma', text: 'Grupos de 3–4 alunas com muita interação — e o formato mais acessível.', meta: '3–4 alunas · turmas abertas', cta: 'Ver turmas →', anchor: '#turmas', highlight: false },
-]
-
 const DIGITAL_SKILLS = [['listening', 'Listening'], ['speaking', 'Speaking'], ['bookOpen', 'Gramática'], ['star', 'Vocabulário']]
 const DIGITAL_INCLUDES = ['Acesso completo à plataforma TalkScape', '1 jornada de 12 semanas incluída', 'Habit tracker diário', 'Espaço de dúvidas com a Renata']
 
@@ -153,6 +147,20 @@ const FAQS = [
   { q: 'Qual plano é melhor pra mim?', a: 'Depende do seu ritmo e objetivo. Essencial é ótimo se você quer uma aula por semana. Jornada é mais completo com aulas + plataforma. Horizonte é pra quem quer mergulhar (3h/semana). Na Welcome Class a gente descobre juntas!' },
 ]
 
+const TURMA_PLAN = {
+  name: 'Turma Aberta', icon: 'usersRound', color: C.terracotta, highlight: true, badge: 'MAIS POPULAR',
+  hours: '1h/semana',
+  prices: [{ label: 'por aluna', price: 'R$ 250/aluna' }],
+  note: 'para iniciantes',
+  benefits: ['Para quem está começando', 'Grupos de até 4 alunas', 'Muita interação e prática', 'Abre com 4 inscritas', 'Acesso à plataforma'],
+}
+
+const PLAN_TABS = [
+  ['individual', 'Individual'],
+  ['dupla', 'Em dupla'],
+  ['turma', 'Em turma'],
+]
+
 const TESTIMONIALS = [
   { text: 'Gosto da maneira dinâmica como a didática é aplicada. Recomendaria sim — as aulas são particulares e adaptadas para cada aluna.', name: 'Aluna do plano Essencial' },
   { text: 'As aulas são divertidas, leves e bem estruturadas. A cada semana trabalhamos um assunto novo, e isso me motiva a continuar. Os vídeos junto aos exercícios de escrita e conversação são muito eficazes.', name: 'Aluna do plano Jornada' },
@@ -175,19 +183,23 @@ const FaqItem = ({ q, a, open, onToggle }) => (
   </div>
 )
 
-const PriceLadder = ({ prices }) => (
-  <div style={{ background: C.cream, borderRadius: 12, margin: '20px 0', overflow: 'hidden' }}>
-    {prices.map((p, j) => {
-      const last = j === prices.length - 1
-      return (
-        <div key={j} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', fontSize: 15, borderTop: j > 0 ? `1px solid ${C.border3}` : 'none', background: last ? C.tan : 'transparent' }}>
-          <span style={{ color: last ? C.tanText : C.mid2, fontWeight: last ? 600 : 400 }}>{p.label}</span>
-          <span style={{ fontWeight: last ? 800 : 700, color: last ? C.terracotta : C.text }}>{p.price}</span>
-        </div>
-      )
-    })}
-  </div>
-)
+// headline price = last tier (12 meses); "valor cheio" = first tier
+const PlanPrice = ({ prices, highlight }) => {
+  const full = prices[0]?.price
+  const now = prices[prices.length - 1]?.price || full
+  const suffix = now && now.includes('/') ? '' : '/mês'
+  return (
+    <div style={{ margin: '18px 0 6px' }}>
+      <div>
+        <span style={serif(500, 34, { color: highlight ? C.terracotta : C.dark })}>{now}</span>
+        <span style={{ fontSize: 14, color: C.mid2 }}>{suffix}</span>
+      </div>
+      {full && full !== now && (
+        <div style={{ fontSize: 12.5, color: C.muted, marginTop: 4, marginBottom: 14 }}>valor cheio {full} · com 12 meses</div>
+      )}
+    </div>
+  )
+}
 
 const PlanCard = ({ plan }) => (
   <div style={{
@@ -207,7 +219,7 @@ const PlanCard = ({ plan }) => (
       </div>
       <span style={{ fontSize: 14, fontWeight: 700, color: C.mid2, whiteSpace: 'nowrap' }}>{plan.hours}</span>
     </div>
-    <PriceLadder prices={plan.prices} />
+    <PlanPrice prices={plan.prices} highlight={plan.highlight} />
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 15, color: C.text }}>
       {plan.benefits.map((b, j) => (
         <div key={j} style={{ display: 'flex', gap: 10 }}>
@@ -239,6 +251,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
   const [err, setErr] = useState('')
   const [done, setDone] = useState(false)
   const [openFaq, setOpenFaq] = useState(0)
+  const [planTab, setPlanTab] = useState('individual')
 
   const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setPhone(''); setSenha(''); setErr(''); setShowModal(true) }
 
@@ -450,29 +463,6 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
         </div>
       </div>
 
-      {/* FORMATOS DE AULA */}
-      <div id="formatos" style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '0 20px 52px' : '0 40px 80px' }}>
-        <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 46px' }}>
-          <SectionEyebrow>AULAS AO VIVO COM A RENATA</SectionEyebrow>
-          <h2 style={serif(500, 44, { margin: '12px 0 12px', lineHeight: 1.1 })}>Aulas do seu jeito</h2>
-          <p style={{ fontSize: 18, lineHeight: 1.55, color: C.mid, margin: 0 }}>Aulas particulares e ao vivo, com correção na hora e plano de estudos. Escolha o formato que combina com você.</p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 22 }}>
-          {FORMATS.map((f, i) => (
-            <div key={i} style={{ background: '#fff', borderRadius: 18, padding: '32px 28px', position: 'relative', border: f.highlight ? `1.5px solid ${C.terracotta}` : `1px solid ${C.border2}` }}>
-              {f.highlight && (
-                <div style={{ position: 'absolute', top: -12, left: 28, background: C.terracotta, color: '#fff', fontSize: 12, fontWeight: 800, letterSpacing: '.04em', padding: '4px 12px', borderRadius: 100 }}>{f.badge}</div>
-              )}
-              <div style={{ width: 52, height: 52, borderRadius: 14, background: C.tan, display: 'flex', alignItems: 'center', justifyContent: 'center', ...serif(600, 24, { color: C.terracotta }) }}>{f.n}</div>
-              <div style={{ fontWeight: 800, fontSize: 22, margin: '18px 0 8px' }}>{f.title}</div>
-              <div style={{ color: C.mid2, fontSize: 15, lineHeight: 1.55 }}>{f.text}</div>
-              <div style={{ marginTop: 16, fontSize: 14, fontWeight: 700, color: C.green }}>{f.meta}</div>
-              <a href={f.anchor} style={{ display: 'inline-block', marginTop: 16, color: C.terracotta, fontWeight: 700, fontSize: 15, textDecoration: 'none' }}>{f.cta}</a>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* JORNADA DIGITAL */}
       <div id="digital" style={{ background: C.green, color: '#F3ECDD' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
@@ -537,71 +527,76 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
         </div>
       </div>
 
-      {/* PLANOS INDIVIDUAIS + PLANOS DUPLA */}
+      {/* PLANOS — formato único com alternador Individual / Em dupla / Em turma */}
       <div id="planos" style={{ background: C.creamAlt }}>
-        <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px 40px' : '80px 40px 50px' }}>
-          <div style={{ textAlign: 'center', maxWidth: 660, margin: '0 auto 46px' }}>
-            <SectionEyebrow>AULAS PARTICULARES INDIVIDUAIS</SectionEyebrow>
-            <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>Aulas individuais</h2>
-            <p style={{ fontSize: 18, color: C.mid, margin: 0 }}>Personalizadas para o seu ritmo e objetivo. Quanto mais tempo de compromisso, mais você economiza — valores por mês.</p>
+        <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
+          <div style={{ textAlign: 'center', maxWidth: 660, margin: '0 auto 28px' }}>
+            <SectionEyebrow>AULAS AO VIVO COM A RENATA</SectionEyebrow>
+            <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>Escolha o formato que combina com você</h2>
+            <p style={{ fontSize: 18, color: C.mid, margin: 0 }}>Aulas particulares com preços especiais, ou turma aberta mais acessível.</p>
           </div>
+
+          {/* toggle */}
+          <div style={{ textAlign: 'center', marginBottom: 26 }}>
+            <div style={{ display: 'inline-flex', background: '#fff', border: `1px solid ${C.border2}`, borderRadius: 100, padding: 4, gap: 4 }}>
+              {PLAN_TABS.map(([k, lb]) => {
+                const active = planTab === k
+                return (
+                  <button key={k} onClick={() => setPlanTab(k)} style={{ fontFamily: "'Hanken Grotesk',sans-serif", fontSize: isMobile ? 13 : 15, fontWeight: 700, padding: isMobile ? '9px 16px' : '11px 24px', borderRadius: 100, border: 'none', cursor: 'pointer', transition: 'all .15s', background: active ? C.terracotta : 'transparent', color: active ? '#fff' : C.mid2 }}>{lb}</button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* guarantee banner */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, textAlign: 'center', background: C.greenSoft, color: C.green, fontWeight: 700, fontSize: isMobile ? 13.5 : 14.5, padding: '12px 22px', borderRadius: 14, maxWidth: 560, margin: '0 auto 32px' }}>
             <Icon name="check" size={18} color={C.green} style={{ flexShrink: 0 }} /> Garantia de 7 dias: não curtiu a 1ª semana? Cancele sem multa.
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
-            {PLANS.map((plan, i) => <PlanCard key={i} plan={plan} />)}
-          </div>
 
-          <div id="planos-dupla" style={{ textAlign: 'center', maxWidth: 660, margin: '70px auto 46px' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: C.green, fontWeight: 700, fontSize: 14, letterSpacing: '.06em', background: C.greenSoft, padding: '7px 16px', borderRadius: 100 }}>
-              <Icon name="usersRound" size={16} color={C.green} /> PARA DUPLAS
+          {planTab === 'individual' && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
+              {PLANS.map((plan, i) => <PlanCard key={i} plan={plan} />)}
             </div>
-            <h2 style={serif(500, 46, { margin: '16px 0 12px', lineHeight: 1.1 })}>Estudem juntas, economizem juntas</h2>
-            <p style={{ fontSize: 18, color: C.mid, margin: 0 }}>Todos os benefícios dos planos individuais, com preço especial por aluna.</p>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
-            {DUO_PLANS.map((plan, i) => <PlanCard key={i} plan={plan} />)}
-          </div>
-        </div>
-      </div>
+          )}
 
-      {/* TURMAS ABERTAS */}
-      <div id="turmas" style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
-        <div style={{ textAlign: 'center', maxWidth: 660, margin: '0 auto 40px' }}>
-          <SectionEyebrow>TURMAS ABERTAS</SectionEyebrow>
-          <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>Aprenda em grupo</h2>
-          <p style={{ fontSize: 18, color: C.mid, margin: 0 }}>Com alunas no mesmo nível e momento que você. Vagas limitadas pra garantir atenção individualizada.</p>
-        </div>
-        <div style={{ maxWidth: 680, margin: '0 auto', borderRadius: 20, overflow: 'hidden', border: `1px solid ${C.border2}`, background: '#fff' }}>
-          <div style={{ background: C.green, color: '#F3ECDD', padding: '26px 32px', display: 'flex', alignItems: 'center', gap: 14 }}>
-            <Icon name="sprout" size={26} color="#F3ECDD" />
-            <div><div style={{ fontWeight: 800, fontSize: 20 }}>General English — Iniciantes</div><div style={{ fontSize: 14, opacity: .9 }}>Nível A1/A2 · 12 semanas · 1x por semana</div></div>
-          </div>
-          <div style={{ padding: '28px 32px' }}>
-            <p style={{ fontSize: 16, lineHeight: 1.55, color: C.mid, margin: '0 0 22px' }}>Nunca estudou inglês de verdade? Ou estudou mas esqueceu tudo? Começamos do zero, no seu ritmo, com alunas no mesmo momento que você.</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              {[['Turma', '3–4 alunas'], ['Duração', '12 semanas'], ['Frequência', '1x por semana'], ['Investimento', 'R$ 220/mês', true]].map(([label, val, hi], i) => (
-                <div key={i} style={{ border: `1px solid ${C.border3}`, borderRadius: 12, padding: '14px 16px', background: hi ? C.tan : 'transparent' }}>
-                  <div style={{ fontSize: 13, color: hi ? '#8A6B4A' : C.muted }}>{label}</div>
-                  <div style={{ fontWeight: hi ? 800 : 700, fontSize: 17, color: hi ? C.terracotta : C.dark }}>{val}</div>
+          {planTab === 'dupla' && (
+            <>
+              <p style={{ textAlign: 'center', fontSize: 16, color: C.mid, margin: '0 auto 24px', maxWidth: 560 }}>Todos os benefícios dos planos individuais, com preço especial por aluna.</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
+                {DUO_PLANS.map((plan, i) => <PlanCard key={i} plan={plan} />)}
+              </div>
+            </>
+          )}
+
+          {planTab === 'turma' && (
+            <div style={{ maxWidth: 380, margin: '0 auto' }}>
+              <div style={{ background: '#fff', borderRadius: 20, padding: '32px 28px', position: 'relative', border: `1.5px solid ${C.terracotta}`, boxShadow: '0 30px 60px -35px rgba(201,88,31,.5)' }}>
+                <div style={{ position: 'absolute', top: -13, left: '50%', transform: 'translateX(-50%)', background: C.terracotta, color: '#fff', fontSize: 12, fontWeight: 800, letterSpacing: '.04em', padding: '5px 16px', borderRadius: 100, whiteSpace: 'nowrap' }}>{TURMA_PLAN.badge}</div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <Icon name={TURMA_PLAN.icon} size={24} color={TURMA_PLAN.color} />
+                    <span style={sans(800, 22)}>{TURMA_PLAN.name}</span>
+                  </div>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: C.mid2, whiteSpace: 'nowrap' }}>{TURMA_PLAN.hours}</span>
                 </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: `1px solid ${C.border3}`, borderRadius: 12, padding: '14px 16px', marginTop: 12 }}>
-              <div><div style={{ fontSize: 13, color: C.muted }}>Vagas disponíveis</div><div style={{ fontWeight: 800, fontSize: 17, color: C.green }}>4 vagas</div></div>
-              <div style={{ display: 'flex', gap: 6 }}>
-                <span style={{ width: 11, height: 11, borderRadius: '50%', background: C.green }} />
-                <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#C9C2B4' }} />
-                <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#C9C2B4' }} />
-                <span style={{ width: 11, height: 11, borderRadius: '50%', background: '#C9C2B4' }} />
+                <div style={{ margin: '18px 0 6px' }}>
+                  <span style={serif(500, 34, { color: C.terracotta })}>R$ 250</span>
+                  <span style={{ fontSize: 14, color: C.mid2 }}>/mês</span>
+                </div>
+                <div style={{ fontSize: 12.5, color: C.muted, marginBottom: 20 }}>por aluna · {TURMA_PLAN.note}</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 15, color: C.text }}>
+                  {TURMA_PLAN.benefits.map((b, j) => (
+                    <div key={j} style={{ display: 'flex', gap: 10 }}>
+                      <Icon name="check" size={18} color={C.green} style={{ flexShrink: 0, marginTop: 2 }} />
+                      <span>{b}</span>
+                    </div>
+                  ))}
+                </div>
+                <a href="https://wa.me/5511986704076?text=Olá%20Renata!%20Quero%20entrar%20na%20lista%20de%20espera%20da%20turma%20aberta%20de%20iniciantes." target="_blank" rel="noreferrer" style={{ display: 'block', textAlign: 'center', fontWeight: 800, fontSize: 16, padding: 14, borderRadius: 100, marginTop: 24, textDecoration: 'none', background: C.terracotta, color: '#fff' }}>Quero esse plano</a>
+                <div style={{ textAlign: 'center', fontSize: 13, color: C.muted, marginTop: 12 }}>A turma abre quando completar 4 inscrições.</div>
               </div>
             </div>
-            <a href="https://wa.me/5511986704076?text=Olá%20Renata!%20Quero%20entrar%20na%20lista%20de%20espera%20da%20turma%20General%20English%20Iniciantes." target="_blank" rel="noreferrer"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, background: C.green, color: '#fff', fontWeight: 800, fontSize: 16, padding: 16, borderRadius: 100, marginTop: 20, textDecoration: 'none' }}>
-              <Icon name="feedback" size={19} color="#fff" /> Quero entrar na lista de espera
-            </a>
-            <div style={{ textAlign: 'center', fontSize: 13, color: C.muted, marginTop: 12 }}>A turma abre quando completar 3 inscrições.</div>
-          </div>
+          )}
         </div>
       </div>
 
