@@ -48,6 +48,7 @@ function shade(hex, amt) {
 const FORMS_LINK = 'https://forms.gle/MgL1cMDT9gijCeWD9'
 const INSTAGRAM = 'https://www.instagram.com/talkscape.byrenata'
 const WHATSAPP = 'https://wa.me/5511986704076?text=Olá%20Renata!%20Vim%20pelo%20TalkScape%20e%20quero%20saber%20mais%20sobre%20as%20aulas.'
+const WELCOME_CLASS = 'https://wa.me/5511986704076?text=Olá%20Renata!%20Vim%20pelo%20TalkScape%20e%20quero%20agendar%20minha%20Welcome%20Class%20gratuita.'
 const LINK_PAGAMENTO_ASAAS = 'https://www.asaas.com/c/ri6cdcimyr50t33r'
 const ASAAS_LINKS = [
   'https://www.asaas.com/c/ri6cdcimyr50t33r',   // 1 jornada
@@ -137,6 +138,21 @@ const DUO_PLANS = [
   },
 ]
 
+const SOCIAL_PROOF = [
+  { icon: 'usersRound', value: '500+', label: 'alunas atendidas' },
+  { icon: 'bookOpen', value: '6 anos', label: 'de experiência' },
+  { icon: 'general', value: 'Pesquisa', label: 'em inglês decolonial' },
+]
+
+const FAQS = [
+  { q: 'Como eu descubro meu nível de inglês?', a: 'Na sua Welcome Class a gente faz uma conversa natural pra entender onde você está. Não é um teste chato — é só pra eu conhecer seu ritmo e suas dúvidas.' },
+  { q: 'Posso cancelar quando quiser?', a: 'Sim! Você tem 7 dias de garantia pra testar sem compromisso. Depois, pode cancelar a qualquer momento, sem multa. Só peço aviso com uma semana de antecedência pra avisar se houver reposição pendente.' },
+  { q: 'Como funciona a Welcome Class?', a: 'A gente marca um horário no WhatsApp. São 30-40 minutos conversando em inglês sobre seus objetivos, sua história com a língua, e o que você espera alcançar. Depois eu mando uma proposta de plano personalizado.' },
+  { q: 'E se eu perder uma aula?', a: 'Sem problema! Você pode repor em outro horário na mesma semana, desde que avise com 24h de antecedência. Os planos Jornada e Horizonte têm prioridade em reposição.' },
+  { q: 'As aulas são síncronas (ao vivo)?', a: 'Sim, as aulas com a Renata são sempre ao vivo e online. Além delas, você tem acesso à plataforma com jornadas de estudo pra praticar no seu ritmo, entre um encontro e outro.' },
+  { q: 'Qual plano é melhor pra mim?', a: 'Depende do seu ritmo e objetivo. Essencial é ótimo se você quer uma aula por semana. Jornada é mais completo com aulas + plataforma. Horizonte é pra quem quer mergulhar (3h/semana). Na Welcome Class a gente descobre juntas!' },
+]
+
 const TESTIMONIALS = [
   { text: 'Gosto da maneira dinâmica como a didática é aplicada. Recomendaria sim — as aulas são particulares e adaptadas para cada aluna.', name: 'Aluna do plano Essencial' },
   { text: 'As aulas são divertidas, leves e bem estruturadas. A cada semana trabalhamos um assunto novo, e isso me motiva a continuar. Os vídeos junto aos exercícios de escrita e conversação são muito eficazes.', name: 'Aluna do plano Jornada' },
@@ -147,6 +163,16 @@ const TESTIMONIALS = [
 
 const SectionEyebrow = ({ children }) => (
   <div style={{ color: C.terracotta, fontWeight: 700, fontSize: 14, letterSpacing: '.08em' }}>{children}</div>
+)
+
+const FaqItem = ({ q, a, open, onToggle }) => (
+  <div style={{ background: '#fff', border: `1px solid ${C.border2}`, borderRadius: 14, padding: '20px 24px' }}>
+    <button onClick={onToggle} style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, fontFamily: "'Hanken Grotesk',sans-serif" }}>
+      <span style={{ fontWeight: 700, fontSize: 16, color: C.dark }}>{q}</span>
+      <span style={{ fontSize: 20, color: C.terracotta, flexShrink: 0, transform: open ? 'rotate(45deg)' : 'none', transition: 'transform .15s' }}>+</span>
+    </button>
+    {open && <p style={{ fontSize: 15, lineHeight: 1.6, color: C.mid2, margin: '14px 0 0' }}>{a}</p>}
+  </div>
 )
 
 const PriceLadder = ({ prices }) => (
@@ -212,6 +238,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState('')
   const [done, setDone] = useState(false)
+  const [openFaq, setOpenFaq] = useState(0)
 
   const openModal = (t = 'particular') => { setTipo(t); setNome(''); setEmail(''); setPhone(''); setSenha(''); setErr(''); setShowModal(true) }
 
@@ -331,8 +358,26 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
               <a href="#porque" style={navLink}>Por quê</a><a href="#metodo" style={navLink}>Método</a><a href="#jornadas" style={navLink}>Jornadas</a><a href="#planos" style={navLink}>Planos</a><a href="#renata" style={navLink}>A Renata</a>
             </>}
             <button onClick={onStudent} style={{ border: `1.5px solid ${C.green}`, background: 'none', color: C.green, padding: isMobile ? '8px 14px' : '10px 20px', borderRadius: 100, fontWeight: 600, fontSize: isMobile ? 13 : 15, cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}>Já sou aluna</button>
-            <button onClick={() => openModal('particular')} style={{ background: C.terracotta, border: 'none', color: '#fff', padding: isMobile ? '8px 14px' : '10px 22px', borderRadius: 100, fontWeight: 700, fontSize: isMobile ? 13 : 15, cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif", whiteSpace: 'nowrap' }}>Quero começar</button>
+            <a href={WELCOME_CLASS} target="_blank" rel="noreferrer" style={{ background: C.terracotta, border: 'none', color: '#fff', padding: isMobile ? '8px 14px' : '10px 22px', borderRadius: 100, fontWeight: 700, fontSize: isMobile ? 13 : 15, cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif", whiteSpace: 'nowrap', textDecoration: 'none' }}>Agende sua Welcome Class</a>
           </div>
+        </div>
+      </div>
+
+      {/* SOCIAL PROOF */}
+      <div style={{ background: C.creamAlt, borderBottom: `1px solid ${C.border}` }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '16px 20px' : '22px 40px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: isMobile ? 16 : 28, flexWrap: 'wrap', textAlign: 'center' }}>
+          {SOCIAL_PROOF.map((s, i) => (
+            <div key={i} style={{ display: 'contents' }}>
+              {i > 0 && <div style={{ width: 1, height: 34, background: C.border3 }} />}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Icon name={s.icon} size={isMobile ? 18 : 22} color={C.terracotta} />
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ fontWeight: 800, fontSize: isMobile ? 15 : 17, color: C.terracotta, lineHeight: 1.1 }}>{s.value}</div>
+                  <div style={{ fontSize: isMobile ? 12 : 13, color: C.muted }}>{s.label}</div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -349,8 +394,11 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
             Aprenda conversando: aulas ao vivo <strong>individuais, em dupla ou em turma</strong>. Além de jornadas de estudo na plataforma pra você avançar no seu ritmo.
           </p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 30, flexWrap: 'wrap' }}>
-            <a href="#planos" style={{ background: C.terracotta, color: '#fff', fontWeight: 700, fontSize: isMobile ? 16 : 18, padding: isMobile ? '14px 26px' : '17px 32px', borderRadius: 100, textDecoration: 'none' }}>Ver planos e preços</a>
-            <a href="#metodo" style={{ color: C.green, fontWeight: 700, fontSize: isMobile ? 16 : 18, padding: '14px 8px', borderBottom: `2px solid ${C.green}`, textDecoration: 'none' }}>Como funciona →</a>
+            <a href={WELCOME_CLASS} target="_blank" rel="noreferrer" style={{ background: C.terracotta, color: '#fff', fontWeight: 700, fontSize: isMobile ? 16 : 18, padding: isMobile ? '14px 26px' : '17px 32px', borderRadius: 100, textDecoration: 'none' }}>Agende sua Welcome Class</a>
+            <a href="#planos" style={{ color: C.green, fontWeight: 700, fontSize: isMobile ? 16 : 18, padding: '14px 8px', borderBottom: `2px solid ${C.green}`, textDecoration: 'none' }}>Ver planos e preços →</a>
+          </div>
+          <div style={{ marginTop: 14, fontSize: 14, color: C.muted, display: 'flex', alignItems: 'center', gap: 7 }}>
+            <Icon name="check" size={16} color={C.green} /> Aula de boas-vindas gratuita, sem compromisso
           </div>
         </div>
         <div style={{ position: 'relative', maxWidth: isMobile ? 340 : 'none', width: '100%', margin: isMobile ? '0 auto' : 0 }}>
@@ -497,6 +545,9 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
             <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>Aulas individuais</h2>
             <p style={{ fontSize: 18, color: C.mid, margin: 0 }}>Personalizadas para o seu ritmo e objetivo. Quanto mais tempo de compromisso, mais você economiza — valores por mês.</p>
           </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, textAlign: 'center', background: C.greenSoft, color: C.green, fontWeight: 700, fontSize: isMobile ? 13.5 : 14.5, padding: '12px 22px', borderRadius: 14, maxWidth: 560, margin: '0 auto 32px' }}>
+            <Icon name="check" size={18} color={C.green} style={{ flexShrink: 0 }} /> Garantia de 7 dias: não curtiu a 1ª semana? Cancele sem multa.
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
             {PLANS.map((plan, i) => <PlanCard key={i} plan={plan} />)}
           </div>
@@ -591,14 +642,27 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
         </div>
       </div>
 
+      {/* FAQ */}
+      <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '0 20px 52px' : '0 40px 80px' }}>
+        <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 40px' }}>
+          <SectionEyebrow>DÚVIDAS?</SectionEyebrow>
+          <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>Perguntas frequentes</h2>
+        </div>
+        <div style={{ maxWidth: 720, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {FAQS.map((f, i) => (
+            <FaqItem key={i} q={f.q} a={f.a} open={openFaq === i} onToggle={() => setOpenFaq(openFaq === i ? -1 : i)} />
+          ))}
+        </div>
+      </div>
+
       {/* CTA FINAL */}
       <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '0 20px 52px' : '0 40px 80px' }}>
         <div style={{ background: C.terracotta, borderRadius: 24, padding: '70px 56px', textAlign: 'center', color: '#fff' }}>
           <h2 style={serif(500, 50, { margin: '0 0 16px', lineHeight: 1.06 })}>Vem construir o seu espaço<br />de aprender inglês</h2>
-          <p style={{ fontSize: 20, opacity: .92, margin: '0 auto 30px', maxWidth: 520 }}>Me conta seus objetivos e a gente encontra o formato ideal pra você — individual, em dupla, em turma ou na plataforma.</p>
-          <button onClick={() => openModal('particular')} style={{ display: 'inline-block', background: '#fff', color: C.terracotta, fontWeight: 800, fontSize: 19, padding: '18px 40px', borderRadius: 100, border: 'none', cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif" }}>
-            Quero começar
-          </button>
+          <p style={{ fontSize: 20, opacity: .92, margin: '0 auto 30px', maxWidth: 520 }}>Me conta seus objetivos na Welcome Class — uma aula gratuita pra a gente encontrar o formato ideal pra você.</p>
+          <a href={WELCOME_CLASS} target="_blank" rel="noreferrer" style={{ display: 'inline-block', background: '#fff', color: C.terracotta, fontWeight: 800, fontSize: 19, padding: '18px 40px', borderRadius: 100, border: 'none', cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif", textDecoration: 'none' }}>
+            Agende sua Welcome Class
+          </a>
         </div>
       </div>
 
