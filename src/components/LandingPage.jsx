@@ -37,14 +37,6 @@ const serif = (weight, size, extra = {}) => ({ fontFamily: "'Newsreader',serif",
 const sans = (weight, size, extra = {}) => ({ fontFamily: "'Hanken Grotesk',sans-serif", fontWeight: weight, fontSize: size, ...extra })
 const navLink = { color: 'inherit', textDecoration: 'none' }
 
-// darken a hex color by a fixed channel amount (used for the diagonal-stripe banners)
-function shade(hex, amt) {
-  const n = parseInt(hex.replace('#', ''), 16)
-  let r = (n >> 16) + amt, g = ((n >> 8) & 255) + amt, b = (n & 255) + amt
-  r = Math.max(0, Math.min(255, r)); g = Math.max(0, Math.min(255, g)); b = Math.max(0, Math.min(255, b))
-  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
-}
-
 const FORMS_LINK = 'https://forms.gle/MgL1cMDT9gijCeWD9'
 const INSTAGRAM = 'https://www.instagram.com/talkscape.byrenata'
 const WHATSAPP = 'https://wa.me/5511986704076?text=Olá%20Renata!%20Vim%20pelo%20TalkScape%20e%20quero%20saber%20mais%20sobre%20as%20aulas.'
@@ -470,8 +462,8 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
         </div>
       </div>
 
-      {/* JORNADA DIGITAL */}
-      <div id="digital" style={{ background: C.green, color: '#F3ECDD' }}>
+      {/* JORNADA DIGITAL + JORNADAS DISPONÍVEIS (bloco único) */}
+      <div id="jornadas" style={{ background: C.green, color: '#F3ECDD' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px,1fr))', gap: 40, alignItems: 'stretch' }}>
             <div>
@@ -509,28 +501,22 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* JORNADAS DE APRENDIZADO */}
-      <div id="jornadas" style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 30, flexWrap: 'wrap', gap: 16 }}>
-          <div style={{ maxWidth: 640 }}>
-            <SectionEyebrow>JORNADAS DE APRENDIZADO</SectionEyebrow>
-            <h2 style={serif(500, 44, { margin: '12px 0 12px', lineHeight: 1.1 })}>Escolha o caminho que faz sentido pra você</h2>
-            <p style={{ fontSize: 18, lineHeight: 1.55, color: C.mid, margin: 0 }}>Cursos <strong>independentes e autônomos</strong> dentro da plataforma. Faça um por conta própria ou combine vários com as aulas ao vivo.</p>
-          </div>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 20 }}>
-          {JOURNEYS.map(j => (
-            <div key={j.id} style={{ borderRadius: 16, overflow: 'hidden', border: `1px solid ${C.border2}`, background: '#fff' }}>
-              <div style={{ height: 72, background: `repeating-linear-gradient(45deg,${j.color},${j.color} 12px,${shade(j.color, -12)} 12px,${shade(j.color, -12)} 24px)` }} />
-              <div style={{ padding: '22px 24px 24px' }}>
-                <div style={{ fontWeight: 800, fontSize: 19 }}>{j.pt}</div>
-                <div style={{ color: C.mid2, fontSize: 15, lineHeight: 1.5, marginTop: 6 }}>{j.desc.pt}</div>
-              </div>
+          {/* jornadas disponíveis — faixa compacta */}
+          <div style={{ marginTop: 44, paddingTop: 36, borderTop: '1px solid rgba(255,255,255,.18)' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap', marginBottom: 18 }}>
+              <h3 style={serif(500, 26, { margin: 0, color: '#fff' })}>Escolha entre {JOURNEYS.length} jornadas</h3>
+              <span style={{ fontSize: 15, color: C.greenLight }}>faça uma por conta própria ou combine várias com as aulas ao vivo</span>
             </div>
-          ))}
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(220px,1fr))', gap: 10 }}>
+              {JOURNEYS.map(j => (
+                <div key={j.id} title={j.desc.pt} style={{ display: 'flex', alignItems: 'center', gap: 11, background: 'rgba(255,255,255,.08)', border: '1px solid rgba(255,255,255,.14)', borderRadius: 12, padding: '13px 16px' }}>
+                  <span style={{ width: 10, height: 10, borderRadius: '50%', background: j.color, flexShrink: 0, boxShadow: '0 0 0 3px rgba(255,255,255,.12)' }} />
+                  <span style={{ fontWeight: 700, fontSize: 15, color: '#fff' }}>{j.pt}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
