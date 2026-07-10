@@ -183,23 +183,30 @@ const FaqItem = ({ q, a, open, onToggle }) => (
   </div>
 )
 
-// headline price = last tier (12 meses); "valor cheio" = first tier
-const PlanPrice = ({ prices, highlight }) => {
-  const full = prices[0]?.price
-  const now = prices[prices.length - 1]?.price || full
-  const suffix = now && now.includes('/') ? '' : '/mês'
-  return (
-    <div style={{ margin: '18px 0 6px' }}>
-      <div>
-        <span style={serif(500, 34, { color: highlight ? C.terracotta : C.dark })}>{now}</span>
-        <span style={{ fontSize: 14, color: C.mid2 }}>{suffix}</span>
-      </div>
-      {full && full !== now && (
-        <div style={{ fontSize: 12.5, color: C.muted, marginTop: 4, marginBottom: 14 }}>valor cheio {full} · com 12 meses</div>
-      )}
+// Tabela de valores fidelidade: quanto maior o compromisso, menor o mensal
+const PriceLadder = ({ prices }) => (
+  <div style={{ background: C.cream, borderRadius: 12, margin: '20px 0', overflow: 'hidden' }}>
+    {prices.map((p, j) => {
+      const last = j === prices.length - 1
+      return (
+        <div key={j} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 16px', fontSize: 15, borderTop: j > 0 ? `1px solid ${C.border3}` : 'none', background: last ? C.tan : 'transparent' }}>
+          <span style={{ color: last ? C.tanText : C.mid2, fontWeight: last ? 600 : 400 }}>{p.label}</span>
+          <span style={{ fontWeight: last ? 800 : 700, color: last ? C.terracotta : C.text }}>{p.price}</span>
+        </div>
+      )
+    })}
+  </div>
+)
+
+// Nota explicando o que é um plano fidelidade
+const FidelityNote = () => (
+  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, maxWidth: 720, margin: '28px auto 0', background: '#fff', border: `1px solid ${C.border2}`, borderRadius: 14, padding: '16px 20px' }}>
+    <Icon name="sprout" size={20} color={C.green} style={{ flexShrink: 0, marginTop: 2 }} />
+    <div style={{ fontSize: 14.5, lineHeight: 1.55, color: C.mid2 }}>
+      <strong style={{ color: C.dark }}>O que é um plano fidelidade?</strong> É o seu tempo de compromisso com a jornada. Quanto mais meses você escolhe de uma vez (3, 6 ou 12), menor fica o valor mensal — o valor cheio é o plano mês a mês, sem fidelidade.
     </div>
-  )
-}
+  </div>
+)
 
 const PlanCard = ({ plan }) => (
   <div style={{
@@ -219,7 +226,7 @@ const PlanCard = ({ plan }) => (
       </div>
       <span style={{ fontSize: 14, fontWeight: 700, color: C.mid2, whiteSpace: 'nowrap' }}>{plan.hours}</span>
     </div>
-    <PlanPrice prices={plan.prices} highlight={plan.highlight} />
+    <PriceLadder prices={plan.prices} />
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 15, color: C.text }}>
       {plan.benefits.map((b, j) => (
         <div key={j} style={{ display: 'flex', gap: 10 }}>
@@ -554,9 +561,12 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
           </div>
 
           {planTab === 'individual' && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
-              {PLANS.map((plan, i) => <PlanCard key={i} plan={plan} />)}
-            </div>
+            <>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
+                {PLANS.map((plan, i) => <PlanCard key={i} plan={plan} />)}
+              </div>
+              <FidelityNote />
+            </>
           )}
 
           {planTab === 'dupla' && (
@@ -565,6 +575,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px,1fr))', gap: 20, alignItems: 'start' }}>
                 {DUO_PLANS.map((plan, i) => <PlanCard key={i} plan={plan} />)}
               </div>
+              <FidelityNote />
             </>
           )}
 
