@@ -310,7 +310,8 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
   const dangerIconBtn = { background: D.claySoft, border: 'none', borderRadius: 8, padding: '7px 9px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }
 
   return (
-    <div style={{ minHeight: '100vh', background: D.canvas, fontFamily: F, color: D.ink, overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: `radial-gradient(ellipse 900px 500px at 15% -10%, ${D.terraSoft}, transparent), radial-gradient(ellipse 800px 500px at 100% 0%, ${D.sageSoft}, transparent) ${D.canvas}`, fontFamily: F, color: D.ink, overflowX: 'hidden' }}>
+      <div style={{ height: 5, background: `linear-gradient(90deg, ${D.terra} 0%, ${D.orange} 34%, ${D.moss} 67%, ${D.sky} 100%)` }} />
 
       {/* Settings modal */}
       {showSettings && (

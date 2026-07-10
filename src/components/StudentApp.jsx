@@ -144,10 +144,11 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
 
   return (
     <>
-    <div style={{ minHeight: '100vh', background: D.canvas, fontFamily: "'Hanken Grotesk',sans-serif", color: D.ink, WebkitFontSmoothing: 'antialiased' }}>
+    <div style={{ minHeight: '100vh', background: `radial-gradient(ellipse 900px 500px at 15% -10%, ${D.terraSoft}, transparent), radial-gradient(ellipse 800px 500px at 100% 0%, ${D.sageSoft}, transparent) ${D.canvas}`, fontFamily: "'Hanken Grotesk',sans-serif", color: D.ink, WebkitFontSmoothing: 'antialiased' }}>
+      <div style={{ height: 5, background: `linear-gradient(90deg, ${D.terra} 0%, ${D.orange} 34%, ${D.moss} 67%, ${D.sky} 100%)` }} />
 
       {/* ================= TOP BAR ================= */}
-      <header style={{ position: 'sticky', top: 0, zIndex: 20, background: 'rgba(251,242,233,.86)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: `1px solid ${D.line}` }}>
+      <header style={{ position: 'sticky', top: 0, zIndex: 20, background: 'rgba(249,241,233,.88)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: `1px solid ${D.line}` }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '10px 20px', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px 18px' }}>
           <Logo h={38} />
 
