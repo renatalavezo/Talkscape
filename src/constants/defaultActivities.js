@@ -3,6 +3,7 @@ import { JOURNEY_CV } from './journeyCV'
 import { JOURNEY_TR } from './journeyTR'
 import { JOURNEY_BJ } from './journeyBJ'
 import { JOURNEY_AC } from './journeyAC'
+import { JOURNEY_GR } from './journeyGR'
 
 const LEGACY_ACTIVITIES = {
   bj1: {
@@ -3067,5 +3068,5 @@ const LEGACY_ACTIVITIES = {
   }
 };
 
-export const DEFAULT_ACTIVITIES = { ...LEGACY_ACTIVITIES, ...CORE_GE, ...JOURNEY_CV, ...JOURNEY_TR, ...JOURNEY_BJ, ...JOURNEY_AC }
+export const DEFAULT_ACTIVITIES = { ...LEGACY_ACTIVITIES, ...CORE_GE, ...JOURNEY_CV, ...JOURNEY_TR, ...JOURNEY_BJ, ...JOURNEY_AC, ...JOURNEY_GR }
 export default DEFAULT_ACTIVITIES;
