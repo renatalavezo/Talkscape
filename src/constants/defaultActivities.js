@@ -1,4 +1,5 @@
 import { CORE_GE } from './coreActivities'
+import { JOURNEY_CV } from './journeyCV'
 
 const LEGACY_ACTIVITIES = {
   bj1: {
@@ -3063,5 +3064,5 @@ const LEGACY_ACTIVITIES = {
   }
 };
 
-export const DEFAULT_ACTIVITIES = { ...LEGACY_ACTIVITIES, ...CORE_GE }
+export const DEFAULT_ACTIVITIES = { ...LEGACY_ACTIVITIES, ...CORE_GE, ...JOURNEY_CV }
 export default DEFAULT_ACTIVITIES;
