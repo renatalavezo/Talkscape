@@ -714,6 +714,12 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                 ))}
                               </div>
                             </div>
+                            <div style={{ marginBottom: 14 }}>
+                              <p style={{ ...sansD(600, 12.5), color: D.muted, marginBottom: 6 }}>Nome da aluna</p>
+                              <input style={{ ...SD.inp, width: '100%', boxSizing: 'border-box' }} type="text" placeholder="Nome"
+                                defaultValue={s.name || ''}
+                                onBlur={e => { const v = e.target.value.trim(); if (v && v !== s.name) upDb({ courseStudents: (courseStudents || []).map(x => x.id === s.id ? { ...x, name: v } : x) }) }} />
+                            </div>
                             {jids.length === 0 && <p style={{ fontSize: 12.5, color: D.muted, marginBottom: 10 }}>Nenhuma jornada atribuída.</p>}
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
                               {jids.map(jid => JOURNEY_MAP[jid] && (
@@ -1368,6 +1374,12 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
               {dtab === 'info' && (
                 <div style={SD.card}>
                   <p style={{ ...SD.lbl, display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="info" size={13} color={D.muted} />{t.infoLabel}</p>
+                  <p style={{ ...sansD(600, 12.5), color: D.muted, marginBottom: 6 }}>{lang === 'pt' ? 'Nome da aluna' : "Student's name"}</p>
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+                    <input style={{ ...SD.inp, flex: 1 }} type="text" placeholder={lang === 'pt' ? 'Nome' : 'Name'}
+                      defaultValue={selS.name || ''}
+                      onBlur={e => { const v = e.target.value.trim(); if (v && v !== selS.name) upDb({ students: students.map(s => s.id === selS.id ? { ...s, name: v } : s) }) }} />
+                  </div>
                   <p style={{ ...sansD(600, 12.5), color: D.muted, marginBottom: 6 }}>Email (login da aluna)</p>
                   <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
                     <input style={{ ...SD.inp, flex: 1 }} type="email" placeholder="email@email.com"
