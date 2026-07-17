@@ -670,7 +670,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                   return (
                     <div key={s.id} style={{ ...SD.card, padding: 22 }}>
                       <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                        <div style={avCircle(nameColor(s.name), 52)}>{initialsOf(s.name)}</div>
+                        <Avatar seed={db[`avatar_${s.id}`] || s.avatar || 'Lily'} size={52} />
                         <div style={{ flex: 1, minWidth: 200 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>{s.name}</span>
@@ -1057,7 +1057,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                   return (
                     <div key={s.id} style={{ background: D.surface, border: `1px solid ${D.line}`, borderRadius: 16, padding: '16px 20px', boxShadow: D.shadow, display: 'flex', alignItems: 'center', gap: 16, cursor: 'pointer', transition: 'all .15s' }}
                       onClick={() => { setSel(s.id); setDtab('level'); setJWeek(1) }}>
-                      <div style={avCircle(nameColor(s.name), 46)}>{initialsOf(s.name)}</div>
+                      <Avatar seed={db[`avatar_${s.id}`] || s.avatar || 'Lily'} size={46} />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                           <span style={{ fontSize: 15.5, fontWeight: 700 }}>{s.name}</span>
@@ -1096,17 +1096,6 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                       <Icon name={journeyOf(selS.id).icon} size={12} color={D.mossDeep} /> {lang === 'pt' ? journeyOf(selS.id).pt : journeyOf(selS.id).en}
                     </span>
                   )}
-                </div>
-                <div>
-                  <p style={{ ...sansD(700, 10.5), color: D.muted, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.6 }}>Avatar</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, maxWidth: 220 }}>
-                    {['Lily','Felix','Zoe','Leo','Mia','Finn','Aria','Kai','Nova','Eli','Luna','Ash'].map(seed => (
-                      <img key={seed} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
-                        width={32} height={32} alt={seed}
-                        onClick={() => upDb({ [`avatar_${selS.id}`]: seed })}
-                        style={{ borderRadius: '50%', cursor: 'pointer', border: (db[`avatar_${selS.id}`] || selS.avatar) === seed ? `2.5px solid ${D.orange}` : '2px solid transparent', background: D.cream }} />
-                    ))}
-                  </div>
                 </div>
               </div>
 
