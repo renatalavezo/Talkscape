@@ -438,7 +438,11 @@ for (const [jid, themes] of Object.entries(THEME_VIDEOS)) {
       if (!Array.isArray(arr)) continue
       const [label, query] = themes[wk]
       const vid = { type: 'video', label: 'Vídeo: ' + label, url: ytSearch(query + ' ' + LEVEL_Q[level]) }
-      arr.forEach((r, i) => { if (r.type === 'video') arr[i] = vid })
+      let found = false
+      arr.forEach((r, i) => { if (r.type === 'video') { arr[i] = vid; found = true } })
+      // Weeks with no video get a matching one appended (kept last so existing
+      // resource positions — and their fallback order — stay unchanged).
+      if (!found) arr.push(vid)
     }
   }
 }
