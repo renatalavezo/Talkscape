@@ -371,6 +371,78 @@ export const JOURNEY_RESOURCES = {
   },
 }
 
+// ---------------------------------------------------------------------------
+// Topic-matched, level-aware video links.
+// Each journey's weekly "video" pointed to a generic channel homepage, so the
+// link never matched the week's topic. Below we override every 'video' resource
+// in these journeys with a YouTube search pre-filtered to the week's theme AND
+// the student's level (básico/intermediário/avançado), so links always match
+// the content, suit the level, and never break.
+const LEVEL_Q = { beginner: 'for beginners', intermediate: 'intermediate', advanced: 'advanced' }
+const ytSearch = (q) => 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q).replace(/%20/g, '+')
+
+// [PT label, EN search terms] per week, in the same theme order as journeys.js.
+const THEME_VIDEOS = {
+  core: {
+    1:  ['inglês básico: saudações e apresentações', 'basic english greetings and introductions'],
+    2:  ['vocabulário essencial: primeiras palavras', 'essential english vocabulary for beginners'],
+    3:  ['entender o inglês falado', 'english listening comprehension practice'],
+    4:  ['falar em voz alta: pronúncia', 'english speaking and pronunciation practice'],
+    5:  ['leitura sem medo', 'english reading practice for learners'],
+    6:  ['escrever seus primeiros textos', 'english writing simple sentences'],
+    7:  ['falar sobre o passado', 'english past simple tense lesson'],
+    8:  ['planos e o futuro', 'english future tense will and going to'],
+    9:  ['situações do dia a dia', 'everyday english conversations daily situations'],
+    10: ['descrever pessoas e coisas', 'english describing people and things adjectives'],
+    11: ['falar com confiança', 'speak english with confidence'],
+    12: ['juntando tudo: revisão', 'english conversation practice review'],
+  },
+  business: {
+    1:  ['apresentações profissionais', 'business english professional introductions'],
+    2:  ['escrita de e-mails', 'business english email writing'],
+    3:  ['reuniões e videochamadas', 'business english meetings and conference calls'],
+    4:  ['apresentações', 'business english presentations'],
+    5:  ['negociação', 'business english negotiation'],
+    6:  ['relatórios e dados', 'business english reports and data'],
+    7:  ['expressões de negócios', 'business english idioms and expressions'],
+    8:  ['entrevistas de emprego', 'english job interview tips'],
+    9:  ['networking', 'business english networking'],
+    10: ['solução de problemas', 'business english problem solving'],
+    11: ['comunicação intercultural', 'cross-cultural communication business english'],
+    12: ['comunicação avançada', 'advanced business english communication'],
+  },
+  popculture: {
+    1:  ['inglês com filmes e séries', 'learn english with movies and tv shows'],
+    2:  ['inglês com música e letras', 'learn english with music and song lyrics'],
+    3:  ['inglês nas redes sociais', 'english for social media slang'],
+    4:  ['inglês com podcasts e YouTube', 'learn english with podcasts and youtube'],
+    5:  ['inglês com livros e literatura', 'learn english with books and literature'],
+    6:  ['inglês de esportes e jogos', 'english vocabulary sports and games'],
+    7:  ['inglês com notícias e atualidades', 'learn english with news and current events'],
+    8:  ['inglês da cultura gastronômica', 'english vocabulary food culture'],
+    9:  ['inglês de moda e arte', 'english vocabulary fashion and art'],
+    10: ['inglês de tecnologia', 'english vocabulary technology'],
+    11: ['inglês de viagens e cultura', 'learn english travel and culture'],
+    12: ['inglês no seu dia a dia', 'english in everyday daily life'],
+  },
+}
+
+for (const [jid, themes] of Object.entries(THEME_VIDEOS)) {
+  const journey = JOURNEY_RESOURCES[jid]
+  if (!journey) continue
+  for (const level of ['beginner', 'intermediate', 'advanced']) {
+    const weeks = journey[level]
+    if (!weeks) continue
+    for (const wk of Object.keys(themes)) {
+      const arr = weeks[wk]
+      if (!Array.isArray(arr)) continue
+      const [label, query] = themes[wk]
+      const vid = { type: 'video', label: 'Vídeo: ' + label, url: ytSearch(query + ' ' + LEVEL_Q[level]) }
+      arr.forEach((r, i) => { if (r.type === 'video') arr[i] = vid })
+    }
+  }
+}
+
 export const TYPE_ICON = { video:'video', podcast:'listening', reading:'reading', exercise:'pen', vocab:'bookOpen' }
 
 // Preferred resource type(s) for each activity category
