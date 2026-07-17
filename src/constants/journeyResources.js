@@ -1,19 +1,20 @@
-// Travel journey: one topic-matched video per week (theme order matches the
-// journey weeks in journeys.js). Links are YouTube searches pre-filtered to the
-// week's theme, so they always match the content and never break.
+// Travel journey: one hand-picked video lesson per week (theme order matches the
+// journey weeks in journeys.js). Curated from established teaching channels
+// (Oxford Online English, engVid and well-known ESL channels) so each link is a
+// single lesson that matches the week's topic.
 const TRAVEL_VIDEO = {
-  1:  {type:'video',label:'Vídeo: inglês no aeroporto e check-in',url:'https://www.youtube.com/results?search_query=english+at+the+airport+check-in+travel+lesson'},
-  2:  {type:'video',label:'Vídeo: inglês no hotel',url:'https://www.youtube.com/results?search_query=english+hotel+check-in+requests+travel+lesson'},
-  3:  {type:'video',label:'Vídeo: transporte, bilhetes e táxi',url:'https://www.youtube.com/results?search_query=english+public+transport+tickets+subway+taxi+travel+lesson'},
-  4:  {type:'video',label:'Vídeo: pedir comida no restaurante',url:'https://www.youtube.com/results?search_query=english+ordering+food+restaurant+travel+lesson'},
-  5:  {type:'video',label:'Vídeo: fazer compras',url:'https://www.youtube.com/results?search_query=english+shopping+asking+size+price+travel+lesson'},
-  6:  {type:'video',label:'Vídeo: pedir e dar direções',url:'https://www.youtube.com/results?search_query=english+asking+and+giving+directions+lesson'},
-  7:  {type:'video',label:'Vídeo: farmácia e emergências',url:'https://www.youtube.com/results?search_query=english+at+the+pharmacy+describing+symptoms+travel+lesson'},
-  8:  {type:'video',label:'Vídeo: turismo e passeios',url:'https://www.youtube.com/results?search_query=english+tourism+sightseeing+attractions+travel+lesson'},
-  9:  {type:'video',label:'Vídeo: fazer reservas',url:'https://www.youtube.com/results?search_query=english+making+reservations+booking+hotel+restaurant+lesson'},
-  10: {type:'video',label:'Vídeo: etiqueta cultural',url:'https://www.youtube.com/results?search_query=english+cultural+etiquette+tipping+table+manners+lesson'},
-  11: {type:'video',label:'Vídeo: problemas de viagem',url:'https://www.youtube.com/results?search_query=english+travel+problems+lost+luggage+complaint+lesson'},
-  12: {type:'video',label:'Vídeo: conversar com locais',url:'https://www.youtube.com/results?search_query=english+small+talk+conversation+with+locals+lesson'},
+  1:  {type:'video',label:'Inglês no aeroporto e check-in (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/airport-english'},
+  2:  {type:'video',label:'Inglês no hotel (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/hotel-english'},
+  3:  {type:'video',label:'Transporte e como se locomover (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/talk-about-transport-and-driving'},
+  4:  {type:'video',label:'Pedir comida no restaurante (Travel English)',url:'https://www.youtube.com/watch?v=q3O2hlbExV4'},
+  5:  {type:'video',label:'Fazer compras (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/going-shopping-in-english'},
+  6:  {type:'video',label:'Pedir e dar direções (Everyday English Dialogues)',url:'https://www.youtube.com/watch?v=Lms1qBpfYIM'},
+  7:  {type:'video',label:'Na farmácia: sintomas e remédios',url:'https://www.youtube.com/watch?v=ifPUfoGBaL8'},
+  8:  {type:'video',label:'Turismo e passeios (Travel & Tourism)',url:'https://www.youtube.com/watch?v=QnxESeRB2j4'},
+  9:  {type:'video',label:'Fazer uma reserva de hotel',url:'https://www.youtube.com/watch?v=6KpyzK6y8Oc'},
+  10: {type:'video',label:'Etiqueta e boas maneiras (engVid)',url:'https://www.engvid.com/english-culture-manners/'},
+  11: {type:'video',label:'Bagagem perdida e problemas de viagem',url:'https://www.youtube.com/watch?v=Hx29GChQogo'},
+  12: {type:'video',label:'Small talk: conversar com locais',url:'https://www.youtube.com/watch?v=WGoIoDuf83o'},
 }
 
 export const JOURNEY_RESOURCES = {
@@ -140,7 +141,7 @@ export const JOURNEY_RESOURCES = {
       3: [TRAVEL_VIDEO[3],{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
       4: [{type:'podcast',label:'All Ears English',url:'https://www.allearsenglish.com'},{type:'exercise',label:'Speaky',url:'https://www.speaky.com'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'}],
       5: [TRAVEL_VIDEO[5],{type:'podcast',label:'All Ears English',url:'https://www.allearsenglish.com'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary'}],
-      6: [TRAVEL_VIDEO[6],{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'video',label:'Vídeo: direções — prática de conversa',url:'https://www.youtube.com/results?search_query=english+directions+conversation+practice+lesson'}],
+      6: [TRAVEL_VIDEO[6],{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'video',label:'Direções: prática de conversa',url:'https://www.youtube.com/watch?v=DPYJQSA-x50'}],
       7: [TRAVEL_VIDEO[7],{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'}],
       8: [{type:'exercise',label:'British Council – Writing',url:'https://learnenglish.britishcouncil.org/skills/writing'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},TRAVEL_VIDEO[8]],
       9: [TRAVEL_VIDEO[9],{type:'reading',label:'VOA Learning English',url:'https://learningenglish.voanews.com'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'}],
@@ -397,20 +398,6 @@ const THEME_VIDEOS = {
     11: ['falar com confiança', 'speak english with confidence'],
     12: ['juntando tudo: revisão', 'english conversation practice review'],
   },
-  business: {
-    1:  ['apresentações profissionais', 'business english professional introductions'],
-    2:  ['escrita de e-mails', 'business english email writing'],
-    3:  ['reuniões e videochamadas', 'business english meetings and conference calls'],
-    4:  ['apresentações', 'business english presentations'],
-    5:  ['negociação', 'business english negotiation'],
-    6:  ['relatórios e dados', 'business english reports and data'],
-    7:  ['expressões de negócios', 'business english idioms and expressions'],
-    8:  ['entrevistas de emprego', 'english job interview tips'],
-    9:  ['networking', 'business english networking'],
-    10: ['solução de problemas', 'business english problem solving'],
-    11: ['comunicação intercultural', 'cross-cultural communication business english'],
-    12: ['comunicação avançada', 'advanced business english communication'],
-  },
   popculture: {
     1:  ['inglês com filmes e séries', 'learn english with movies and tv shows'],
     2:  ['inglês com música e letras', 'learn english with music and song lyrics'],
@@ -443,6 +430,45 @@ for (const [jid, themes] of Object.entries(THEME_VIDEOS)) {
       // Weeks with no video get a matching one appended (kept last so existing
       // resource positions — and their fallback order — stay unchanged).
       if (!found) arr.push(vid)
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Curated video lessons: one hand-picked best video per week for Business
+// (Travel is curated inline via TRAVEL_VIDEO above). Chosen from established
+// teaching channels — Oxford Online English and engVid lesson pages plus
+// well-known ESL channels — so each link is a single lesson on the week's topic.
+const CURATED_VIDEO = {
+  travel: TRAVEL_VIDEO,
+  business: {
+    1:  {type:'video',label:'Apresentações profissionais: quem você é e o que faz',url:'https://www.youtube.com/watch?v=yMLDiA6Hy-Y'},
+    2:  {type:'video',label:'Escrever e-mails em inglês (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/write-emails-in-english'},
+    3:  {type:'video',label:'Reuniões e videochamadas: frases essenciais',url:'https://www.youtube.com/watch?v=yxw77hO0Gmc'},
+    4:  {type:'video',label:'Fazer apresentações (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/presentations-in-english'},
+    5:  {type:'video',label:'Negociar em inglês (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/how-to-negotiate-in-business'},
+    6:  {type:'video',label:'Descrever dados e tendências (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/describing-trends-business'},
+    7:  {type:'video',label:'Expressões e idioms de negócios (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/business-english-phrases-idioms'},
+    8:  {type:'video',label:'Entrevista de emprego em inglês (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/english-job-interview'},
+    9:  {type:'video',label:'Networking: fazer contatos (engVid)',url:'https://www.engvid.com/business-english-how-to-network-successfully/'},
+    10: {type:'video',label:'Discutir problemas e encontrar soluções',url:'https://www.youtube.com/watch?v=3E7_nzeP2dk'},
+    11: {type:'video',label:'Comunicação intercultural nos negócios',url:'https://www.youtube.com/watch?v=QjEDxlzZnIo'},
+    12: {type:'video',label:'Linguagem diplomática: comunicação avançada',url:'https://www.youtube.com/watch?v=-f4Gpx071UQ'},
+  },
+}
+
+for (const [jid, map] of Object.entries(CURATED_VIDEO)) {
+  const journey = JOURNEY_RESOURCES[jid]
+  if (!journey) continue
+  for (const level of ['beginner', 'intermediate', 'advanced']) {
+    const weeks = journey[level]
+    if (!weeks) continue
+    for (const wk of Object.keys(map)) {
+      const arr = weeks[wk]
+      if (!Array.isArray(arr)) continue
+      let found = false
+      arr.forEach((r, i) => { if (r.type === 'video') { arr[i] = map[wk]; found = true } })
+      if (!found) arr.push(map[wk])
     }
   }
 }
