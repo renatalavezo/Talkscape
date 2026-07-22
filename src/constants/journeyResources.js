@@ -1,3 +1,22 @@
+// Travel journey: one hand-picked video lesson per week (theme order matches the
+// journey weeks in journeys.js). Curated from established teaching channels
+// (Oxford Online English, engVid and well-known ESL channels) so each link is a
+// single lesson that matches the week's topic.
+const TRAVEL_VIDEO = {
+  1:  {type:'video',label:'Inglês no aeroporto e check-in (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/airport-english'},
+  2:  {type:'video',label:'Inglês no hotel (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/hotel-english'},
+  3:  {type:'video',label:'Transporte e como se locomover (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/talk-about-transport-and-driving'},
+  4:  {type:'video',label:'Pedir comida no restaurante (Travel English)',url:'https://www.youtube.com/watch?v=q3O2hlbExV4'},
+  5:  {type:'video',label:'Fazer compras (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/going-shopping-in-english'},
+  6:  {type:'video',label:'Pedir e dar direções (Everyday English Dialogues)',url:'https://www.youtube.com/watch?v=Lms1qBpfYIM'},
+  7:  {type:'video',label:'Na farmácia: sintomas e remédios',url:'https://www.youtube.com/watch?v=ifPUfoGBaL8'},
+  8:  {type:'video',label:'Turismo e passeios (Travel & Tourism)',url:'https://www.youtube.com/watch?v=QnxESeRB2j4'},
+  9:  {type:'video',label:'Fazer uma reserva de hotel',url:'https://www.youtube.com/watch?v=6KpyzK6y8Oc'},
+  10: {type:'video',label:'Etiqueta e boas maneiras (engVid)',url:'https://www.engvid.com/english-culture-manners/'},
+  11: {type:'video',label:'Bagagem perdida e problemas de viagem',url:'https://www.youtube.com/watch?v=Hx29GChQogo'},
+  12: {type:'video',label:'Small talk: conversar com locais',url:'https://www.youtube.com/watch?v=WGoIoDuf83o'},
+}
+
 export const JOURNEY_RESOURCES = {
   core: {
     beginner: {
@@ -89,44 +108,44 @@ export const JOURNEY_RESOURCES = {
   },
   travel: {
     beginner: {
-      1: [{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
-      2: [{type:'video',label:'EngVid',url:'https://www.engvid.com'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Tower',url:'https://www.esltower.com/grammarquizzes.html'}],
-      3: [{type:'video',label:'English with Lucy',url:'https://www.youtube.com/c/EnglishwithLucy'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
-      4: [{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
-      5: [{type:'video',label:'EnglishClass101',url:'https://www.youtube.com/c/EnglishClass101'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
-      6: [{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Tower',url:'https://www.esltower.com/grammarquizzes.html'}],
-      7: [{type:'video',label:'EngVid',url:'https://www.engvid.com'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
-      8: [{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
-      9: [{type:'video',label:'EnglishClass101',url:'https://www.youtube.com/c/EnglishClass101'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Tower',url:'https://www.esltower.com/grammarquizzes.html'}],
-      10:[{type:'video',label:'English with Lucy',url:'https://www.youtube.com/c/EnglishwithLucy'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
-      11:[{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
-      12:[{type:'video',label:'EnglishClass101',url:'https://www.youtube.com/c/EnglishClass101'},{type:'exercise',label:'British Council – Speaking',url:'https://learnenglish.britishcouncil.org/skills/speaking'},{type:'exercise',label:'Vocaroo',url:'https://vocaroo.com'}],
+      1: [TRAVEL_VIDEO[1],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
+      2: [TRAVEL_VIDEO[2],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Tower',url:'https://www.esltower.com/grammarquizzes.html'}],
+      3: [TRAVEL_VIDEO[3],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
+      4: [TRAVEL_VIDEO[4],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
+      5: [TRAVEL_VIDEO[5],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
+      6: [TRAVEL_VIDEO[6],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Tower',url:'https://www.esltower.com/grammarquizzes.html'}],
+      7: [TRAVEL_VIDEO[7],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
+      8: [TRAVEL_VIDEO[8],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
+      9: [TRAVEL_VIDEO[9],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Tower',url:'https://www.esltower.com/grammarquizzes.html'}],
+      10:[TRAVEL_VIDEO[10],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening/a1-listening'}],
+      11:[TRAVEL_VIDEO[11],{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary/a1-a2-vocabulary'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
+      12:[TRAVEL_VIDEO[12],{type:'exercise',label:'British Council – Speaking',url:'https://learnenglish.britishcouncil.org/skills/speaking'},{type:'exercise',label:'Vocaroo',url:'https://vocaroo.com'}],
     },
     intermediate: {
-      1: [{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
-      2: [{type:'video',label:'EngVid',url:'https://www.engvid.com'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'}],
-      3: [{type:'video',label:'English with Lucy',url:'https://www.youtube.com/c/EnglishwithLucy'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'}],
-      4: [{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'}],
-      5: [{type:'video',label:'EngVid',url:'https://www.engvid.com'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
-      6: [{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'reading',label:'VOA Learning English',url:'https://learningenglish.voanews.com'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'}],
-      7: [{type:'video',label:'English with Lucy',url:'https://www.youtube.com/c/EnglishwithLucy'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'}],
-      8: [{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'reading',label:'VOA Learning English',url:'https://learningenglish.voanews.com'},{type:'video',label:'English with Lucy',url:'https://www.youtube.com/c/EnglishwithLucy'}],
+      1: [TRAVEL_VIDEO[1],{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
+      2: [TRAVEL_VIDEO[2],{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'}],
+      3: [TRAVEL_VIDEO[3],{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'}],
+      4: [TRAVEL_VIDEO[4],{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'}],
+      5: [TRAVEL_VIDEO[5],{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
+      6: [TRAVEL_VIDEO[6],{type:'reading',label:'VOA Learning English',url:'https://learningenglish.voanews.com'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'}],
+      7: [TRAVEL_VIDEO[7],{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'}],
+      8: [{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'reading',label:'VOA Learning English',url:'https://learningenglish.voanews.com'},TRAVEL_VIDEO[8]],
       9: [{type:'podcast',label:'All Ears English',url:'https://www.allearsenglish.com'},{type:'exercise',label:'British Council – Speaking',url:'https://learnenglish.britishcouncil.org/skills/speaking'},{type:'exercise',label:'Speaky',url:'https://www.speaky.com'}],
       10:[{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'reading',label:'VOA Learning English',url:'https://learningenglish.voanews.com'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'}],
-      11:[{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
+      11:[TRAVEL_VIDEO[11],{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading/b1-reading'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
       12:[{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'exercise',label:'British Council – Speaking',url:'https://learnenglish.britishcouncil.org/skills/speaking'},{type:'exercise',label:'Speaky',url:'https://www.speaky.com'}],
     },
     advanced: {
-      1: [{type:'video',label:'EngVid',url:'https://www.engvid.com'},{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'},{type:'exercise',label:'British Council – Writing',url:'https://learnenglish.britishcouncil.org/skills/writing'}],
-      2: [{type:'video',label:'English with Lucy',url:'https://www.youtube.com/c/EnglishwithLucy'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'}],
-      3: [{type:'video',label:'EnglishClass101',url:'https://www.youtube.com/c/EnglishClass101'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
+      1: [TRAVEL_VIDEO[1],{type:'exercise',label:'British Council – Listening',url:'https://learnenglish.britishcouncil.org/skills/listening'},{type:'exercise',label:'British Council – Writing',url:'https://learnenglish.britishcouncil.org/skills/writing'}],
+      2: [TRAVEL_VIDEO[2],{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'}],
+      3: [TRAVEL_VIDEO[3],{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
       4: [{type:'podcast',label:'All Ears English',url:'https://www.allearsenglish.com'},{type:'exercise',label:'Speaky',url:'https://www.speaky.com'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'}],
-      5: [{type:'video',label:'EngVid',url:'https://www.engvid.com'},{type:'podcast',label:'All Ears English',url:'https://www.allearsenglish.com'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary'}],
-      6: [{type:'video',label:'EngVid',url:'https://www.engvid.com'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'video',label:'Learn English with TV Series',url:'https://www.youtube.com/c/LearnEnglishwithTVSeries'}],
-      7: [{type:'video',label:'TED Talks',url:'https://www.ted.com/talks'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'}],
-      8: [{type:'exercise',label:'British Council – Writing',url:'https://learnenglish.britishcouncil.org/skills/writing'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},{type:'video',label:'EngVid – Business',url:'https://www.engvid.com/topic/business-english/'}],
-      9: [{type:'video',label:'TED Talks',url:'https://www.ted.com/talks'},{type:'reading',label:'VOA Learning English',url:'https://learningenglish.voanews.com'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'}],
-      10:[{type:'video',label:'BBC Learning English',url:'https://www.youtube.com/c/bbclearningenglish'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
+      5: [TRAVEL_VIDEO[5],{type:'podcast',label:'All Ears English',url:'https://www.allearsenglish.com'},{type:'vocab',label:'British Council – Vocabulary',url:'https://learnenglish.britishcouncil.org/vocabulary'}],
+      6: [TRAVEL_VIDEO[6],{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'video',label:'Direções: prática de conversa',url:'https://www.youtube.com/watch?v=DPYJQSA-x50'}],
+      7: [TRAVEL_VIDEO[7],{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'}],
+      8: [{type:'exercise',label:'British Council – Writing',url:'https://learnenglish.britishcouncil.org/skills/writing'},{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},TRAVEL_VIDEO[8]],
+      9: [TRAVEL_VIDEO[9],{type:'reading',label:'VOA Learning English',url:'https://learningenglish.voanews.com'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'}],
+      10:[TRAVEL_VIDEO[10],{type:'reading',label:'British Council – Reading',url:'https://learnenglish.britishcouncil.org/skills/reading'},{type:'exercise',label:'ESL Lounge',url:'https://www.esllounge.com/student/grammar-exercises.php'}],
       11:[{type:'exercise',label:'italki',url:'https://www.italki.com/en/community'},{type:'exercise',label:'Speaky',url:'https://www.speaky.com'},{type:'podcast',label:'All Ears English',url:'https://www.allearsenglish.com'}],
       12:[{type:'exercise',label:'italki',url:'https://www.italki.com/en/community'},{type:'podcast',label:'BBC 6 Minute English',url:'https://www.bbc.co.uk/learningenglish/english/features/6-minute-english'},{type:'exercise',label:'Vocaroo',url:'https://vocaroo.com'}],
     },
@@ -351,6 +370,163 @@ export const JOURNEY_RESOURCES = {
       12:[{type:'exercise',label:'Vocaroo',url:'https://vocaroo.com'},{type:'video',label:'Go Natural English',url:'https://www.youtube.com/c/GoNaturalEnglish'},{type:'exercise',label:'British Council – Level Test',url:'https://learnenglish.britishcouncil.org'}],
     },
   },
+}
+
+// ---------------------------------------------------------------------------
+// Topic-matched, level-aware video links.
+// Each journey's weekly "video" pointed to a generic channel homepage, so the
+// link never matched the week's topic. Below we override every 'video' resource
+// in these journeys with a YouTube search pre-filtered to the week's theme AND
+// the student's level (básico/intermediário/avançado), so links always match
+// the content, suit the level, and never break.
+const LEVEL_Q = { beginner: 'for beginners', intermediate: 'intermediate', advanced: 'advanced' }
+const ytSearch = (q) => 'https://www.youtube.com/results?search_query=' + encodeURIComponent(q).replace(/%20/g, '+')
+
+// [PT label, EN search terms] per week, in the same theme order as journeys.js.
+const THEME_VIDEOS = {
+  core: {
+    1:  ['inglês básico: saudações e apresentações', 'basic english greetings and introductions'],
+    2:  ['vocabulário essencial: primeiras palavras', 'essential english vocabulary for beginners'],
+    3:  ['entender o inglês falado', 'english listening comprehension practice'],
+    4:  ['falar em voz alta: pronúncia', 'english speaking and pronunciation practice'],
+    5:  ['leitura sem medo', 'english reading practice for learners'],
+    6:  ['escrever seus primeiros textos', 'english writing simple sentences'],
+    7:  ['falar sobre o passado', 'english past simple tense lesson'],
+    8:  ['planos e o futuro', 'english future tense will and going to'],
+    9:  ['situações do dia a dia', 'everyday english conversations daily situations'],
+    10: ['descrever pessoas e coisas', 'english describing people and things adjectives'],
+    11: ['falar com confiança', 'speak english with confidence'],
+    12: ['juntando tudo: revisão', 'english conversation practice review'],
+  },
+  popculture: {
+    1:  ['inglês com filmes e séries', 'learn english with movies and tv shows'],
+    2:  ['inglês com música e letras', 'learn english with music and song lyrics'],
+    3:  ['inglês nas redes sociais', 'english for social media slang'],
+    4:  ['inglês com podcasts e YouTube', 'learn english with podcasts and youtube'],
+    5:  ['inglês com livros e literatura', 'learn english with books and literature'],
+    6:  ['inglês de esportes e jogos', 'english vocabulary sports and games'],
+    7:  ['inglês com notícias e atualidades', 'learn english with news and current events'],
+    8:  ['inglês da cultura gastronômica', 'english vocabulary food culture'],
+    9:  ['inglês de moda e arte', 'english vocabulary fashion and art'],
+    10: ['inglês de tecnologia', 'english vocabulary technology'],
+    11: ['inglês de viagens e cultura', 'learn english travel and culture'],
+    12: ['inglês no seu dia a dia', 'english in everyday daily life'],
+  },
+}
+
+for (const [jid, themes] of Object.entries(THEME_VIDEOS)) {
+  const journey = JOURNEY_RESOURCES[jid]
+  if (!journey) continue
+  for (const level of ['beginner', 'intermediate', 'advanced']) {
+    const weeks = journey[level]
+    if (!weeks) continue
+    for (const wk of Object.keys(themes)) {
+      const arr = weeks[wk]
+      if (!Array.isArray(arr)) continue
+      const [label, query] = themes[wk]
+      const vid = { type: 'video', label: 'Vídeo: ' + label, url: ytSearch(query + ' ' + LEVEL_Q[level]) }
+      let found = false
+      arr.forEach((r, i) => { if (r.type === 'video') { arr[i] = vid; found = true } })
+      // Weeks with no video get a matching one appended (kept last so existing
+      // resource positions — and their fallback order — stay unchanged).
+      if (!found) arr.push(vid)
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Curated video lessons: one hand-picked best video per week for Business
+// (Travel is curated inline via TRAVEL_VIDEO above). Chosen from established
+// teaching channels — Oxford Online English and engVid lesson pages plus
+// well-known ESL channels — so each link is a single lesson on the week's topic.
+const CURATED_VIDEO = {
+  travel: TRAVEL_VIDEO,
+  business: {
+    1:  {type:'video',label:'Apresentações profissionais: quem você é e o que faz',url:'https://www.youtube.com/watch?v=yMLDiA6Hy-Y'},
+    2:  {type:'video',label:'Escrever e-mails em inglês (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/write-emails-in-english'},
+    3:  {type:'video',label:'Reuniões e videochamadas: frases essenciais',url:'https://www.youtube.com/watch?v=yxw77hO0Gmc'},
+    4:  {type:'video',label:'Fazer apresentações (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/presentations-in-english'},
+    5:  {type:'video',label:'Negociar em inglês (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/how-to-negotiate-in-business'},
+    6:  {type:'video',label:'Descrever dados e tendências (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/describing-trends-business'},
+    7:  {type:'video',label:'Expressões e idioms de negócios (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/business-english-phrases-idioms'},
+    8:  {type:'video',label:'Entrevista de emprego em inglês (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/english-job-interview'},
+    9:  {type:'video',label:'Networking: fazer contatos (engVid)',url:'https://www.engvid.com/business-english-how-to-network-successfully/'},
+    10: {type:'video',label:'Discutir problemas e encontrar soluções',url:'https://www.youtube.com/watch?v=3E7_nzeP2dk'},
+    11: {type:'video',label:'Comunicação intercultural nos negócios',url:'https://www.youtube.com/watch?v=QjEDxlzZnIo'},
+    12: {type:'video',label:'Linguagem diplomática: comunicação avançada',url:'https://www.youtube.com/watch?v=-f4Gpx071UQ'},
+  },
+  grammar: {
+    1:  {type:'video',label:'Artigos: a, an, the (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/5-levels-english-grammar-articles'},
+    2:  {type:'video',label:'Preposições: at, on, in (engVid)',url:'https://www.engvid.com/prepositions-of-place-at-on-in-grammar/'},
+    3:  {type:'video',label:'Presente: simple x continuous (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/5-levels-present-simple-present-continuous'},
+    4:  {type:'video',label:'Falar sobre o passado (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/talk-about-the-past-in-english'},
+    5:  {type:'video',label:'Falar sobre o futuro (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/talk-about-future'},
+    6:  {type:'video',label:'Verbos modais (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/english-modal-verbs-introduction'},
+    7:  {type:'video',label:'Condicionais: do zero ao terceiro (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/5-levels-conditional-sentences'},
+    8:  {type:'video',label:'Voz passiva (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/passive-voice'},
+    9:  {type:'video',label:'Orações relativas (British Council)',url:'https://learnenglish.britishcouncil.org/grammar/b1-b2-grammar/relative-clauses-defining-relative-clauses'},
+    10: {type:'video',label:'Erros comuns de gramática (engVid)',url:'https://www.engvid.com/8-common-grammar-mistakes-in-english/'},
+    11: {type:'video',label:'Gerúndio e infinitivo',url:'https://www.youtube.com/watch?v=KQWvKIBiuS0'},
+    12: {type:'video',label:'Estruturas avançadas: inversão e cleft',url:'https://www.youtube.com/watch?v=MzFdq4aKPh4'},
+  },
+  academic: {
+    1:  {type:'video',label:'Estrutura de parágrafo (Academic English UK)',url:'https://academic-englishuk.com/paragraphing/'},
+    2:  {type:'video',label:'Conectivos e linking words (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/ielts-writing-linking-words-phrases'},
+    3:  {type:'video',label:'Como escrever uma redação (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/ielts-writing-task-2-essay'},
+    4:  {type:'video',label:'Vocabulário acadêmico (engVid)',url:'https://www.engvid.com/academic-vocabulary-cause-effect-verbs/'},
+    5:  {type:'video',label:'E-mails formais e profissionais (engVid)',url:'https://www.engvid.com/how-to-write-professional-emails-in-english/'},
+    6:  {type:'video',label:'Escrever relatórios eficazes',url:'https://www.youtube.com/watch?v=zf7HyxcpfLw'},
+    7:  {type:'video',label:'Redação argumentativa',url:'https://www.youtube.com/watch?v=v_D6K42DTSA'},
+    8:  {type:'video',label:'Resumir e parafrasear',url:'https://www.youtube.com/watch?v=JHwNMAlEavU'},
+    9:  {type:'video',label:'Escrever um trabalho de pesquisa',url:'https://www.youtube.com/watch?v=oOryFvSLOV8'},
+    10: {type:'video',label:'Pontuação e revisão (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/english-punctuation-guide'},
+    11: {type:'video',label:'Documentos profissionais',url:'https://www.youtube.com/watch?v=YjJEiWZw3_w'},
+    12: {type:'video',label:'Revisar e aprimorar seu texto (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/improve-english-writing'},
+  },
+  conversation: {
+    1:  {type:'video',label:'Quebrar o gelo: small talk (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/how-to-make-small-talk'},
+    2:  {type:'video',label:'Dar sua opinião (engVid)',url:'https://www.engvid.com/conversation-skills-giving-your-opinion/'},
+    3:  {type:'video',label:'Contar histórias (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/tell-a-story'},
+    4:  {type:'video',label:'Concordar e discordar / debater (engVid)',url:'https://www.engvid.com/conversation-skills-agree-disagree/'},
+    5:  {type:'video',label:'Humor e ironia: sarcasmo (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/how-to-use-sarcasm'},
+    6:  {type:'video',label:'Falar ao telefone (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/talking-on-phone-english'},
+    7:  {type:'video',label:'Situações sociais (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/social-life-listening-lesson-a1-a2'},
+    8:  {type:'video',label:'Estilo de vida e cultura (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/talk-about-health-lifestyle'},
+    9:  {type:'video',label:'Expressar emoções (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/talk-about-emotions'},
+    10: {type:'video',label:'Registro e tom: formal x informal (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/formal-informal-english'},
+    11: {type:'video',label:'Falar com fluência (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/speak-english-fluently'},
+    12: {type:'video',label:'Soar natural: frases do dia a dia',url:'https://www.youtube.com/watch?v=xuq3La6VrKU'},
+  },
+  speaking: {
+    1:  {type:'video',label:'Vencer o medo de falar (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/speak-english-with-confidence'},
+    2:  {type:'video',label:'Pronúncia: sons do inglês (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/sounds-and-spelling'},
+    3:  {type:'video',label:'Ritmo e ênfase / stress (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/sentence-stress'},
+    4:  {type:'video',label:'Fala conectada / linking (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/linking-pronunciation'},
+    5:  {type:'video',label:'Entonação (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/intonation-in-english'},
+    6:  {type:'video',label:'Construir fluência (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/speak-english-fluently'},
+    7:  {type:'video',label:'Falar em público',url:'https://www.youtube.com/watch?v=82TU1epxJLU'},
+    8:  {type:'video',label:'Pensar em inglês, sem traduzir (Rachel’s English)',url:'https://rachelsenglish.com/think-in-english/'},
+    9:  {type:'video',label:'Sotaque e identidade (Rachel’s English)',url:'https://rachelsenglish.com/american-english-accent-training-how-to-improve-your-english-speaking/'},
+    10: {type:'video',label:'Prática do mundo real (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/have-english-conversation'},
+    11: {type:'video',label:'Conversação avançada: masterclass de fluência',url:'https://www.youtube.com/watch?v=_tOk64tu5vw'},
+    12: {type:'video',label:'Seu grande avanço: falar inglês é possível',url:'https://www.youtube.com/watch?v=I2ThEG1JBYM'},
+  },
+}
+
+for (const [jid, map] of Object.entries(CURATED_VIDEO)) {
+  const journey = JOURNEY_RESOURCES[jid]
+  if (!journey) continue
+  for (const level of ['beginner', 'intermediate', 'advanced']) {
+    const weeks = journey[level]
+    if (!weeks) continue
+    for (const wk of Object.keys(map)) {
+      const arr = weeks[wk]
+      if (!Array.isArray(arr)) continue
+      let found = false
+      arr.forEach((r, i) => { if (r.type === 'video') { arr[i] = map[wk]; found = true } })
+      if (!found) arr.push(map[wk])
+    }
+  }
 }
 
 export const TYPE_ICON = { video:'video', podcast:'listening', reading:'reading', exercise:'pen', vocab:'bookOpen' }

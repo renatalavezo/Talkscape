@@ -46,3 +46,19 @@ export function studentDbSlice(db, sid) {
 export function safeStudents(students) {
   return (students || []).map(({ password, ...rest }) => rest)
 }
+
+// Resolve activities for a specific difficulty level (beginner | intermediate | advanced).
+// Activities may carry a `levels` object with a per-level variant of their fields; this
+// flattens the chosen variant onto the base activity so the modal receives a plain act.
+// Flat activities (no `levels`) pass through unchanged — keeps older content working.
+const LEVEL_FALLBACK = { beginner: ['beginner', 'intermediate', 'advanced'], intermediate: ['intermediate', 'beginner', 'advanced'], advanced: ['advanced', 'intermediate', 'beginner'] }
+export function resolveActs(acts, level = 'beginner') {
+  if (!Array.isArray(acts)) return []
+  const order = LEVEL_FALLBACK[level] || LEVEL_FALLBACK.beginner
+  return acts.map(act => {
+    if (!act || !act.levels) return act
+    const chosen = order.map(l => act.levels[l]).find(Boolean) || {}
+    const { levels, ...base } = act
+    return { ...base, ...chosen }
+  })
+}

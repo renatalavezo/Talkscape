@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { CAT } from '../constants/colors'
 import { D, serifD, sansD } from '../constants/dashColors'
-import { hashPassword } from '../utils'
+import { hashPassword, resolveActs } from '../utils'
 import { JOURNEY_MAP } from '../constants/journeys'
 import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 import { DEFAULT_ACTIVITIES } from '../constants/defaultActivities'
@@ -287,7 +287,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                                     <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, color: cStrong, background: cSoft, padding: '4px 10px', borderRadius: 99 }}>{pt ? cm.pt : cm.en}</span>
                                     {task.link && <a href={task.link} target="_blank" rel="noreferrer" onClick={() => markVisited(task.link)} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, color: visited[task.link] ? D.moss : D.terra, background: visited[task.link] ? D.sageSoft : D.surfaceWarm, border: `1px solid ${D.line}`, padding: '4px 10px', borderRadius: 99, textDecoration: 'none' }}><Icon name="link" size={11} color={visited[task.link] ? D.moss : D.terra} />{visited[task.link] ? (pt ? 'Recurso acessado' : 'Resource opened') : (pt ? 'Acessar recurso' : 'Open resource')}</a>}
                                     {r && (() => { const v = !!visited[r.url]; return <a href={r.url} target="_blank" rel="noreferrer" onClick={() => markVisited(r.url)} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, color: v ? D.moss : D.ink, background: v ? D.sageSoft : D.surfaceWarm, border: `1px solid ${D.line}`, padding: '4px 10px', borderRadius: 99, textDecoration: 'none' }}>{v ? <Icon name="check" size={11} color={D.moss} /> : <Icon name={TYPE_ICON[r.type]} size={11} color={D.ink} />}{r.label}</a> })()}
-                                    {taskActs.length > 0 && <button onClick={() => setActModal({ taskId: task.id, acts: taskActs, taskText: pt ? task.pt : task.en, context: taskCtx })} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 700, fontFamily: 'inherit', color: actScore !== undefined ? D.moss : D.orange, background: actScore !== undefined ? D.sageSoft : D.orangeSoft, border: 'none', padding: '4px 10px', borderRadius: 99, cursor: 'pointer' }}><Icon name="target" size={12} color={actScore !== undefined ? D.moss : D.orange} />{pt ? 'Atividades' : 'Activities'}{actScore !== undefined ? ` · ${actScore}%` : ` (${taskActs.length})`}</button>}
+                                    {taskActs.length > 0 && <button onClick={() => setActModal({ taskId: task.id, acts: resolveActs(taskActs, student.level || 'beginner'), taskText: pt ? task.pt : task.en, context: taskCtx })} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 700, fontFamily: 'inherit', color: actScore !== undefined ? D.moss : D.orange, background: actScore !== undefined ? D.sageSoft : D.orangeSoft, border: 'none', padding: '4px 10px', borderRadius: 99, cursor: 'pointer' }}><Icon name="target" size={12} color={actScore !== undefined ? D.moss : D.orange} />{pt ? 'Atividades' : 'Activities'}{actScore !== undefined ? ` · ${actScore}%` : ` (${taskActs.length})`}</button>}
                                   </div>
                                 </div>
                               </div>
