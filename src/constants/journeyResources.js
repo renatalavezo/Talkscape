@@ -455,6 +455,20 @@ const CURATED_VIDEO = {
     11: {type:'video',label:'Comunicação intercultural nos negócios',url:'https://www.youtube.com/watch?v=QjEDxlzZnIo'},
     12: {type:'video',label:'Linguagem diplomática: comunicação avançada',url:'https://www.youtube.com/watch?v=-f4Gpx071UQ'},
   },
+  grammar: {
+    1:  {type:'video',label:'Artigos: a, an, the (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/5-levels-english-grammar-articles'},
+    2:  {type:'video',label:'Preposições: at, on, in (engVid)',url:'https://www.engvid.com/prepositions-of-place-at-on-in-grammar/'},
+    3:  {type:'video',label:'Presente: simple x continuous (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/5-levels-present-simple-present-continuous'},
+    4:  {type:'video',label:'Falar sobre o passado (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/talk-about-the-past-in-english'},
+    5:  {type:'video',label:'Falar sobre o futuro (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/talk-about-future'},
+    6:  {type:'video',label:'Verbos modais (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/english-modal-verbs-introduction'},
+    7:  {type:'video',label:'Condicionais: do zero ao terceiro (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/5-levels-conditional-sentences'},
+    8:  {type:'video',label:'Voz passiva (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/passive-voice'},
+    9:  {type:'video',label:'Orações relativas (British Council)',url:'https://learnenglish.britishcouncil.org/grammar/b1-b2-grammar/relative-clauses-defining-relative-clauses'},
+    10: {type:'video',label:'Erros comuns de gramática (engVid)',url:'https://www.engvid.com/8-common-grammar-mistakes-in-english/'},
+    11: {type:'video',label:'Gerúndio e infinitivo',url:'https://www.youtube.com/watch?v=KQWvKIBiuS0'},
+    12: {type:'video',label:'Estruturas avançadas: inversão e cleft',url:'https://www.youtube.com/watch?v=MzFdq4aKPh4'},
+  },
 }
 
 for (const [jid, map] of Object.entries(CURATED_VIDEO)) {
