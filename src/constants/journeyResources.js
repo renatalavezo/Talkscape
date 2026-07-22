@@ -469,6 +469,20 @@ const CURATED_VIDEO = {
     11: {type:'video',label:'Gerúndio e infinitivo',url:'https://www.youtube.com/watch?v=KQWvKIBiuS0'},
     12: {type:'video',label:'Estruturas avançadas: inversão e cleft',url:'https://www.youtube.com/watch?v=MzFdq4aKPh4'},
   },
+  academic: {
+    1:  {type:'video',label:'Estrutura de parágrafo (Academic English UK)',url:'https://academic-englishuk.com/paragraphing/'},
+    2:  {type:'video',label:'Conectivos e linking words (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/ielts-writing-linking-words-phrases'},
+    3:  {type:'video',label:'Como escrever uma redação (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/ielts-writing-task-2-essay'},
+    4:  {type:'video',label:'Vocabulário acadêmico (engVid)',url:'https://www.engvid.com/academic-vocabulary-cause-effect-verbs/'},
+    5:  {type:'video',label:'E-mails formais e profissionais (engVid)',url:'https://www.engvid.com/how-to-write-professional-emails-in-english/'},
+    6:  {type:'video',label:'Escrever relatórios eficazes',url:'https://www.youtube.com/watch?v=zf7HyxcpfLw'},
+    7:  {type:'video',label:'Redação argumentativa',url:'https://www.youtube.com/watch?v=v_D6K42DTSA'},
+    8:  {type:'video',label:'Resumir e parafrasear',url:'https://www.youtube.com/watch?v=JHwNMAlEavU'},
+    9:  {type:'video',label:'Escrever um trabalho de pesquisa',url:'https://www.youtube.com/watch?v=oOryFvSLOV8'},
+    10: {type:'video',label:'Pontuação e revisão (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/english-punctuation-guide'},
+    11: {type:'video',label:'Documentos profissionais',url:'https://www.youtube.com/watch?v=YjJEiWZw3_w'},
+    12: {type:'video',label:'Revisar e aprimorar seu texto (Oxford Online English)',url:'https://www.oxfordonlineenglish.com/improve-english-writing'},
+  },
 }
 
 for (const [jid, map] of Object.entries(CURATED_VIDEO)) {
