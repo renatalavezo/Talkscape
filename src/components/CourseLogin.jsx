@@ -3,7 +3,7 @@ import { ir, pp, S } from '../constants/styles'
 import Logo from './Logo'
 import Icon from './Icon'
 
-export default function CourseLogin({ lang, u, setU, p, setP, err, busy, onLogin, onBack }) {
+export default function CourseLogin({ lang, u, setU, p, setP, err, busy, onLogin, onBack, onForgot }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})`, padding: '32px 20px' }}>
       <div style={{ marginBottom: 24 }}>
@@ -51,6 +51,12 @@ export default function CourseLogin({ lang, u, setU, p, setP, err, busy, onLogin
           <Icon name="next" size={16} color="#fff" />
           {busy ? (lang === 'pt' ? 'Entrando...' : 'Signing in...') : (lang === 'pt' ? 'Entrar' : 'Sign in')}
         </button>
+
+        <div style={{ textAlign: 'center', marginBottom: 12 }}>
+          <button style={{ background: 'none', border: 'none', color: B.marrom, fontSize: 12.5, fontWeight: 600, cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif", textDecoration: 'underline' }} onClick={onForgot}>
+            {lang === 'pt' ? 'Esqueci minha senha' : 'Forgot my password'}
+          </button>
+        </div>
 
         <button style={{ ...S.btn(B.bege), width: '100%', fontSize: 14, color: B.dark, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={onBack}>
           <Icon name="back" size={14} color={B.dark} />
