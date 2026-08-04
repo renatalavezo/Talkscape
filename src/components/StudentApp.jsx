@@ -4,7 +4,7 @@ import { D, serifD, sansD } from '../constants/dashColors'
 import { CEFR_META } from '../constants/cefr'
 import { PLAN } from '../constants/plan'
 import { STUDY_HABITS, HW_HABITS } from '../constants/habits'
-import { todayStr, weekDays, hashPassword } from '../utils'
+import { todayStr, weekDays, hashPassword, resolveActs } from '../utils'
 import { useIsMobile } from '../hooks/useIsMobile'
 import Logo from './Logo'
 import Avatar from './Avatar'
@@ -532,7 +532,7 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
                               </a>
                             ) })()}
                             {taskActs.length > 0 && (
-                              <button onClick={e => { e.stopPropagation(); setActModal({ taskId: task.id, acts: taskActs, taskText: displayText, context: taskCtx }) }}
+                              <button onClick={e => { e.stopPropagation(); setActModal({ taskId: task.id, acts: resolveActs(taskActs, simpleLevel), taskText: displayText, context: taskCtx }) }}
                                 style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 700, fontFamily: 'inherit', color: actScore !== undefined ? D.mossDeep : D.terra, background: actScore !== undefined ? D.sageSoft : D.terraSoft, padding: '5px 11px', borderRadius: 8, border: 'none', cursor: 'pointer' }}>
                                 <Icon name="target" size={13} color={actScore !== undefined ? D.mossDeep : D.terra} />
                                 {pt ? 'Atividades' : 'Activities'}{actScore !== undefined ? ` · ${actScore}%` : ` (${taskActs.length})`}

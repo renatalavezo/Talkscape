@@ -5,10 +5,13 @@ import Icon from './Icon'
 
 const TYPE_LABELS = {
   mc:        { en: 'Multiple Choice',   pt: 'Múltipla Escolha' },
+  gapdrop:   { en: 'Choose the Word',   pt: 'Complete com Opções' },
   fill:      { en: 'Fill in the Blank', pt: 'Complete a Frase' },
   tf:        { en: 'True or False',     pt: 'Verdadeiro ou Falso' },
   translate: { en: 'Translation',       pt: 'Tradução' },
   match:     { en: 'Match',             pt: 'Relacione' },
+  order:     { en: 'Order the Words',   pt: 'Ordene as Palavras' },
+  sort:      { en: 'Categorize',        pt: 'Categorize' },
   text:      { en: 'Written Answer',    pt: 'Resposta Escrita' },
 }
 
@@ -47,10 +50,15 @@ function ActivityItem({ act, lang, onNext, isLast, onResult }) {
     }
     return null
   })
+  // order: shuffled pool of tokens (each with a stable key) + the sequence the student builds
+  const [pool] = useState(() => act.type === 'order' ? shuffle((act.tokens || []).map((t, i) => ({ t, k: `${i}` }))) : null)
+  const [placed, setPlaced] = useState([])
+  // sort: map of item index -> chosen group name
+  const [assign, setAssign] = useState({})
 
   const check = () => {
     let ok = false
-    if (act.type === 'mc')   ok = sel === act.answerIdx
+    if (act.type === 'mc' || act.type === 'gapdrop') ok = sel === act.answerIdx
     if (act.type === 'tf')   ok = sel === act.answer
     if (act.type === 'fill') {
       const st = text.trim().toLowerCase()
@@ -64,25 +72,36 @@ function ActivityItem({ act, lang, onNext, isLast, onResult }) {
       ok = Object.keys(pairs.matched).length === act.pairs.length &&
         act.pairs.every(p => pairs.matched[p.left] === p.right)
     }
+    if (act.type === 'order') {
+      const built = placed.map(k => pool.find(x => x.k === k)?.t)
+      ok = built.length === (act.tokens || []).length && built.join(' ') === (act.tokens || []).join(' ')
+    }
+    if (act.type === 'sort') {
+      ok = (act.items || []).length > 0 && act.items.every((it, i) => assign[i] === it.g)
+    }
     setCorrect(ok)
     setSubmitted(true)
     onResult(ok)
   }
 
   const answerLabel = () => {
-    if (act.type === 'mc')        return act.options[act.answerIdx]
+    if (act.type === 'mc' || act.type === 'gapdrop') return act.options[act.answerIdx]
     if (act.type === 'tf')        return act.answer ? 'True / Verdadeiro' : 'False / Falso'
     if (act.type === 'fill' || act.type === 'translate') return act.answer
     if (act.type === 'text')      return act.keywords?.join(', ')
     if (act.type === 'match')     return act.pairs.map(p => `${p.left} → ${p.right}`).join(' · ')
+    if (act.type === 'order')     return (act.tokens || []).join(' ')
+    if (act.type === 'sort')      return (act.items || []).map(i => `${i.t} → ${i.g}`).join(' · ')
     return ''
   }
 
   const bg     = submitted ? (correct ? '#d1fae5' : '#fff4f4') : '#fff'
   const border = submitted ? (correct ? '#6ee7b7' : '#fca5a5') : B.border
-  const canCheck = act.type === 'mc' ? sel !== null
+  const canCheck = (act.type === 'mc' || act.type === 'gapdrop') ? sel !== null
     : act.type === 'tf' ? sel !== null
     : act.type === 'match' ? Object.keys(pairs?.matched || {}).length === (act.pairs?.length || 0)
+    : act.type === 'order' ? placed.length === (act.tokens?.length || 0)
+    : act.type === 'sort' ? Object.keys(assign).length === (act.items?.length || 0)
     : text.trim().length > 0
 
   return (
@@ -99,7 +118,7 @@ function ActivityItem({ act, lang, onNext, isLast, onResult }) {
 
       <p style={{ fontWeight: 600, fontSize: 15, fontFamily: 'Inter,sans-serif', color: B.dark, marginBottom: 16, lineHeight: 1.5 }}>{act.prompt}</p>
 
-      {act.type === 'mc' && (
+      {(act.type === 'mc' || act.type === 'gapdrop') && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {act.options.map((opt, i) => (
             <button key={i} disabled={submitted} onClick={() => setSel(i)}
@@ -185,6 +204,62 @@ function ActivityItem({ act, lang, onNext, isLast, onResult }) {
               )
             })}
           </div>
+        </div>
+      )}
+
+      {act.type === 'order' && pool && (
+        <div>
+          {/* answer line the student builds */}
+          <div style={{ minHeight: 46, display: 'flex', flexWrap: 'wrap', gap: 7, padding: '10px 12px', borderRadius: 11, border: `1.5px dashed ${B.border}`, background: '#fff', marginBottom: 12 }}>
+            {placed.length === 0 && (
+              <span style={{ fontSize: 12.5, color: B.light, fontFamily: 'Inter,sans-serif', fontStyle: 'italic', alignSelf: 'center' }}>
+                {lang === 'pt' ? 'Toque nas palavras na ordem certa...' : 'Tap the words in the right order...'}
+              </span>
+            )}
+            {placed.map(k => {
+              const tk = pool.find(x => x.k === k)
+              return (
+                <button key={k} disabled={submitted} onClick={() => setPlaced(p => p.filter(x => x !== k))}
+                  style={{ padding: '7px 12px', borderRadius: 9, border: `1.5px solid ${B.oliva}`, background: '#eef2eb', color: B.dark, fontWeight: 600, fontSize: 13.5, fontFamily: 'Inter,sans-serif', cursor: submitted ? 'default' : 'pointer' }}>
+                  {tk?.t}
+                </button>
+              )
+            })}
+          </div>
+          {/* remaining word bank */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+            {pool.filter(x => !placed.includes(x.k)).map(x => (
+              <button key={x.k} disabled={submitted} onClick={() => setPlaced(p => [...p, x.k])}
+                style={{ padding: '8px 13px', borderRadius: 9, border: `1.5px solid ${B.border}`, background: '#fff', color: B.dark, fontWeight: 600, fontSize: 13.5, fontFamily: 'Inter,sans-serif', cursor: submitted ? 'default' : 'pointer' }}>
+                {x.t}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {act.type === 'sort' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+          {(act.items || []).map((it, i) => {
+            const chosen = assign[i]
+            const right = submitted && chosen === it.g
+            return (
+              <div key={i} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, padding: '9px 11px', borderRadius: 11,
+                border: `1.5px solid ${submitted ? (right ? '#6ee7b7' : '#fca5a5') : B.border}`, background: submitted ? (right ? '#d1fae5' : '#fee2e2') : '#fff' }}>
+                <span style={{ fontWeight: 700, fontSize: 14, fontFamily: 'Inter,sans-serif', color: B.dark, flex: '1 1 90px', minWidth: 0 }}>{it.t}</span>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {(act.groups || []).map(g => (
+                    <button key={g} disabled={submitted} onClick={() => setAssign(a => ({ ...a, [i]: g }))}
+                      style={{ padding: '6px 11px', borderRadius: 8, fontSize: 12.5, fontFamily: 'Poppins,sans-serif', fontWeight: 600,
+                        border: `1.5px solid ${chosen === g ? B.laranja : B.border}`, background: chosen === g ? B.laranja + '18' : '#fff',
+                        color: chosen === g ? B.laranja : B.mid, cursor: submitted ? 'default' : 'pointer' }}>
+                      {g}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )
+          })}
         </div>
       )}
 

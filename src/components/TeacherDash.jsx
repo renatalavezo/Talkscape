@@ -109,6 +109,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
   const [courseAnswers, setCourseAnswers] = useState({})
   const [selJBase, setSelJBase]           = useState(null)
   const [selJBaseWeek, setSelJBaseWeek]   = useState(1)
+  const [resetDrafts, setResetDrafts]     = useState({})
   const [jBaseOpen, setJBaseOpen]         = useState(false)
   const [jBaseEditTask, setJBaseEditTask] = useState(null)
   const [nJBTaskEn, setNJBTaskEn]         = useState('')
@@ -670,7 +671,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                   return (
                     <div key={s.id} style={{ ...SD.card, padding: 22 }}>
                       <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                        <div style={avCircle(nameColor(s.name), 52)}>{initialsOf(s.name)}</div>
+                        <Avatar seed={db[`avatar_${s.id}`] || s.avatar || 'Lily'} size={52} />
                         <div style={{ flex: 1, minWidth: 200 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                             <span style={{ fontSize: 16, fontWeight: 700 }}>{s.name}</span>
@@ -712,6 +713,26 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                                     <Icon name={SIMPLE_ICON[k]} size={13} color={s.level === k ? SIMPLE_COLOR[k][0] : D.muted} />
                                   </button>
                                 ))}
+                              </div>
+                            </div>
+                            <div style={{ marginBottom: 14 }}>
+                              <p style={{ ...sansD(600, 12.5), color: D.muted, marginBottom: 6 }}>Nome da aluna</p>
+                              <input style={{ ...SD.inp, width: '100%', boxSizing: 'border-box' }} type="text" placeholder="Nome"
+                                defaultValue={s.name || ''}
+                                onBlur={e => { const v = e.target.value.trim(); if (v && v !== s.name) upDb({ courseStudents: (courseStudents || []).map(x => x.id === s.id ? { ...x, name: v } : x) }) }} />
+                            </div>
+                            <div style={{ marginBottom: 14 }}>
+                              <p style={{ ...sansD(600, 12.5), color: D.muted, marginBottom: 6 }}>Redefinir senha</p>
+                              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                                <input style={{ ...SD.inp, flex: 1, minWidth: 150, boxSizing: 'border-box' }} type="text" placeholder="Nova senha (mín. 6)"
+                                  value={resetDrafts[s.id] || ''} onChange={e => setResetDrafts(d => ({ ...d, [s.id]: e.target.value }))} />
+                                <button style={SD.btn(D.moss)} onClick={async () => {
+                                  const v = (resetDrafts[s.id] || '').trim()
+                                  if (v.length < 6) return
+                                  const hashed = await hashPassword(v)
+                                  upDb({ [`pwd_${s.id}`]: hashed, passwordResets: (db.passwordResets || []).filter(r => r.id !== s.id) })
+                                  setResetDrafts(d => { const n = { ...d }; delete n[s.id]; return n })
+                                }}><Icon name="key" size={14} color="#fff" />Definir</button>
                               </div>
                             </div>
                             {jids.length === 0 && <p style={{ fontSize: 12.5, color: D.muted, marginBottom: 10 }}>Nenhuma jornada atribuída.</p>}
@@ -990,6 +1011,47 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                 </button>
               </div>
 
+              {/* password reset requests */}
+              {(db.passwordResets || []).length > 0 && (
+                <div style={{ ...SD.card, marginBottom: 18, border: `1.5px solid ${D.orange}55`, background: D.orangeSoft }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    <Icon name="key" size={15} color={D.orange} />
+                    <p style={{ ...sansD(700, 13.5), color: D.ink }}>{lang === 'pt' ? 'Pedidos de redefinição de senha' : 'Password reset requests'}</p>
+                    <span style={SD.pill(D.orange, '#fff')}>{(db.passwordResets || []).length}</span>
+                  </div>
+                  {(db.passwordResets || []).map((r, i) => (
+                    <div key={r.id || r.contact || i} style={{ padding: '12px 13px', background: D.surface, borderRadius: 13, marginBottom: 8, border: `1px solid ${D.line}` }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: r.id ? 10 : 0 }}>
+                        <div style={{ flex: 1, minWidth: 150 }}>
+                          <p style={{ ...sansD(600, 13.5), color: D.ink }}>
+                            {r.name || r.contact}
+                            {!r.id && <span style={{ ...sansD(600, 11), color: D.clay, marginLeft: 6 }}>{lang === 'pt' ? '(conta não encontrada)' : '(account not found)'}</span>}
+                            {r.id && <span style={{ ...sansD(600, 11), color: D.muted, marginLeft: 6 }}>{r.type === 'course' ? (lang === 'pt' ? '· jornada' : '· course') : (lang === 'pt' ? '· particular' : '· private')}</span>}
+                          </p>
+                          <p style={{ fontSize: 12, color: D.muted, marginTop: 1 }}>{r.contact}{r.at ? ' · ' + r.at.slice(0, 10) : ''}</p>
+                        </div>
+                        <button style={SD.soft(D.muted, D.surfaceWarm)} onClick={() => upDb({ passwordResets: (db.passwordResets || []).filter((_, j) => j !== i) })}>
+                          {lang === 'pt' ? 'Dispensar' : 'Dismiss'}
+                        </button>
+                      </div>
+                      {r.id && (
+                        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                          <input style={{ ...SD.inp, flex: 1, minWidth: 160 }} type="text" placeholder={lang === 'pt' ? 'Nova senha (mín. 6)' : 'New password (min. 6)'}
+                            value={resetDrafts[r.id] || ''} onChange={e => setResetDrafts(d => ({ ...d, [r.id]: e.target.value }))} />
+                          <button style={SD.btn(D.moss)} onClick={async () => {
+                            const v = (resetDrafts[r.id] || '').trim()
+                            if (v.length < 6) return
+                            const hashed = await hashPassword(v)
+                            upDb({ [`pwd_${r.id}`]: hashed, passwordResets: (db.passwordResets || []).filter((_, j) => j !== i) })
+                            setResetDrafts(d => { const n = { ...d }; delete n[r.id]; return n })
+                          }}><Icon name="key" size={14} color="#fff" />{lang === 'pt' ? 'Definir senha' : 'Set password'}</button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {/* mini stats */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 14, marginBottom: 22 }}>
                 {(() => {
@@ -1057,7 +1119,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                   return (
                     <div key={s.id} style={{ background: D.surface, border: `1px solid ${D.line}`, borderRadius: 16, padding: '16px 20px', boxShadow: D.shadow, display: 'flex', alignItems: 'center', gap: 16, cursor: 'pointer', transition: 'all .15s' }}
                       onClick={() => { setSel(s.id); setDtab('level'); setJWeek(1) }}>
-                      <div style={avCircle(nameColor(s.name), 46)}>{initialsOf(s.name)}</div>
+                      <Avatar seed={db[`avatar_${s.id}`] || s.avatar || 'Lily'} size={46} />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
                           <span style={{ fontSize: 15.5, fontWeight: 700 }}>{s.name}</span>
@@ -1096,17 +1158,6 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                       <Icon name={journeyOf(selS.id).icon} size={12} color={D.mossDeep} /> {lang === 'pt' ? journeyOf(selS.id).pt : journeyOf(selS.id).en}
                     </span>
                   )}
-                </div>
-                <div>
-                  <p style={{ ...sansD(700, 10.5), color: D.muted, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 0.6 }}>Avatar</p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, maxWidth: 220 }}>
-                    {['Lily','Felix','Zoe','Leo','Mia','Finn','Aria','Kai','Nova','Eli','Luna','Ash'].map(seed => (
-                      <img key={seed} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`}
-                        width={32} height={32} alt={seed}
-                        onClick={() => upDb({ [`avatar_${selS.id}`]: seed })}
-                        style={{ borderRadius: '50%', cursor: 'pointer', border: (db[`avatar_${selS.id}`] || selS.avatar) === seed ? `2.5px solid ${D.orange}` : '2px solid transparent', background: D.cream }} />
-                    ))}
-                  </div>
                 </div>
               </div>
 
@@ -1379,11 +1430,29 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
               {dtab === 'info' && (
                 <div style={SD.card}>
                   <p style={{ ...SD.lbl, display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="info" size={13} color={D.muted} />{t.infoLabel}</p>
+                  <p style={{ ...sansD(600, 12.5), color: D.muted, marginBottom: 6 }}>{lang === 'pt' ? 'Nome da aluna' : "Student's name"}</p>
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+                    <input style={{ ...SD.inp, flex: 1 }} type="text" placeholder={lang === 'pt' ? 'Nome' : 'Name'}
+                      defaultValue={selS.name || ''}
+                      onBlur={e => { const v = e.target.value.trim(); if (v && v !== selS.name) upDb({ students: students.map(s => s.id === selS.id ? { ...s, name: v } : s) }) }} />
+                  </div>
                   <p style={{ ...sansD(600, 12.5), color: D.muted, marginBottom: 6 }}>Email (login da aluna)</p>
                   <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
                     <input style={{ ...SD.inp, flex: 1 }} type="email" placeholder="email@email.com"
                       defaultValue={selS.email || ''}
                       onBlur={e => { if (e.target.value.trim()) upDb({ students: students.map(s => s.id === selS.id ? { ...s, email: e.target.value.trim().toLowerCase() } : s) }) }} />
+                  </div>
+                  <p style={{ ...sansD(600, 12.5), color: D.muted, marginBottom: 6 }}>{lang === 'pt' ? 'Redefinir senha da aluna' : "Reset student's password"}</p>
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
+                    <input style={{ ...SD.inp, flex: 1, minWidth: 160 }} type="text" placeholder={lang === 'pt' ? 'Nova senha (mín. 6)' : 'New password (min. 6)'}
+                      value={resetDrafts[selS.id] || ''} onChange={e => setResetDrafts(d => ({ ...d, [selS.id]: e.target.value }))} />
+                    <button style={SD.btn(D.moss)} onClick={async () => {
+                      const v = (resetDrafts[selS.id] || '').trim()
+                      if (v.length < 6) return
+                      const hashed = await hashPassword(v)
+                      upDb({ [`pwd_${selS.id}`]: hashed, passwordResets: (db.passwordResets || []).filter(r => r.id !== selS.id) })
+                      setResetDrafts(d => { const n = { ...d }; delete n[selS.id]; return n })
+                    }}><Icon name="key" size={14} color="#fff" />{lang === 'pt' ? 'Definir' : 'Set'}</button>
                   </div>
                   <p style={{ ...sansD(600, 12.5), color: D.muted, marginBottom: 6 }}>{t.infoGenLabel}</p>
                   <textarea style={{ ...SD.ta, marginBottom: 14 }} rows={4} placeholder={t.infoGenPh} value={infoGen} onChange={e => setInfoGen(e.target.value)} />

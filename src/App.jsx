@@ -14,6 +14,7 @@ import LandingPage from './components/LandingPage'
 import CourseLogin from './components/CourseLogin'
 import CourseApp from './components/CourseApp'
 import Register from './components/Register'
+import ForgotPassword from './components/ForgotPassword'
 
 export default function App() {
   const [db, setDb]             = useState({})
@@ -96,7 +97,8 @@ export default function App() {
       // Check course students
       for (const cs of courseStudents) {
         if ((cs.email || '').trim().toLowerCase() === u) {
-          if (await checkPassword(p, cs.password)) {
+          const storedPwd = db[`pwd_${cs.id}`] || cs.password
+          if (await checkPassword(p, storedPwd)) {
             if (!cs.active) { setLoginErr('Seu acesso ainda não foi liberado. Aguarde a confirmação do pagamento.'); return }
             setId(cs.id); setView('course'); setLoginErr(''); return
           }
@@ -130,6 +132,26 @@ export default function App() {
     }
   }
 
+  // "Esqueci minha senha": record a reset request for Teacher Renata to handle
+  // from her dashboard (no email backend). Matches the account when possible.
+  const requestPasswordReset = (email) => {
+    const e = email.trim().toLowerCase()
+    if (!e) return
+    const s  = students.find(x => (x.email || '').trim().toLowerCase() === e || (x.username || '').trim().toLowerCase() === e)
+    const cs = !s && courseStudents.find(x => (x.email || '').trim().toLowerCase() === e)
+    const match = s || cs
+    const req = {
+      id: match ? match.id : null,
+      type: s ? 'student' : cs ? 'course' : null,
+      name: match ? match.name : '',
+      contact: email.trim(),
+      at: new Date().toISOString(),
+    }
+    const existing = db.passwordResets || []
+    const filtered = existing.filter(r => match ? r.id !== req.id : (r.contact || '').trim().toLowerCase() !== e)
+    upDb({ passwordResets: [...filtered, req] })
+  }
+
   if (loading || (connErr && !ready)) return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})`, padding: 24, textAlign: 'center' }}>
       <Logo h={60} contrast />
@@ -153,10 +175,11 @@ export default function App() {
       {view === 'landing'  && <LandingPage onStudent={() => setView('s-login')} onCourse={() => setView('c-login')} onTeacher={() => setView('t-pass')} />}
       {view === 't-pass'   && <TeacherPass t={t} val={passVal} setVal={setPassVal} err={passErr} onSubmit={() => { if (passVal === (db.teacherPass || TEACHER_PASS)) { setView('teacher'); setPassErr(false) } else setPassErr(true) }} onBack={() => { setView('landing'); setPassVal(''); setPassErr(false) }} />}
       {view === 'teacher'  && <TeacherDash t={t} lang={lang} setLang={setLang} students={students} courseStudents={courseStudents} cadastrosPendentes={cadastrosPendentes} db={db} upDb={upDb} onPreview={id => { setId(id); setView('preview') }} onPreviewCourse={id => { setId(id); setView('course-preview') }} onLogout={() => setView('landing')} />}
-      {view === 's-login'  && <StudentLogin t={t} lang={lang} setLang={setLang} u={loginU} setU={setLoginU} p={loginP} setP={setLoginP} err={loginErr} busy={loggingIn} onLogin={doStudentLogin} onBack={() => { setView('landing'); setLoginErr('') }} onRegister={() => setView('register')} />}
+      {view === 's-login'  && <StudentLogin t={t} lang={lang} setLang={setLang} u={loginU} setU={setLoginU} p={loginP} setP={setLoginP} err={loginErr} busy={loggingIn} onLogin={doStudentLogin} onBack={() => { setView('landing'); setLoginErr('') }} onRegister={() => setView('register')} onForgot={() => { setView('p-reset'); setLoginErr('') }} />}
+      {view === 'p-reset'  && <ForgotPassword lang={lang} onSubmit={requestPasswordReset} onBack={() => setView('s-login')} />}
       {view === 'register' && <Register lang={lang} onBack={() => setView('s-login')} students={students} upDb={upDb} />}
       {(view === 'student' || view === 'preview') && <StudentApp t={t} lang={lang} setLang={setLang} sid={activeId} students={safeStudents(students)} db={view === 'preview' ? db : studentSlice} upDb={upDb} isPreview={view === 'preview'} onBack={() => setView(view === 'preview' ? 'teacher' : 'landing')} />}
-      {view === 'c-login'  && <CourseLogin lang={lang} u={courseLoginU} setU={setCourseLoginU} p={courseLoginP} setP={setCourseLoginP} err={courseLoginErr} busy={loggingIn} onLogin={doCourseLogin} onBack={() => { setView('landing'); setCourseLoginErr('') }} />}
+      {view === 'c-login'  && <CourseLogin lang={lang} u={courseLoginU} setU={setCourseLoginU} p={courseLoginP} setP={setCourseLoginP} err={courseLoginErr} busy={loggingIn} onLogin={doCourseLogin} onBack={() => { setView('landing'); setCourseLoginErr('') }} onForgot={() => { setView('p-reset'); setCourseLoginErr('') }} />}
       {view === 'course'         && <CourseApp lang={lang} sid={activeId} courseStudents={safeStudents(courseStudents)} db={studentSlice} upDb={upDb} onLogout={() => setView('landing')} />}
       {view === 'course-preview' && <CourseApp lang={lang} sid={activeId} courseStudents={safeStudents(courseStudents)} db={db} upDb={upDb} onLogout={() => setView('teacher')} />}
     </>

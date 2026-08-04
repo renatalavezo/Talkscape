@@ -67,14 +67,14 @@ const WAButton = ({ style, href = WHATSAPP, children = 'Falar no WhatsApp' }) =>
 // ---- static content data (mirrors the mockup copy) ----
 
 const DIFFERENTIALS = [
-  { icon: 'target', title: 'Verdadeiramente personalizado', text: 'Cada aluna percorre um caminho único, a partir do seu ritmo, dos seus objetivos e da sua história. Não existe receita pronta aqui — o que funciona pra uma pessoa pode não funcionar pra outra, e isso é respeitado desde o primeiro encontro.' },
-  { icon: 'messagesSquare', title: 'Inglês como prática social', text: 'Aprender uma língua vai muito além de memorizar gramática. O foco é desenvolver a sua capacidade de se expressar e pensar em inglês de forma genuína, com contexto e propósito — não apenas pra passar em testes.' },
-  { icon: 'trendingUp', title: 'Evolução acompanhada de perto', text: 'Com o TalkScape você visualiza seu progresso semana a semana, de forma concreta e transparente. Adeus àquela sensação de estudar sem sair do lugar — aqui cada etapa é registrada e celebrada.' },
+  { icon: 'target', title: 'Verdadeiramente personalizado', text: 'Cada aluna percorre um caminho único, a partir do seu ritmo, dos seus objetivos e da sua história. Não existe receita pronta aqui. O que funciona pra uma pessoa pode não funcionar pra outra, e isso é respeitado desde o primeiro encontro.' },
+  { icon: 'messagesSquare', title: 'Inglês como prática social', text: 'Aprender uma língua vai muito além de memorizar gramática. O foco é desenvolver a sua capacidade de se expressar e pensar em inglês de forma genuína, com contexto e propósito, não apenas pra passar em testes.' },
+  { icon: 'trendingUp', title: 'Evolução acompanhada de perto', text: 'Com o TalkScape você visualiza seu progresso semana a semana, de forma concreta e transparente. Adeus àquela sensação de estudar sem sair do lugar. Aqui cada etapa é registrada e celebrada.' },
 ]
 
 const HOW_IT_WORKS = [
   { n: '01', title: 'Seu ponto de partida', text: 'A gente descobre juntas seu nível, seus objetivos e a sua história com o inglês.' },
-  { n: '02', title: 'Plano sob medida', text: 'Um caminho único, construído a partir do seu ritmo — nada de receita pronta.' },
+  { n: '02', title: 'Plano sob medida', text: 'Um caminho único, construído a partir do seu ritmo, nada de receita pronta.' },
   { n: '03', title: 'Aulas + plataforma', text: 'Aulas ao vivo com a Renata e a Jornada Digital pra praticar entre um encontro e outro.' },
   { n: '04', title: 'Progresso à vista', text: 'Você acompanha sua evolução semana a semana, de forma concreta e transparente.' },
 ]
@@ -131,7 +131,7 @@ const SOCIAL_PROOF = [
 ]
 
 const FAQS = [
-  { q: 'Como eu descubro meu nível de inglês?', a: 'Na sua Welcome Class a gente faz uma conversa natural pra entender onde você está. Não é um teste chato — é só pra eu conhecer seu ritmo e suas dúvidas.' },
+  { q: 'Como eu descubro meu nível de inglês?', a: 'Na sua Welcome Class a gente faz uma conversa natural pra entender onde você está. Não é um teste chato, é só pra eu conhecer seu ritmo e suas dúvidas.' },
   { q: 'Posso cancelar quando quiser?', a: 'Sim! Você tem 7 dias de garantia pra testar sem compromisso. Depois, pode cancelar a qualquer momento, sem multa. Só peço aviso com uma semana de antecedência pra avisar se houver reposição pendente.' },
   { q: 'Como funciona a Welcome Class?', a: 'A gente marca um horário no WhatsApp. São 30-40 minutos conversando em inglês sobre seus objetivos, sua história com a língua, e o que você espera alcançar. Depois eu mando uma proposta de plano personalizado.' },
   { q: 'E se eu perder uma aula?', a: 'Sem problema! Você pode repor em outro horário na mesma semana, desde que avise com 24h de antecedência. Os planos Jornada e Horizonte têm prioridade em reposição.' },
@@ -154,7 +154,7 @@ const PLAN_TABS = [
 ]
 
 const TESTIMONIALS = [
-  { text: 'Gosto da maneira dinâmica como a didática é aplicada. Recomendaria sim — as aulas são particulares e adaptadas para cada aluna.', name: 'Aluna do plano Essencial' },
+  { text: 'Gosto da maneira dinâmica como a didática é aplicada. Recomendaria sim, as aulas são particulares e adaptadas para cada aluna.', name: 'Aluna do plano Essencial' },
   { text: 'As aulas são divertidas, leves e bem estruturadas. A cada semana trabalhamos um assunto novo, e isso me motiva a continuar. Os vídeos junto aos exercícios de escrita e conversação são muito eficazes.', name: 'Aluna do plano Jornada' },
   { text: 'Gosto do jeito que lida com o aprendizado e da liberdade pra nos adaptarmos. Reforcei muitos aprendizados e descobri coisas sobre a língua que nunca tinha visto. As dúvidas são tiradas de forma clara e o espaço é muito receptivo.', name: 'Aluna do plano Horizonte' },
 ]
@@ -195,7 +195,7 @@ const FidelityNote = () => (
   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, maxWidth: 720, margin: '28px auto 0', background: '#fff', border: `1px solid ${C.border2}`, borderRadius: 14, padding: '16px 20px' }}>
     <Icon name="sprout" size={20} color={C.green} style={{ flexShrink: 0, marginTop: 2 }} />
     <div style={{ fontSize: 14.5, lineHeight: 1.55, color: C.mid2 }}>
-      <strong style={{ color: C.dark }}>O que é um plano fidelidade?</strong> É o seu tempo de compromisso com a jornada. Quanto mais meses você escolhe de uma vez (3, 6 ou 12), menor fica o valor mensal — o valor cheio é o plano mês a mês, sem fidelidade.
+      <strong style={{ color: C.dark }}>O que é um plano fidelidade?</strong> É o seu tempo de compromisso com a jornada. Quanto mais meses você escolhe de uma vez (3, 6 ou 12), menor fica o valor mensal. O valor cheio é o plano mês a mês, sem fidelidade.
     </div>
   </div>
 )
@@ -320,7 +320,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
               ))}
             </div>
 
-            {/* AULA PARTICULAR — link para forms */}
+            {/* AULA PARTICULAR - link para forms */}
             {tipo === 'particular' && (
               <div style={{ textAlign: 'center' }}>
                 <div style={{ width: 64, height: 64, borderRadius: '50%', background: C.tan, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
@@ -338,7 +338,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
               </div>
             )}
 
-            {/* JORNADA DIGITAL — inscrição no site */}
+            {/* JORNADA DIGITAL - inscrição no site */}
             {tipo === 'curso' && (<>
               <p style={sans(600, 12, { color: C.muted, marginBottom: 6 })}>Nome completo</p>
               <input style={{ width: '100%', padding: '11px 14px', borderRadius: 12, border: `1.5px solid ${C.border3}`, fontSize: 14, fontFamily: "'Hanken Grotesk',sans-serif", marginBottom: 14, boxSizing: 'border-box', outline: 'none' }}
@@ -430,7 +430,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
         <div style={{ textAlign: 'center', maxWidth: 640, margin: '0 auto 52px' }}>
           <SectionEyebrow>POR QUE O TALKSCAPE</SectionEyebrow>
           <h2 style={serif(500, 46, { margin: '12px 0 12px', lineHeight: 1.1 })}>Não é mais uma escola de inglês. É o seu espaço.</h2>
-          <p style={{ fontSize: 18, color: C.mid, margin: 0 }}>Aqui a língua é meio de se expressar, compreender e criar novas conexões — não decoreba pra passar em teste.</p>
+          <p style={{ fontSize: 18, color: C.mid, margin: 0 }}>Aqui a língua é meio de se expressar, compreender e criar novas conexões, não decoreba pra passar em teste.</p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px,1fr))', gap: 22 }}>
           {DIFFERENTIALS.map((d, i) => (
@@ -502,7 +502,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
             </div>
           </div>
 
-          {/* jornadas disponíveis — faixa compacta */}
+          {/* jornadas disponíveis - faixa compacta */}
           <div style={{ marginTop: 44, paddingTop: 36, borderTop: '1px solid rgba(255,255,255,.18)' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap', marginBottom: 18 }}>
               <h3 style={serif(500, 26, { margin: 0, color: '#fff' })}>Escolha entre {JOURNEYS.length} jornadas</h3>
@@ -520,7 +520,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
         </div>
       </div>
 
-      {/* PLANOS — formato único com alternador Individual / Em dupla / Em turma */}
+      {/* PLANOS - formato único com alternador Individual / Em dupla / Em turma */}
       <div id="planos" style={{ background: C.creamAlt }}>
         <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '52px 20px' : '80px 40px' }}>
           <div style={{ textAlign: 'center', maxWidth: 660, margin: '0 auto 28px' }}>
@@ -606,7 +606,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
           <div>
             <SectionEyebrow>SOBRE A PROFESSORA</SectionEyebrow>
             <h2 style={serif(500, 46, { margin: '12px 0 22px', lineHeight: 1.1 })}>Oi, eu sou a Renata!</h2>
-            <p style={{ fontSize: 18, lineHeight: 1.65, color: C.mid, margin: '0 0 16px' }}><strong style={{ color: C.dark }}>Professora desde antes de saber escrever</strong>, meus olhos sempre brilharam pelo ensinar — quando nas brincadeiras infantis havia apenas uma lousa com giz e alguns brinquedos me escutando.</p>
+            <p style={{ fontSize: 18, lineHeight: 1.65, color: C.mid, margin: '0 0 16px' }}><strong style={{ color: C.dark }}>Professora desde antes de saber escrever</strong>, meus olhos sempre brilharam pelo ensinar, quando nas brincadeiras infantis havia apenas uma lousa com giz e alguns brinquedos me escutando.</p>
             <p style={{ fontSize: 18, lineHeight: 1.65, color: C.mid, margin: '0 0 16px' }}>Hoje, além de dar aulas, tenho a oportunidade de estudar e pesquisar sobre o inglês: entender como essa língua é estruturada e, mais importante do que tudo, entender como podemos <strong style={{ color: C.dark }}>utilizá-la de forma crítica e reflexiva</strong>.</p>
             <p style={{ fontSize: 18, lineHeight: 1.65, color: C.mid, margin: '0 0 16px' }}>Criei o TalkScape porque não acredito que uma língua deva ser apenas falada, como muitas escolas pregam por aí. Aqui, a língua deve ser compreendida como <strong style={{ color: C.green }}>meio de se expressar, compreender e criar novas conexões</strong>.</p>
             <p style={{ fontSize: 18, lineHeight: 1.65, color: C.mid, margin: 0 }}>Ah, e por fim: tenho dois estagiários, a <strong style={{ color: C.dark }}>Toffee</strong> e o <strong style={{ color: C.dark }}>Gato</strong>. Eles estão ansiosos pra te conhecer.</p>
@@ -651,7 +651,7 @@ export default function LandingPage({ onStudent, onCourse, onTeacher }) {
       <div style={{ maxWidth: 1180, margin: '0 auto', padding: isMobile ? '0 20px 52px' : '0 40px 80px' }}>
         <div style={{ background: C.terracotta, borderRadius: 24, padding: '70px 56px', textAlign: 'center', color: '#fff' }}>
           <h2 style={serif(500, 50, { margin: '0 0 16px', lineHeight: 1.06 })}>Vem construir o seu espaço<br />de aprender inglês</h2>
-          <p style={{ fontSize: 20, opacity: .92, margin: '0 auto 30px', maxWidth: 520 }}>Me conta seus objetivos na Welcome Class — uma aula gratuita pra a gente encontrar o formato ideal pra você.</p>
+          <p style={{ fontSize: 20, opacity: .92, margin: '0 auto 30px', maxWidth: 520 }}>Me conta seus objetivos na Welcome Class, uma aula gratuita pra a gente encontrar o formato ideal pra você.</p>
           <a href={WELCOME_CLASS} target="_blank" rel="noreferrer" style={{ display: 'inline-block', background: '#fff', color: C.terracotta, fontWeight: 800, fontSize: 19, padding: '18px 40px', borderRadius: 100, border: 'none', cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif", textDecoration: 'none' }}>
             Agende sua Welcome Class
           </a>

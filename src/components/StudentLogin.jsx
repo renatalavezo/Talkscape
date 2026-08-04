@@ -3,7 +3,7 @@ import { ir, pp, S } from '../constants/styles'
 import Logo from './Logo'
 import Icon from './Icon'
 
-export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, busy, onLogin, onBack, onRegister }) {
+export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, busy, onLogin, onBack, onRegister, onForgot }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: `linear-gradient(145deg,${B.marrom},${B.laranja} 55%,${B.rosa})`, padding: 20 }}>
       <div style={{ background: B.white, borderRadius: 24, padding: '44px 36px', maxWidth: 380, width: '100%', boxShadow: '0 40px 80px rgba(44,24,16,0.3)' }}>
@@ -32,9 +32,15 @@ export default function StudentLogin({ t, lang, setLang, u, setU, p, setP, err, 
           </div>
         )}
 
-        <button style={{ ...S.btn(B.laranja), width: '100%', marginBottom: 12, fontSize: 15, opacity: busy ? 0.7 : 1, cursor: busy ? 'wait' : 'pointer' }} onClick={onLogin} disabled={busy}>
+        <button style={{ ...S.btn(B.laranja), width: '100%', marginBottom: 10, fontSize: 15, opacity: busy ? 0.7 : 1, cursor: busy ? 'wait' : 'pointer' }} onClick={onLogin} disabled={busy}>
           {busy ? (lang === 'pt' ? 'Entrando...' : 'Signing in...') : (lang === 'pt' ? 'Entrar' : 'Sign in')}
         </button>
+
+        <div style={{ textAlign: 'center', marginBottom: 12 }}>
+          <button style={{ background: 'none', border: 'none', color: B.marrom, fontSize: 12.5, fontWeight: 600, cursor: 'pointer', fontFamily: "'Hanken Grotesk',sans-serif", textDecoration: 'underline' }} onClick={onForgot}>
+            {lang === 'pt' ? 'Esqueci minha senha' : 'Forgot my password'}
+          </button>
+        </div>
 
         <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
           <button style={{ background: 'none', border: `1.5px solid ${B.border}`, borderRadius: 20, padding: '6px 16px', fontSize: 12, color: B.mid, cursor: 'pointer' }} onClick={onBack}>←</button>
