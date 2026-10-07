@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { CAT } from '../constants/colors'
 import { D, serifD, sansD } from '../constants/dashColors'
 import { hashPassword } from '../utils'
-import { JOURNEY_MAP } from '../constants/journeys'
+import { JOURNEY_MAP, isSituated } from '../constants/journeys'
+import { courseStudentCefr } from '../constants/journeyLevels'
+import JourneyV2 from './journeyV2/JourneyV2'
 import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 import { DEFAULT_ACTIVITIES } from '../constants/defaultActivities'
 import Avatar from './Avatar'
@@ -218,6 +220,12 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                   </>
                 )}
 
+                {isSituated(journey) && (
+                  <JourneyV2 key={jid} journey={journey} lang={lang} sid={sid} db={db} upDb={upDb} cefr={courseStudentCefr(student)}
+                    checked={checked} markDone={id => upDb({ [`cjsd_${sid}`]: { ...checked, [id]: true } })} />
+                )}
+
+                {!isSituated(journey) && <>
                 {/* week grid */}
                 <div style={{ ...kicker, marginBottom: 12 }}>{allWeeks.length} {pt ? 'semanas' : 'weeks'}</div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
@@ -298,6 +306,7 @@ export default function CourseApp({ lang, sid, courseStudents, db, upDb, onLogou
                     </div>
                   )
                 })()}
+                </>}
               </>
             )}
           </section>

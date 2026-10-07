@@ -4,7 +4,8 @@ import { D, serifD, sansD } from '../constants/dashColors'
 import { CEFR_META } from '../constants/cefr'
 import { PLAN } from '../constants/plan'
 import { AVATARS } from '../constants/avatars'
-import { JOURNEYS, JOURNEY_MAP } from '../constants/journeys'
+import { JOURNEYS, JOURNEY_MAP, ASSIGNABLE_JOURNEYS, isSituated } from '../constants/journeys'
+import JourneyV2TeacherView from './journeyV2/JourneyV2TeacherView'
 import { CEFR_ORDER, SIMPLE_FROM_CEFR, courseStudentCefr } from '../constants/journeyLevels'
 import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 import Avatar from './Avatar'
@@ -699,7 +700,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
 
                       {selCourseJrn === s.id && (() => {
                         const jids = csJids(s)
-                        const available = JOURNEYS.filter(j => !jids.includes(j.id))
+                        const available = ASSIGNABLE_JOURNEYS.filter(j => !jids.includes(j.id))
                         const upJids = newJids => upDb({ courseStudents: (courseStudents || []).map(x => x.id === s.id ? { ...x, jids: newJids, jid: newJids[0] || null } : x) })
                         return (
                           <div style={{ marginTop: 16, borderTop: `1px solid ${D.line}`, paddingTop: 16 }}>
@@ -1181,7 +1182,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                     <div style={{ ...SD.card, marginBottom: 14 }}>
                       <p style={SD.lbl}>{lang === 'pt' ? 'Atribuir jornada' : 'Assign journey'}</p>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                        {JOURNEYS.map(j => (
+                        {ASSIGNABLE_JOURNEYS.map(j => (
                           <button key={j.id} onClick={() => { upDb({ [`jrn_${selS.id}`]: j.id }); setJWeek(1) }}
                             style={{ ...SD.chip, background: currentJid === j.id ? j.color : D.surfaceWarm, color: currentJid === j.id ? '#fff' : D.muted, fontSize: 12, padding: '8px 14px', border: `1.5px solid ${currentJid === j.id ? j.color : D.line}` }}>
                             <Icon name={j.icon} size={13} color={currentJid === j.id ? '#fff' : D.muted} /> {lang === 'pt' ? j.pt : j.en}
@@ -1190,7 +1191,10 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         {currentJid && <button onClick={() => upDb({ [`jrn_${selS.id}`]: null })} style={{ ...SD.chip, background: D.claySoft, color: D.clay, fontSize: 11 }}><Icon name="close" size={11} color={D.clay} />{lang === 'pt' ? 'Remover' : 'Remove'}</button>}
                       </div>
                     </div>
-                    {currentJ && (
+                    {currentJ && isSituated(currentJ) && (
+                      <JourneyV2TeacherView journey={currentJ} lang={lang} sid={selS.id} db={db} cefr={db[`lv_${selS.id}`] || 'A1'} checked={jChecked} />
+                    )}
+                    {currentJ && !isSituated(currentJ) && (
                       <>
                         <div style={{ background: currentJ.color, borderRadius: 16, padding: '16px 20px', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 12, boxShadow: D.shadow }}>
                           <Icon name={currentJ.icon} size={26} color="#fff" />

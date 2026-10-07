@@ -11,7 +11,8 @@ import Avatar from './Avatar'
 import AvatarBuilder from './AvatarBuilder'
 import CalSection from './CalSection'
 import Icon from './Icon'
-import { JOURNEY_MAP } from '../constants/journeys'
+import { JOURNEY_MAP, isSituated } from '../constants/journeys'
+import JourneyV2 from './journeyV2/JourneyV2'
 import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 import ActivityModal from './ActivityModal'
 import { DEFAULT_ACTIVITIES } from '../constants/defaultActivities'
@@ -443,7 +444,12 @@ export default function StudentApp({ t, lang, setLang, sid, students, db, upDb, 
             </div>
           </section>
         )}
-        {tab === 'journey' && journey && (
+        {tab === 'journey' && journey && isSituated(journey) && (
+          <JourneyV2 journey={journey} lang={lang} sid={sid} db={db} upDb={upDb} cefr={lvl}
+            checked={jChecked} markDone={id => upDb({ [`jsd_${sid}`]: { ...jChecked, [id]: true } })} />
+        )}
+
+        {tab === 'journey' && journey && !isSituated(journey) && (
           <section>
             {/* course banner */}
             <div style={{ background: `linear-gradient(135deg,${D.moss},${D.mossDeep})`, borderRadius: 22, padding: '28px 32px', color: '#fff', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 20, boxShadow: D.shadowLg, position: 'relative', overflow: 'hidden', marginBottom: 24 }}>
