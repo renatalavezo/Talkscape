@@ -23,7 +23,10 @@
 //   cat       legacy colour/label only; derived from skills[0]
 //   skills    'listening'|'speaking'|'interaction'|'writing'|'reading'
 //   moves     planning stages covered: 'enter'|'explore'|'notice'|'try'|'act'|'reflect'
-//   minutes   estimated time per level { A1, A2, B1, B2 }
+//   minutes   estimated time per level { A1, A2, B1, B2 } — shown to orient the
+//             student only. Time is a CONSEQUENCE of a coherent learning path,
+//             never a design target: do not add or stretch content to reach a
+//             duration, and no check enforces weekly totals.
 //   purpose, situation, steps, bridge, levels (overrides — see resolveActivity)
 //
 // Step kinds (all have `id`, `kind`, and usually `say:{en,pt}` = the instruction,

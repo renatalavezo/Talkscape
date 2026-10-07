@@ -11,8 +11,8 @@ export const CORE_V2_META = {
   aboveRange: {
     policy: 'cap',
     why: {
-      en: 'Core works on everyday situations designed for A1–B1. A C1/C2 student should only be here by the teacher\'s choice (e.g. reactivating English or rebuilding confidence). They get the B2 extension — the most demanding version these situations genuinely support; a "C1 version" of introducing yourself in a group would be artificial. For C1 development, assign another journey.',
-      pt: 'A Core trabalha situações do cotidiano pensadas para A1–B1. Um aluno C1/C2 só deveria estar aqui por escolha da professora (por exemplo, para reativar o inglês ou recuperar a confiança). Ele recebe a extensão B2 — a versão mais exigente que essas situações realmente sustentam; uma "versão C1" de se apresentar num grupo seria artificial. Para desenvolvimento C1, atribua outra jornada.',
+      en: 'This journey was planned for A1–B1, with an extension version up to B2. For C1–C2 students, the activities use the B2 version because these situations (introducing yourself to a group, arranging a time, ordering, asking for directions…) do not call for extra linguistic complexity without making the task artificial. It can still make sense for a C1–C2 student — e.g. to reactivate their English or regain confidence speaking — but it will not develop C1-level language.',
+      pt: 'Esta jornada foi planejada para A1–B1, com versão de extensão até B2. Para estudantes C1–C2, as atividades usam a versão B2 porque estas situações (apresentar-se a um grupo, combinar um horário, fazer pedidos, pedir direções…) não exigem complexidade linguística adicional sem tornar a tarefa artificial. Ela ainda pode fazer sentido para uma estudante C1–C2 — por exemplo, para reativar o inglês ou ganhar confiança para falar —, mas não vai desenvolver a língua no nível C1.',
     },
   },
   // A thread across the journey: the student belongs to an online community.

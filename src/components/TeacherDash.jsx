@@ -743,7 +743,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                               <div style={{ display: 'flex', gap: 8 }}>
                                 <select style={{ ...SD.inp, flex: 1 }} value={addJrnId} onChange={e => setAddJrnId(e.target.value)}>
                                   <option value="">Adicionar jornada...</option>
-                                  {available.map(j => <option key={j.id} value={j.id}>{j.pt}</option>)}
+                                  {available.map(j => <option key={j.id} value={j.id}>{j.pt}{j.meta ? ` · ${j.meta.levels.target[0]}–${j.meta.levels.supported[1]}` : ''}</option>)}
                                 </select>
                                 <button style={{ ...SD.btn(D.moss), padding: '0 16px' }} onClick={() => { if (addJrnId) { upJids([...jids, addJrnId]); setAddJrnId('') } }}>
                                   <Icon name="add" size={14} color="#fff" />
@@ -1185,7 +1185,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                         {ASSIGNABLE_JOURNEYS.map(j => (
                           <button key={j.id} onClick={() => { upDb({ [`jrn_${selS.id}`]: j.id }); setJWeek(1) }}
                             style={{ ...SD.chip, background: currentJid === j.id ? j.color : D.surfaceWarm, color: currentJid === j.id ? '#fff' : D.muted, fontSize: 12, padding: '8px 14px', border: `1.5px solid ${currentJid === j.id ? j.color : D.line}` }}>
-                            <Icon name={j.icon} size={13} color={currentJid === j.id ? '#fff' : D.muted} /> {lang === 'pt' ? j.pt : j.en}
+                            <Icon name={j.icon} size={13} color={currentJid === j.id ? '#fff' : D.muted} /> {lang === 'pt' ? j.pt : j.en}{j.meta ? ` · ${j.meta.levels.target[0]}–${j.meta.levels.supported[1]}` : ''}
                           </button>
                         ))}
                         {currentJid && <button onClick={() => upDb({ [`jrn_${selS.id}`]: null })} style={{ ...SD.chip, background: D.claySoft, color: D.clay, fontSize: 11 }}><Icon name="close" size={11} color={D.clay} />{lang === 'pt' ? 'Remover' : 'Remove'}</button>}

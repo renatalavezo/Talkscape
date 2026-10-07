@@ -32,6 +32,11 @@ for (const lv of ['C1', 'C2']) {
 }
 ok(resolveLevel(META, undefined).level === META.baseLevel, 'unknown level → base')
 assert.throws(() => resolveLevel({ ...META, aboveRange: { policy: 'cap' } }, 'C1'), 'cap without justification must fail')
+// the justification shown to the teacher must state the real ranges
+for (const l of ['en', 'pt']) {
+  const why = META.aboveRange.why[l]
+  ok(why.includes(`${META.levels.target[0]}–${META.levels.target[1]}`) && why.includes(META.levels.supported[1]), `aboveRange.why (${l}) states the planned range and the version used`)
+}
 checks++
 
 // ── week 1 structure, per level

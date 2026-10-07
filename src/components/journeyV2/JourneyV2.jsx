@@ -19,7 +19,7 @@ const T = {
   weekDone:  { pt: 'Semana concluída!', en: 'Week complete!' },
   youSaid:   { pt: 'Como você se avaliou:', en: 'How you rated yourself:' },
   arc:       { pt: 'O percurso', en: 'The path' },
-  sessions:  { pt: 'sessões de 15–20 min', en: '15–20 min sessions' },
+  estimate:  { pt: 'estimativa — vá no seu ritmo', en: 'estimate — go at your own pace' },
 }
 const SCALE_LABEL = { notYet: { pt: 'ainda não', en: 'not yet' }, withHelp: { pt: 'com ajuda', en: 'with help' }, yes: { pt: 'sim', en: 'yes' } }
 
@@ -98,7 +98,7 @@ export default function JourneyV2({ journey, lang, sid, db, upDb, cefr, checked,
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '4px 12px' }}>
           <h2 style={{ margin: 0, ...serifD(500, 25) }}>{tx(T.week, lang)} {week.week}</h2>
           <span style={{ fontSize: 17, color: D.muted }}>{tx(week.theme, lang)}</span>
-          <span style={{ marginLeft: 'auto', fontSize: 13, color: D.muted }}>{doneCount}/{week.tasks.length} · ~{total} {tx(L.minutes, lang)} ({tx(T.sessions, lang)})</span>
+          <span style={{ marginLeft: 'auto', fontSize: 13, color: D.muted }}>{doneCount}/{week.tasks.length} · ~{total} {tx(L.minutes, lang)} ({tx(T.estimate, lang)})</span>
         </div>
         <p style={{ fontSize: 15, lineHeight: 1.55, margin: '10px 0 14px' }}>{tx(week.situation, lang)}</p>
         <div style={{ fontSize: 13, fontWeight: 700, color: D.muted, marginBottom: 6 }}>{tx(T.canDo, lang)}</div>
