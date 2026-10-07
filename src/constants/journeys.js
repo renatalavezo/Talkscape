@@ -1,3 +1,5 @@
+import { PILOT_JOURNEYS } from './journeys/pilot.js'
+
 export const JOURNEYS = [
   {
     id: 'core', icon: 'flag', color: '#4A90E2',
@@ -1275,4 +1277,9 @@ export const JOURNEYS = [
   },
 ]
 
-export const JOURNEY_MAP = Object.fromEntries(JOURNEYS.map(j => [j.id, j]))
+// Pilot journeys (v2 format) are assignable by the teacher but not listed publicly.
+export { PILOT_JOURNEYS }
+export const ASSIGNABLE_JOURNEYS = [...JOURNEYS, ...PILOT_JOURNEYS]
+export const isSituated = j => j?.format === 'situated'
+
+export const JOURNEY_MAP = Object.fromEntries(ASSIGNABLE_JOURNEYS.map(j => [j.id, j]))

@@ -14,7 +14,7 @@ import {
   AlertTriangle, HelpCircle, Download, Upload, RefreshCw,
   BookCheck, Pen, List, Grid3x3, Activity,
   Sprout, TreeDeciduous, Mountain, Scale, Flag, Video, Handshake,
-  MessagesSquare, Quote, UsersRound
+  MessagesSquare, Quote, UsersRound, Play, Square
 } from 'lucide-react'
 
 const icons = {
@@ -121,6 +121,8 @@ const icons = {
   messagesSquare: MessagesSquare,
   quote:         Quote,
   usersRound:    UsersRound,
+  play:          Play,
+  stop:          Square,
 }
 
 export default function Icon({ name, size = 16, color = 'currentColor', style = {} }) {

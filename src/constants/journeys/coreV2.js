@@ -88,6 +88,10 @@ const CHECK_INTRO = [
   { en: 'Would a new friend know what to say to me?', pt: 'Uma pessoa nova saberia o que me responder?' },
 ]
 
+// Model introduction (week 1) — also shown in week 12 when the student's own
+// week-1 text does not exist.
+export const W1_MODEL_INTRO = "Hi everyone! I'm Carla, from Belo Horizonte, Brazil. I'm a nurse, like Priya, and I work in a big hospital. In my free time I love dancing — ask me about forró! This year I want to travel to Canada and talk to people without fear."
+
 // How each member reacts when the student asks THEM a question (activity 5).
 // Matched by keywords in the student's own question; fallback keeps the
 // conversation natural when nothing matches.
@@ -433,7 +437,7 @@ export const CORE_V2_WEEK_1 = {
           say: { en: "Write your introduction post. Answer Mia's request, say one thing you want to do in English, and finish with a hook.", pt: 'Escreva seu post de apresentação. Responda ao pedido da Mia, diga algo que você quer fazer em inglês e termine com um gancho.' },
           starters: ["Hi everyone! I'm …", "I'm from …", "I'm a/an … / I work as …", 'In my free time I love …', 'This year I want to …', 'Ask me about …!'],
           wordBank: ['nurse', 'engineer', 'student', 'teacher', 'lawyer', 'salesperson', 'retired', 'I work from home', 'cooking', 'football', 'series', 'music', 'travelling', 'my kids', 'my cat'],
-          model: "Hi everyone! I'm Carla, from Belo Horizonte, Brazil. I'm a nurse, like Priya, and I work in a big hospital. In my free time I love dancing — ask me about forró! This year I want to travel to Canada and talk to people without fear.",
+          model: W1_MODEL_INTRO,
           checklist: CHECK_INTRO,
           note: { en: 'Your post is saved. You can edit it any time — and in week 12 you will look back at this first version.', pt: 'Seu post fica salvo. Você pode editar quando quiser — e na semana 12 vai olhar de novo para esta primeira versão.' } },
         { id: 's2', kind: 'act', mode: 'write', ref: 'w1-buddy', saveAs: 'w1-reply',
@@ -624,7 +628,8 @@ export const CORE_V2_W12_THEN_AND_NOW = {
       ifMissing: {
         en: 'Your week-1 introduction is not saved — that is fine. Look at the week-1 example (Carla\'s) and think: what does your text today do that you could not do when you started?',
         pt: 'Sua apresentação da semana 1 não está salva — tudo bem. Olhe o exemplo da semana 1 (o da Carla) e pense: o que o seu texto de hoje faz que você não conseguia fazer quando começou?',
-      } },
+      },
+      fallbackText: W1_MODEL_INTRO },
     { id: 's3', kind: 'reflect',
       say: { en: 'Looking back at these 12 weeks — which situations can you handle now?', pt: 'Olhando para essas 12 semanas — com quais situações você consegue lidar agora?' },
       canDo: 'journey',
