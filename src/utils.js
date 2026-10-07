@@ -33,11 +33,15 @@ export async function checkPassword(input, stored) {
 
 // Returns a db slice with only the keys that belong to a specific student id.
 // Strips sensitive fields (passwords, other students' data) from the client view.
+// Shared journey content edited by the teacher (course base plan `jBase_*` and
+// task activities `acts_*`) is not tied to any student, so it is passed through
+// too — otherwise those edits only showed up in the teacher's preview.
+const SHARED_JOURNEY_KEY = /^(jBase|acts)_/
 export function studentDbSlice(db, sid) {
   const slice = {}
   const prefix = new RegExp(`_${sid}($|_)`)
   for (const [k, v] of Object.entries(db)) {
-    if (prefix.test(k)) slice[k] = v
+    if (prefix.test(k) || SHARED_JOURNEY_KEY.test(k)) slice[k] = v
   }
   return slice
 }
