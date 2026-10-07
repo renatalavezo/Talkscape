@@ -5,6 +5,7 @@ import { CEFR_META } from '../constants/cefr'
 import { PLAN } from '../constants/plan'
 import { AVATARS } from '../constants/avatars'
 import { JOURNEYS, JOURNEY_MAP } from '../constants/journeys'
+import { CEFR_ORDER, SIMPLE_FROM_CEFR, courseStudentCefr } from '../constants/journeyLevels'
 import { JOURNEY_RESOURCES, TYPE_ICON, pickResource, levelHint } from '../constants/journeyResources'
 import Avatar from './Avatar'
 import Icon from './Icon'
@@ -676,7 +677,7 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                             <span style={{ fontSize: 16, fontWeight: 700 }}>{s.name}</span>
                             <span style={SD.pill(s.active ? D.sageSoft : D.honeySoft, s.active ? D.mossDeep : D.honey)}>● {s.active ? 'Ativo' : 'Aguardando'}</span>
                             {unanswered > 0 && <span style={SD.pill(D.orangeSoft, D.orange)}>{unanswered} dúvida{unanswered > 1 ? 's' : ''}</span>}
-                            {s.level && <span style={SD.pill(SIMPLE_COLOR[s.level][1], SIMPLE_COLOR[s.level][0])}><Icon name={SIMPLE_ICON[s.level]} size={11} color={SIMPLE_COLOR[s.level][0]} />{SIMPLE_LABEL[s.level]}</span>}
+                            {s.level && <span style={SD.pill(SIMPLE_COLOR[s.level][1], SIMPLE_COLOR[s.level][0])}><Icon name={SIMPLE_ICON[s.level]} size={11} color={SIMPLE_COLOR[s.level][0]} />{SIMPLE_LABEL[s.level]}{s.cefr ? ` · ${s.cefr}` : ''}</span>}
                           </div>
                           <div style={{ fontSize: 13, color: D.muted, marginTop: 5 }}>{s.email}</div>
                           <div style={{ display: 'flex', gap: 7, marginTop: 10, flexWrap: 'wrap' }}>
@@ -707,12 +708,25 @@ export default function TeacherDash({ t, lang, setLang, students, courseStudents
                               <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
                                 <p style={{ fontSize: 12, color: D.muted, marginRight: 4 }}>Nível:</p>
                                 {['beginner','intermediate','advanced'].map(k => (
-                                  <button key={k} title={SIMPLE_LABEL[k]} onClick={() => upDb({ courseStudents: (courseStudents||[]).map(x => x.id === s.id ? {...x, level: x.level === k ? null : k} : x) })}
+                                  <button key={k} title={SIMPLE_LABEL[k]} onClick={() => upDb({ courseStudents: (courseStudents||[]).map(x => x.id === s.id ? {...x, level: x.level === k ? null : k, cefr: x.level !== k && SIMPLE_FROM_CEFR[x.cefr] === k ? x.cefr : null} : x) })}
                                     style={{ padding: '5px 9px', borderRadius: 9, border: `1.5px solid ${s.level === k ? SIMPLE_COLOR[k][0] : D.line}`, background: s.level === k ? SIMPLE_COLOR[k][1] : D.surface, cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
                                     <Icon name={SIMPLE_ICON[k]} size={13} color={s.level === k ? SIMPLE_COLOR[k][0] : D.muted} />
                                   </button>
                                 ))}
                               </div>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap', marginBottom: 12 }}>
+                              <p style={{ fontSize: 12, color: D.muted, marginRight: 4 }}>CEFR (opcional):</p>
+                              {CEFR_ORDER.map(c => {
+                                const active = s.cefr === c
+                                return (
+                                  <button key={c} onClick={() => upDb({ courseStudents: (courseStudents||[]).map(x => x.id === s.id ? (x.cefr === c ? { ...x, cefr: null } : { ...x, cefr: c, level: SIMPLE_FROM_CEFR[c] }) : x) })}
+                                    style={{ padding: '4px 9px', borderRadius: 9, border: `1.5px solid ${active ? D.moss : D.line}`, background: active ? D.mossSoft : D.surface, color: active ? D.mossDeep : D.muted, cursor: 'pointer', fontFamily: 'inherit', fontSize: 12, fontWeight: 700 }}>
+                                    {c}
+                                  </button>
+                                )
+                              })}
+                              {!s.cefr && courseStudentCefr(s) && <span style={{ fontSize: 11.5, color: D.muted, marginLeft: 4, fontStyle: 'italic' }}>usando {courseStudentCefr(s)} pelo nível</span>}
                             </div>
                             {jids.length === 0 && <p style={{ fontSize: 12.5, color: D.muted, marginBottom: 10 }}>Nenhuma jornada atribuída.</p>}
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
