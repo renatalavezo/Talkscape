@@ -5,6 +5,10 @@ import { readFileSync } from 'node:fs'
 import { resolveLevel, resolveWeek } from '../src/constants/journeys/schema.js'
 import { CORE_V2_META as META, CORE_V2_WEEK_1 as W1, CORE_V2_PEOPLE as PEOPLE, CORE_V2_W12_THEN_AND_NOW as W12 } from '../src/constants/journeys/coreV2.js'
 import { responsePatch, getResponse, comparison, responsesKey } from '../src/constants/journeys/responses.js'
+import { isSupportedStep } from '../src/constants/journeys/stepKinds.js'
+import { resolveThem, nextYouTurn } from '../src/constants/journeys/chat.js'
+import { JOURNEYS, JOURNEY_MAP, ASSIGNABLE_JOURNEYS } from '../src/constants/journeys.js'
+import { CORE_PILOT } from '../src/constants/journeys/pilot.js'
 
 // studentDbSlice lives in utils.js, which reads import.meta.env (Vite only);
 // evaluate just that function's source so the real code is what gets tested.
@@ -100,5 +104,69 @@ ok(sliceA[responsesKey(A, 'core')] && !sliceA[responsesKey(B, 'core')], 'student
 ok(!JSON.stringify(sliceA).includes('Bruno') && !sliceA.students, "no other student's data in slice")
 assert.throws(() => responsePatch(db, A, 'core', 'w1.intro', 'x'), 'dots rejected (Firebase keys)'); checks++
 ok(responsePatch(db, A, 'core', 'w1-x', 'y'.repeat(5000))[responsesKey(A, 'core')]['w1-x'].text.length === 2000, 'long text capped')
+
+// ── every step is renderable by the player, at every level
+for (const lv of [...AUTHORED, 'C1']) {
+  for (const t of resolveWeek(META, W1, lv).tasks) for (const st of t.steps) ok(isSupportedStep(st), `${t.id}.${st.id}@${lv}: player supports ${st.kind}/${st.mode || st.input?.type || ''}`)
+}
+for (const st of W12.steps) ok(isSupportedStep(st), `w12 ${st.id}: player supports ${st.kind}`)
+
+// ── connections between activities
+const PARTIAL = /…|\.\.\.|___/
+for (const lv of AUTHORED) {
+  const w = resolveWeek(META, W1, lv)
+  const savedSoFar = new Set()
+  w.tasks.forEach((t, k) => {
+    ok(t.bridge?.en && t.bridge?.pt, `${t.id}@${lv} has a bridge to what comes next`)
+    ok(t.purpose?.pt && t.situation?.pt, `${t.id}@${lv} has purpose + situation`)
+    for (const st of t.steps) {
+      const ref = st.ref || st.with?.ref
+      if (ref) ok(savedSoFar.has(ref), `${t.id}.${st.id}@${lv}: "${ref}" is produced by an earlier step`)
+      if (st.saveAs) savedSoFar.add(st.saveAs)
+      // scaffolding never hands over a full answer
+      const model = [st.model, ...Object.values(st.models || {})].filter(Boolean)
+      for (const s of st.starters || []) {
+        ok(PARTIAL.test(s), `${t.id}.${st.id}@${lv}: starter is partial: "${s}"`)
+        ok(!model.includes(s), `${t.id}.${st.id}@${lv}: starter is not the model`)
+      }
+      for (const f of st.frame || []) ok(PARTIAL.test(f), `${t.id}.${st.id}@${lv}: frame line has a gap: "${f}"`)
+      if (st.kind === 'act') ok(st.checklist?.length, `${t.id}.${st.id}@${lv}: production has self-check criteria`)
+      if (st.kind === 'engage' && st.input.type === 'audio') ok(st.input.script?.length > 20, `${t.id}.${st.id}@${lv}: audio has a transcript`)
+      if (st.kind === 'chat') {
+        const people = Object.keys(PEOPLE)
+        ok(st.turns[0].them, `${t.id}@${lv}: partner opens the chat`)
+        for (const p of people) {
+          st.turns.filter(x => x.them).forEach((x, n) => ok(resolveThem(x.them, p, 'zzz').length > 0, `${t.id}@${lv}: turn ${n} has text for ${p}`))
+          for (const x of st.turns.filter(x => x.you)) for (const m of [x.you.model, x.you.models?.[p]].filter(Boolean)) {
+            ok(!x.you.starters.includes(m), `${t.id}@${lv}: model is not offered as a starter`)
+          }
+        }
+        ok(st.turns.filter(x => x.them?.replies).every(x => x.them.fallback?.default), `${t.id}@${lv}: reply pools have a default fallback`)
+        ok(nextYouTurn(st.turns, 0) < st.turns.length, `${t.id}@${lv}: chat has student turns`)
+      }
+    }
+    if (k === w.tasks.length - 1) ok(t.steps.some(x => x.kind === 'reflect'), `week ends with a reflection @${lv}`)
+  })
+}
+// reply pool: keyword match and fallback both work
+ok(resolveThem({ replies: { Lucas: [{ match: ['dog'], text: 'D' }] }, fallback: { default: 'F' } }, 'Lucas', 'Is your DOG loud?') === 'D', 'reply pool is case-insensitive')
+ok(resolveThem({ replies: {}, fallback: { default: 'F' } }, 'Kenji', 'hm') === 'F', 'reply pool falls back')
+
+// ── week 12 retrieves what week 1 saves
+const w1Slots = new Set(W1.tasks.flatMap(t => t.steps).map(x => x.saveAs).filter(Boolean))
+const cmpStep = W12.steps.find(x => x.kind === 'compare')
+ok(w1Slots.has(cmpStep.before), `week 12 compares with a slot week 1 saves (${cmpStep.before})`)
+ok(W12.steps.findIndex(x => x.saveAs === cmpStep.after) < W12.steps.indexOf(cmpStep), 'week 12 writes the new text before comparing')
+ok(cmpStep.ifMissing?.pt && cmpStep.ifMissing?.en && cmpStep.fallbackText, 'week 12 handles a missing week-1 text')
+ok(SAFE.test(W12.id) && W12.minutes, 'week 12 activity id/minutes')
+
+// ── pilot integration (legacy journeys untouched)
+ok(JOURNEYS.length === 9 && !JOURNEYS.some(j => j.pilot), 'public list still has the 9 legacy journeys (landing page unchanged)')
+ok(JOURNEY_MAP[CORE_PILOT.id] === CORE_PILOT && ASSIGNABLE_JOURNEYS.includes(CORE_PILOT), 'pilot is assignable and resolvable')
+ok(CORE_PILOT.weeks.length === 1 && CORE_PILOT.weeks[0].week === 1, 'only week 1 is connected')
+ok(SAFE.test(CORE_PILOT.id), 'pilot journey id is Firebase-safe')
+const allIds = ASSIGNABLE_JOURNEYS.flatMap(j => j.weeks.flatMap(w => w.tasks.map(t => t.id)))
+ok(new Set(allIds).size === allIds.length, 'task ids unique across ALL journeys (jsd_ progress is one map per student)')
+for (const t of CORE_PILOT.weeks[0].tasks) ok(t.en && t.pt && t.cat, `${t.id} keeps en/pt/cat for legacy screens (dashboard, teacher %)`)
 
 console.log(`check-journeys: ${checks} checks passed`)
